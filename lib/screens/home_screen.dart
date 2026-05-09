@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../l10n/app_localizations.dart';
 import '../providers/grade_provider.dart';
 import 'subject_detail_screen.dart';
 import 'stats_screen.dart';
@@ -11,10 +12,11 @@ class HomeScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final subjects = ref.watch(subjectsProvider);
+    final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Subjects', style: TextStyle(fontWeight: FontWeight.bold)),
+        title: Text(l10n.subjects, style: const TextStyle(fontWeight: FontWeight.bold)),
         backgroundColor: Colors.transparent,
         elevation: 0,
         actions: [
@@ -38,7 +40,7 @@ class HomeScreen extends ConsumerWidget {
         ],
       ),
       body: subjects.isEmpty
-          ? const Center(child: Text('No subjects added yet.'))
+          ? Center(child: Text(l10n.noSubjects))
           : ListView.builder(
               padding: const EdgeInsets.all(16),
               itemCount: subjects.length,
@@ -84,9 +86,9 @@ class HomeScreen extends ConsumerWidget {
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
-                                const Text(
-                                  'Current Average',
-                                  style: TextStyle(color: Colors.white38, fontSize: 12),
+                                Text(
+                                  l10n.currentAverage,
+                                  style: const TextStyle(color: Colors.white38, fontSize: 12),
                                 ),
                               ],
                             ),
@@ -114,7 +116,7 @@ class HomeScreen extends ConsumerWidget {
             ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () => _showAddSubjectDialog(context, ref),
-        label: const Text('Add Subject'),
+        label: Text(l10n.addSubject),
         icon: const Icon(Icons.add),
         backgroundColor: const Color(0xFF6366F1),
       ),
@@ -123,17 +125,18 @@ class HomeScreen extends ConsumerWidget {
 
   void _showAddSubjectDialog(BuildContext context, WidgetRef ref) {
     final controller = TextEditingController();
+    final l10n = AppLocalizations.of(context)!;
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('New Subject'),
+        title: Text(l10n.newSubject),
         content: TextField(
           controller: controller,
-          decoration: const InputDecoration(hintText: 'Subject Name (e.g. Mathematics)'),
+          decoration: InputDecoration(hintText: l10n.subjectNameHint),
           autofocus: true,
         ),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(context), child: const Text('Cancel')),
+          TextButton(onPressed: () => Navigator.pop(context), child: Text(l10n.cancel)),
           ElevatedButton(
             onPressed: () {
               if (controller.text.isNotEmpty) {
@@ -141,7 +144,7 @@ class HomeScreen extends ConsumerWidget {
                 Navigator.pop(context);
               }
             },
-            child: const Text('Add'),
+            child: Text(l10n.add),
           ),
         ],
       ),

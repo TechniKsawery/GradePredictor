@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../l10n/app_localizations.dart';
 import '../models/subject.dart';
 import '../models/grade.dart';
 import '../providers/grade_provider.dart';
@@ -13,6 +14,7 @@ class SubjectDetailScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final grades = ref.watch(gradesProvider(subject.id));
     final average = ref.watch(averageProvider(subject.id));
+    final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
       appBar: AppBar(
@@ -22,26 +24,26 @@ class SubjectDetailScreen extends ConsumerWidget {
       ),
       body: Column(
         children: [
-          _buildAverageHeader(context, average),
+          _buildAverageHeader(context, average, l10n),
           Expanded(
             child: grades.isEmpty
-                ? const Center(child: Text('No grades added yet.'))
+                ? Center(child: Text(l10n.noSubjects))
                 : ListView.builder(
                     padding: const EdgeInsets.all(16),
                     itemCount: grades.length,
                     itemBuilder: (context, index) {
                       final grade = grades[index];
-                      return _buildGradeCard(context, ref, grade);
+                      return _buildGradeCard(context, ref, grade, l10n);
                     },
                   ),
           ),
-          _buildActionButtons(context, ref),
+          _buildActionButtons(context, ref, l10n),
         ],
       ),
     );
   }
 
-  Widget _buildAverageHeader(BuildContext context, double average) {
+  Widget _buildAverageHeader(BuildContext context, double average, AppLocalizations l10n) {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(32),
@@ -56,9 +58,9 @@ class SubjectDetailScreen extends ConsumerWidget {
       ),
       child: Column(
         children: [
-          const Text(
-            'Current Average',
-            style: TextStyle(color: Colors.white70, fontSize: 16),
+          Text(
+            l10n.currentAverage,
+            style: const TextStyle(color: Colors.white70, fontSize: 16),
           ),
           Text(
             average.toStringAsFixed(2),
@@ -73,7 +75,7 @@ class SubjectDetailScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildGradeCard(BuildContext context, WidgetRef ref, Grade grade) {
+  Widget _buildGradeCard(BuildContext context, WidgetRef ref, Grade grade, AppLocalizations l10n) {
     return Container(
       margin: const EdgeInsets.only(bottom: 8),
       decoration: BoxDecoration(
@@ -88,7 +90,7 @@ class SubjectDetailScreen extends ConsumerWidget {
             style: const TextStyle(color: Color(0xFF6366F1), fontWeight: FontWeight.bold),
           ),
         ),
-        title: Text('Weight: ${grade.weight}'),
+        title: Text('${l10n.weight}: ${grade.weight}'),
         subtitle: Text(grade.type),
         trailing: IconButton(
           icon: const Icon(Icons.delete_outline, color: Colors.white24),
@@ -98,7 +100,7 @@ class SubjectDetailScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildActionButtons(BuildContext context, WidgetRef ref) {
+  Widget _buildActionButtons(BuildContext context, WidgetRef ref, AppLocalizations l10n) {
     return Padding(
       padding: const EdgeInsets.all(16),
       child: Row(
@@ -107,7 +109,7 @@ class SubjectDetailScreen extends ConsumerWidget {
             child: ElevatedButton.icon(
               onPressed: () => _showAddGradeDialog(context, ref),
               icon: const Icon(Icons.add),
-              label: const Text('Add Grade'),
+              label: Text(l10n.addGrade),
             ),
           ),
           const SizedBox(width: 12),
@@ -118,7 +120,7 @@ class SubjectDetailScreen extends ConsumerWidget {
                 builder: (context) => PredictionDialog(subjectId: subject.id),
               ),
               icon: const Icon(Icons.psychology),
-              label: const Text('Predict'),
+              label: Text(l10n.predict),
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFF06B6D4),
               ),
@@ -132,24 +134,25 @@ class SubjectDetailScreen extends ConsumerWidget {
   void _showAddGradeDialog(BuildContext context, WidgetRef ref) {
     final gradeController = TextEditingController();
     final weightController = TextEditingController();
+    final l10n = AppLocalizations.of(context)!;
     String selectedType = 'test';
 
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Add Grade'),
+        title: Text(l10n.addGrade),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             TextField(
               controller: gradeController,
-              decoration: const InputDecoration(labelText: 'Grade (e.g. 5)'),
+              decoration: InputDecoration(labelText: l10n.gradeHint),
               keyboardType: TextInputType.number,
             ),
             const SizedBox(height: 12),
             TextField(
               controller: weightController,
-              decoration: const InputDecoration(labelText: 'Weight (e.g. 1.0)'),
+              decoration: InputDecoration(labelText: l10n.weightHint),
               keyboardType: TextInputType.number,
             ),
             const SizedBox(height: 12),
@@ -159,12 +162,12 @@ class SubjectDetailScreen extends ConsumerWidget {
                 DropdownMenuItem(value: t, child: Text(t.toUpperCase()))
               ).toList(),
               onChanged: (v) => selectedType = v!,
-              decoration: const InputDecoration(labelText: 'Type'),
+              decoration: InputDecoration(labelText: l10n.type),
             ),
           ],
         ),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(context), child: const Text('Cancel')),
+          TextButton(onPressed: () => Navigator.pop(context), child: Text(l10n.cancel)),
           ElevatedButton(
             onPressed: () {
               final g = double.tryParse(gradeController.text) ?? 0;
@@ -174,7 +177,7 @@ class SubjectDetailScreen extends ConsumerWidget {
                 Navigator.pop(context);
               }
             },
-            child: const Text('Add'),
+            child: Text(l10n.add),
           ),
         ],
       ),

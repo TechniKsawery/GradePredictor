@@ -1,0 +1,124 @@
+// ignore: unused_import
+import 'package:intl/intl.dart' as intl;
+import 'app_localizations.dart';
+
+// ignore_for_file: type=lint
+
+/// The translations for Polish (`pl`).
+class AppLocalizationsPl extends AppLocalizations {
+  AppLocalizationsPl([String locale = 'pl']) : super(locale);
+
+  @override
+  String get appTitle => 'GradePredictor';
+
+  @override
+  String get login => 'Zaloguj się';
+
+  @override
+  String get signUp => 'Zarejestruj się';
+
+  @override
+  String get email => 'Email';
+
+  @override
+  String get password => 'Hasło';
+
+  @override
+  String get welcomeBack => 'Witaj z powrotem, studencie!';
+
+  @override
+  String get newHere => 'Nowy tutaj? Utwórz konto';
+
+  @override
+  String get alreadyHaveAccount => 'Masz już konto? Zaloguj się';
+
+  @override
+  String get subjects => 'Przedmioty';
+
+  @override
+  String get addSubject => 'Dodaj przedmiot';
+
+  @override
+  String get newSubject => 'Nowy przedmiot';
+
+  @override
+  String get subjectNameHint => 'Nazwa przedmiotu (np. Matematyka)';
+
+  @override
+  String get cancel => 'Anuluj';
+
+  @override
+  String get add => 'Dodaj';
+
+  @override
+  String get currentAverage => 'Aktualna średnia';
+
+  @override
+  String get addGrade => 'Dodaj ocenę';
+
+  @override
+  String get predict => 'Prognozuj';
+
+  @override
+  String get weight => 'Waga';
+
+  @override
+  String get type => 'Typ';
+
+  @override
+  String get gradeHint => 'Ocena (np. 5)';
+
+  @override
+  String get weightHint => 'Waga (np. 1.0)';
+
+  @override
+  String get gradePredictor => 'Kalkulator ocen';
+
+  @override
+  String get targetAverage => 'Docelowa średnia';
+
+  @override
+  String get nextAssignmentWeight => 'Waga następnej oceny';
+
+  @override
+  String get calculate => 'Oblicz';
+
+  @override
+  String get statistics => 'Statystyki';
+
+  @override
+  String get performance => 'Wyniki przedmiotów';
+
+  @override
+  String get insights => 'Szybkie wglądy';
+
+  @override
+  String get subjectsToRescue => 'Przedmioty do \'ratowania\'';
+
+  @override
+  String get bestSubject => 'Najlepszy przedmiot';
+
+  @override
+  String get noSubjects => 'Brak dodanych przedmiotów.';
+
+  @override
+  String get checkEmail => 'Sprawdź email w celu potwierdzenia!';
+
+  @override
+  String get accountCreated => 'Konto utworzone! Zaloguj się.';
+
+  @override
+  String impossible(Object needed) {
+    return 'Niemożliwe! Potrzebowałbyś $needed';
+  }
+
+  @override
+  String easy(Object needed) {
+    return 'Łatwo! Potrzebujesz tylko 1.0 (lub mniej: $needed)';
+  }
+
+  @override
+  String neededAtLeast(Object needed) {
+    return 'Musisz dostać co najmniej: $needed';
+  }
+}

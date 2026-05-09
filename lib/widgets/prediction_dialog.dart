@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../l10n/app_localizations.dart';
 import '../providers/grade_provider.dart';
 
 class PredictionDialog extends ConsumerStatefulWidget {
@@ -18,6 +19,7 @@ class _PredictionDialogState extends ConsumerState<PredictionDialog> {
   void _calculate() {
     final target = double.tryParse(_targetController.text);
     final weight = double.tryParse(_weightController.text);
+    final l10n = AppLocalizations.of(context)!;
     
     if (target == null || weight == null) return;
 
@@ -31,31 +33,33 @@ class _PredictionDialogState extends ConsumerState<PredictionDialog> {
       currentTotalWeights += g.weight;
     }
     
-    // Formula: (Target * (CurrentWeights + NewWeight) - CurrentSum) / NewWeight
     final needed = (target * (currentTotalWeights + weight) - currentWeightedSum) / weight;
     
     setState(() {
+      final neededStr = needed.toStringAsFixed(2);
       if (needed > 6) {
-        _result = 'Impossible! You would need a ${needed.toStringAsFixed(2)}';
+        _result = l10n.impossible(neededStr);
       } else if (needed < 1) {
-        _result = 'Easy! You only need a 1.0 (or less: ${needed.toStringAsFixed(2)})';
+        _result = l10n.easy(neededStr);
       } else {
-        _result = 'You need to get at least: ${needed.toStringAsFixed(2)}';
+        _result = l10n.neededAtLeast(neededStr);
       }
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return AlertDialog(
-      title: const Text('Grade Predictor'),
+      title: Text(l10n.gradePredictor),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           TextField(
             controller: _targetController,
-            decoration: const InputDecoration(
-              labelText: 'Target Average',
+            decoration: InputDecoration(
+              labelText: l10n.targetAverage,
               hintText: 'e.g. 4.75',
             ),
             keyboardType: TextInputType.number,
@@ -63,8 +67,8 @@ class _PredictionDialogState extends ConsumerState<PredictionDialog> {
           const SizedBox(height: 16),
           TextField(
             controller: _weightController,
-            decoration: const InputDecoration(
-              labelText: 'Weight of next assignment',
+            decoration: InputDecoration(
+              labelText: l10n.nextAssignmentWeight,
               hintText: 'e.g. 1.0',
             ),
             keyboardType: TextInputType.number,
@@ -92,8 +96,8 @@ class _PredictionDialogState extends ConsumerState<PredictionDialog> {
         ],
       ),
       actions: [
-        TextButton(onPressed: () => Navigator.pop(context), child: const Text('Close')),
-        ElevatedButton(onPressed: _calculate, child: const Text('Calculate')),
+        TextButton(onPressed: () => Navigator.pop(context), child: Text(l10n.cancel)),
+        ElevatedButton(onPressed: _calculate, child: Text(l10n.calculate)),
       ],
     );
   }

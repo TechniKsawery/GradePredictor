@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fl_chart/fl_chart.dart';
+import '../l10n/app_localizations.dart';
 import '../providers/grade_provider.dart';
 import '../models/subject.dart';
 import 'package:printing/printing.dart';
@@ -13,16 +14,17 @@ class StatsScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final subjects = ref.watch(subjectsProvider);
+    final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Statistics'),
+        title: Text(l10n.statistics),
         backgroundColor: Colors.transparent,
         elevation: 0,
         actions: [
           IconButton(
             icon: const Icon(Icons.picture_as_pdf),
-            onPressed: () => _exportToPdf(context, ref, subjects),
+            onPressed: () => _exportToPdf(context, ref, subjects, l10n),
           ),
         ],
       ),
@@ -31,27 +33,27 @@ class StatsScreen extends ConsumerWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              'Subject Performance',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            Text(
+              l10n.performance,
+              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 24),
-            _buildBarChart(context, ref, subjects),
+            _buildBarChart(context, ref, subjects, l10n),
             const SizedBox(height: 48),
-            const Text(
-              'Quick Insights',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            Text(
+              l10n.insights,
+              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 16),
-            _buildInsights(ref, subjects),
+            _buildInsights(ref, subjects, l10n),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildBarChart(BuildContext context, WidgetRef ref, List<Subject> subjects) {
-    if (subjects.isEmpty) return const Center(child: Text('Add subjects to see charts.'));
+  Widget _buildBarChart(BuildContext context, WidgetRef ref, List<Subject> subjects, AppLocalizations l10n) {
+    if (subjects.isEmpty) return Center(child: Text(l10n.noSubjects));
 
     return SizedBox(
       height: 300,
@@ -104,7 +106,7 @@ class StatsScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildInsights(WidgetRef ref, List<Subject> subjects) {
+  Widget _buildInsights(WidgetRef ref, List<Subject> subjects, AppLocalizations l10n) {
     if (subjects.isEmpty) return const SizedBox();
 
     final lowPerformers = subjects.where((s) => ref.watch(averageProvider(s.id)) < 3.0).toList();
@@ -112,14 +114,14 @@ class StatsScreen extends ConsumerWidget {
     return Column(
       children: [
         _insightCard(
-          'Subjects to "Rescue"',
-          '${lowPerformers.length} subjects need attention',
+          l10n.subjectsToRescue,
+          '${lowPerformers.length} ${l10n.subjects}',
           lowPerformers.isNotEmpty ? Colors.redAccent : Colors.greenAccent,
           Icons.warning_amber_rounded,
         ),
         const SizedBox(height: 12),
         _insightCard(
-          'Best Subject',
+          l10n.bestSubject,
           _getBestSubject(ref, subjects),
           const Color(0xFF06B6D4),
           Icons.star_outline,
@@ -166,7 +168,7 @@ class StatsScreen extends ConsumerWidget {
     return best.name;
   }
 
-  Future<void> _exportToPdf(BuildContext context, WidgetRef ref, List<Subject> subjects) async {
+  Future<void> _exportToPdf(BuildContext context, WidgetRef ref, List<Subject> subjects, AppLocalizations l10n) async {
     final pdf = pw.Document();
 
     pdf.addPage(
@@ -180,7 +182,7 @@ class StatsScreen extends ConsumerWidget {
               pw.Text('Summary of current academic standing:'),
               pw.SizedBox(height: 20),
               pw.TableHelper.fromTextArray(
-                headers: ['Subject', 'Current Average'],
+                headers: [l10n.type, l10n.currentAverage],
                 data: subjects.map((s) {
                   final avg = ref.read(averageProvider(s.id));
                   return [s.name, avg.toStringAsFixed(2)];

@@ -39,6 +39,8 @@ dependencies:
   flutter_riverpod: ^2.6.1
   google_fonts: ^6.2.1
   shared_preferences: ^2.5.2
+  flutter_localizations:
+    sdk: flutter
 
 dev_dependencies:
   flutter_test:
@@ -57,9 +59,7 @@ dev_dependencies:
 # The following section is specific to Flutter packages.
 flutter:
 
-  # The following line ensures that the Material Icons font is
-  # included with your application, so that you can use the icons in
-  # the material Icons class.
+  generate: true
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
