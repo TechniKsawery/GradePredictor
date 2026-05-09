@@ -369,6 +369,72 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Change Language'**
   String get changeLanguage;
+
+  /// No description provided for @profileDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'How other students will see you'**
+  String get profileDescription;
+
+  /// No description provided for @enterName.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your name'**
+  String get enterName;
+
+  /// No description provided for @languageDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Switch application language'**
+  String get languageDescription;
+
+  /// No description provided for @passwordDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Update your account security'**
+  String get passwordDescription;
+
+  /// No description provided for @passwordHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Minimum 6 characters'**
+  String get passwordHint;
+
+  /// No description provided for @delete.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get delete;
+
+  /// No description provided for @confirmDelete.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure?'**
+  String get confirmDelete;
+
+  /// No description provided for @deleteSubjectConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'This will delete the subject and all its grades.'**
+  String get deleteSubjectConfirm;
+
+  /// No description provided for @editSubject.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Subject'**
+  String get editSubject;
+
+  /// No description provided for @editGrade.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Grade'**
+  String get editGrade;
+
+  /// No description provided for @save.
+  ///
+  /// In en, this message translates to:
+  /// **'Save'**
+  String get save;
 }
 
 class _AppLocalizationsDelegate

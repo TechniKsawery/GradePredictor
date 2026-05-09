@@ -150,4 +150,38 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get changeLanguage => 'Change Language';
+
+  @override
+  String get profileDescription => 'How other students will see you';
+
+  @override
+  String get enterName => 'Enter your name';
+
+  @override
+  String get languageDescription => 'Switch application language';
+
+  @override
+  String get passwordDescription => 'Update your account security';
+
+  @override
+  String get passwordHint => 'Minimum 6 characters';
+
+  @override
+  String get delete => 'Delete';
+
+  @override
+  String get confirmDelete => 'Are you sure?';
+
+  @override
+  String get deleteSubjectConfirm =>
+      'This will delete the subject and all its grades.';
+
+  @override
+  String get editSubject => 'Edit Subject';
+
+  @override
+  String get editGrade => 'Edit Grade';
+
+  @override
+  String get save => 'Save';
 }

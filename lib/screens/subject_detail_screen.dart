@@ -82,20 +82,106 @@ class SubjectDetailScreen extends ConsumerWidget {
         color: const Color(0xFF1E293B),
         borderRadius: BorderRadius.circular(12),
       ),
-      child: ListTile(
-        leading: CircleAvatar(
-          backgroundColor: const Color(0xFF6366F1).withValues(alpha: 0.1),
-          child: Text(
-            grade.grade.toString(),
-            style: const TextStyle(color: Color(0xFF6366F1), fontWeight: FontWeight.bold),
+      child: InkWell(
+        onTap: () => _showEditGradeDialog(context, ref, grade),
+        borderRadius: BorderRadius.circular(12),
+        child: ListTile(
+          leading: CircleAvatar(
+            backgroundColor: const Color(0xFF6366F1).withValues(alpha: 0.1),
+            child: Text(
+              grade.grade.toString(),
+              style: const TextStyle(color: Color(0xFF6366F1), fontWeight: FontWeight.bold),
+            ),
+          ),
+          title: Text('${l10n.weight}: ${grade.weight}'),
+          subtitle: Text(grade.type),
+          trailing: IconButton(
+            icon: const Icon(Icons.delete_outline, color: Colors.white24),
+            onPressed: () => _showDeleteGradeConfirm(context, ref, grade),
           ),
         ),
-        title: Text('${l10n.weight}: ${grade.weight}'),
-        subtitle: Text(grade.type),
-        trailing: IconButton(
-          icon: const Icon(Icons.delete_outline, color: Colors.white24),
-          onPressed: () => ref.read(gradesProvider(subject.id).notifier).deleteGrade(grade.id),
+      ),
+    );
+  }
+
+  void _showEditGradeDialog(BuildContext context, WidgetRef ref, Grade grade) {
+    final gradeController = TextEditingController(text: grade.grade.toString());
+    final weightController = TextEditingController(text: grade.weight.toString());
+    final l10n = AppLocalizations.of(context)!;
+    String selectedType = grade.type;
+
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(l10n.editGrade),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TextField(
+              controller: gradeController,
+              decoration: InputDecoration(labelText: l10n.gradeHint),
+              keyboardType: TextInputType.number,
+            ),
+            const SizedBox(height: 12),
+            TextField(
+              controller: weightController,
+              decoration: InputDecoration(labelText: l10n.weightHint),
+              keyboardType: TextInputType.number,
+            ),
+            const SizedBox(height: 12),
+            DropdownButtonFormField<String>(
+              value: selectedType,
+              items: ['test', 'quiz', 'homework', 'activity'].map((t) => 
+                DropdownMenuItem(value: t, child: Text(t.toUpperCase()))
+              ).toList(),
+              onChanged: (v) => selectedType = v!,
+              decoration: InputDecoration(labelText: l10n.type),
+            ),
+          ],
         ),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(context), child: Text(l10n.cancel)),
+          ElevatedButton(
+            onPressed: () {
+              final gValue = double.tryParse(gradeController.text) ?? 0;
+              final wValue = double.tryParse(weightController.text) ?? 1.0;
+              if (gValue > 0) {
+                final updatedGrade = Grade(
+                  id: grade.id,
+                  subjectId: grade.subjectId,
+                  grade: gValue,
+                  weight: wValue,
+                  type: selectedType,
+                  date: grade.date,
+                );
+                ref.read(gradesProvider(subject.id).notifier).updateGrade(updatedGrade);
+                Navigator.pop(context);
+              }
+            },
+            child: Text(l10n.save),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showDeleteGradeConfirm(BuildContext context, WidgetRef ref, Grade grade) {
+    final l10n = AppLocalizations.of(context)!;
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(l10n.confirmDelete),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(context), child: Text(l10n.cancel)),
+          ElevatedButton(
+            onPressed: () {
+              ref.read(gradesProvider(subject.id).notifier).deleteGrade(grade.id);
+              Navigator.pop(context);
+            },
+            style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+            child: Text(l10n.delete),
+          ),
+        ],
       ),
     );
   }

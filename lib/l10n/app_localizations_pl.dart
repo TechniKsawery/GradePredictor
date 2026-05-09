@@ -150,4 +150,38 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get changeLanguage => 'Zmień język';
+
+  @override
+  String get profileDescription => 'Tak będą Cię widzieć inni studenci';
+
+  @override
+  String get enterName => 'Wpisz swoją nazwę';
+
+  @override
+  String get languageDescription => 'Zmień język aplikacji';
+
+  @override
+  String get passwordDescription => 'Zaktualizuj zabezpieczenia konta';
+
+  @override
+  String get passwordHint => 'Minimum 6 znaków';
+
+  @override
+  String get delete => 'Usuń';
+
+  @override
+  String get confirmDelete => 'Czy na pewno?';
+
+  @override
+  String get deleteSubjectConfirm =>
+      'To usunie przedmiot wraz ze wszystkimi ocenami.';
+
+  @override
+  String get editSubject => 'Edytuj przedmiot';
+
+  @override
+  String get editGrade => 'Edytuj ocenę';
+
+  @override
+  String get save => 'Zapisz';
 }

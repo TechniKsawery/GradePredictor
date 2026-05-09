@@ -28,6 +28,11 @@ class SubjectsNotifier extends StateNotifier<List<Subject>> {
     state = [...state, newSubject];
   }
 
+  Future<void> updateSubject(String id, String name) async {
+    await _service.updateSubject(id, name);
+    state = state.map((s) => s.id == id ? Subject(id: s.id, userId: s.userId, name: name) : s).toList();
+  }
+
   Future<void> deleteSubject(String id) async {
     await _service.deleteSubject(id);
     state = state.where((s) => s.id != id).toList();
@@ -63,6 +68,11 @@ class GradesNotifier extends StateNotifier<List<Grade>> {
       date: DateTime.now(),
     ));
     state = [newGrade, ...state];
+  }
+
+  Future<void> updateGrade(Grade grade) async {
+    await _service.updateGrade(grade);
+    state = state.map((g) => g.id == grade.id ? grade : g).toList();
   }
 
   Future<void> deleteGrade(String id) async {

@@ -43,5 +43,16 @@
   "profileUpdated": "Profil zaktualizowany pomyślnie!",
   "passwordUpdated": "Hasło zaktualizowane pomyślnie!",
   "error": "Błąd: {message}",
-  "changeLanguage": "Zmień język"
+  "changeLanguage": "Zmień język",
+  "profileDescription": "Tak będą Cię widzieć inni studenci",
+  "enterName": "Wpisz swoją nazwę",
+  "languageDescription": "Zmień język aplikacji",
+  "passwordDescription": "Zaktualizuj zabezpieczenia konta",
+  "passwordHint": "Minimum 6 znaków",
+  "delete": "Usuń",
+  "confirmDelete": "Czy na pewno?",
+  "deleteSubjectConfirm": "To usunie przedmiot wraz ze wszystkimi ocenami.",
+  "editSubject": "Edytuj przedmiot",
+  "editGrade": "Edytuj ocenę",
+  "save": "Zapisz"
 }

@@ -43,5 +43,16 @@
   "profileUpdated": "Profil erfolgreich aktualisiert!",
   "passwordUpdated": "Passwort erfolgreich aktualisiert!",
   "error": "Fehler: {message}",
-  "changeLanguage": "Sprache ändern"
+  "changeLanguage": "Sprache ändern",
+  "profileDescription": "Wie dich andere Studenten sehen werden",
+  "enterName": "Geben Sie Ihren Namen ein",
+  "languageDescription": "Sprache der Anwendung ändern",
+  "passwordDescription": "Sicherheit Ihres Kontos aktualisieren",
+  "passwordHint": "Mindestens 6 Zeichen",
+  "delete": "Löschen",
+  "confirmDelete": "Sind Sie sicher?",
+  "deleteSubjectConfirm": "Dadurch werden das Fach und alle seine Noten gelöscht.",
+  "editSubject": "Fach bearbeiten",
+  "editGrade": "Note bearbeiten",
+  "save": "Speichern"
 }

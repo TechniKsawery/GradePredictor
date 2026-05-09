@@ -150,4 +150,38 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get changeLanguage => 'Sprache ändern';
+
+  @override
+  String get profileDescription => 'Wie dich andere Studenten sehen werden';
+
+  @override
+  String get enterName => 'Geben Sie Ihren Namen ein';
+
+  @override
+  String get languageDescription => 'Sprache der Anwendung ändern';
+
+  @override
+  String get passwordDescription => 'Sicherheit Ihres Kontos aktualisieren';
+
+  @override
+  String get passwordHint => 'Mindestens 6 Zeichen';
+
+  @override
+  String get delete => 'Löschen';
+
+  @override
+  String get confirmDelete => 'Sind Sie sicher?';
+
+  @override
+  String get deleteSubjectConfirm =>
+      'Dadurch werden das Fach und alle seine Noten gelöscht.';
+
+  @override
+  String get editSubject => 'Fach bearbeiten';
+
+  @override
+  String get editGrade => 'Note bearbeiten';
+
+  @override
+  String get save => 'Speichern';
 }

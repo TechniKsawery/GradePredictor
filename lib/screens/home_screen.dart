@@ -63,6 +63,7 @@ class HomeScreen extends ConsumerWidget {
                         builder: (_) => SubjectDetailScreen(subject: subject),
                       ),
                     ),
+                    onLongPress: () => _showEditSubjectDialog(context, ref, subject),
                     child: Container(
                       padding: const EdgeInsets.all(20),
                       decoration: BoxDecoration(
@@ -70,51 +71,60 @@ class HomeScreen extends ConsumerWidget {
                         borderRadius: BorderRadius.circular(16),
                         border: Border.all(color: Colors.white10),
                       ),
-                      child: Row(
-                        children: [
-                          Container(
-                            width: 48,
-                            height: 48,
-                            decoration: BoxDecoration(
-                              color: const Color(0xFF6366F1).withValues(alpha: 0.2),
-                              borderRadius: BorderRadius.circular(12),
+                      child: IntrinsicHeight(
+                        child: Row(
+                          children: [
+                            Container(
+                              width: 48,
+                              height: 48,
+                              decoration: BoxDecoration(
+                                color: const Color(0xFF6366F1).withValues(alpha: 0.2),
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: const Icon(Icons.book_outlined, color: Color(0xFF6366F1)),
                             ),
-                            child: const Icon(Icons.book_outlined, color: Color(0xFF6366F1)),
-                          ),
-                          const SizedBox(width: 16),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  subject.name,
-                                  style: const TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
+                            const SizedBox(width: 16),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    subject.name,
+                                    style: const TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                    ),
                                   ),
+                                  Text(
+                                    l10n.currentAverage,
+                                    style: const TextStyle(color: Colors.white38, fontSize: 12),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                IconButton(
+                                  icon: const Icon(Icons.delete_outline, color: Colors.white24),
+                                  onPressed: () => _showDeleteSubjectConfirm(context, ref, subject),
+                                  constraints: const BoxConstraints(),
+                                  padding: EdgeInsets.zero,
                                 ),
                                 Text(
-                                  l10n.currentAverage,
-                                  style: const TextStyle(color: Colors.white38, fontSize: 12),
+                                  average.toStringAsFixed(2),
+                                  style: TextStyle(
+                                    fontSize: 24,
+                                    fontWeight: FontWeight.bold,
+                                    color: average >= 4.0 ? const Color(0xFF10B981) : Colors.white,
+                                  ),
                                 ),
                               ],
                             ),
-                          ),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: [
-                              Text(
-                                average.toStringAsFixed(2),
-                                style: TextStyle(
-                                  fontSize: 24,
-                                  fontWeight: FontWeight.bold,
-                                  color: average >= 4.0 ? const Color(0xFF10B981) : Colors.white,
-                                ),
-                              ),
-                              const Icon(Icons.chevron_right, color: Colors.white24, size: 16),
-                            ],
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
                   ),
@@ -126,6 +136,56 @@ class HomeScreen extends ConsumerWidget {
         label: Text(l10n.addSubject),
         icon: const Icon(Icons.add),
         backgroundColor: const Color(0xFF6366F1),
+      ),
+    );
+  }
+
+  void _showDeleteSubjectConfirm(BuildContext context, WidgetRef ref, subject) {
+    final l10n = AppLocalizations.of(context)!;
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(l10n.confirmDelete),
+        content: Text(l10n.deleteSubjectConfirm),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(context), child: Text(l10n.cancel)),
+          ElevatedButton(
+            onPressed: () {
+              ref.read(subjectsProvider.notifier).deleteSubject(subject.id);
+              Navigator.pop(context);
+            },
+            style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+            child: Text(l10n.delete),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showEditSubjectDialog(BuildContext context, WidgetRef ref, subject) {
+    final controller = TextEditingController(text: subject.name);
+    final l10n = AppLocalizations.of(context)!;
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(l10n.editSubject),
+        content: TextField(
+          controller: controller,
+          decoration: InputDecoration(hintText: l10n.subjectNameHint),
+          autofocus: true,
+        ),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(context), child: Text(l10n.cancel)),
+          ElevatedButton(
+            onPressed: () {
+              if (controller.text.isNotEmpty) {
+                ref.read(subjectsProvider.notifier).updateSubject(subject.id, controller.text);
+                Navigator.pop(context);
+              }
+            },
+            child: Text(l10n.save),
+          ),
+        ],
       ),
     );
   }

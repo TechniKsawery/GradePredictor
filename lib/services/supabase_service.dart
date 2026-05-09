@@ -75,6 +75,10 @@ class SupabaseService {
     return Subject.fromJson(response);
   }
 
+  Future<void> updateSubject(String id, String name) async {
+    await client.from('subjects').update({'name': name}).eq('id', id);
+  }
+
   Future<void> deleteSubject(String id) async {
     await client.from('subjects').delete().eq('id', id);
   }
@@ -96,6 +100,10 @@ class SupabaseService {
         .select()
         .single();
     return Grade.fromJson(response);
+  }
+
+  Future<void> updateGrade(Grade grade) async {
+    await client.from('grades').update(grade.toJson()).eq('id', grade.id);
   }
 
   Future<void> deleteGrade(String id) async {

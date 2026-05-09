@@ -43,5 +43,16 @@
   "profileUpdated": "Profile updated successfully!",
   "passwordUpdated": "Password updated successfully!",
   "error": "Error: {message}",
-  "changeLanguage": "Change Language"
+  "changeLanguage": "Change Language",
+  "profileDescription": "How other students will see you",
+  "enterName": "Enter your name",
+  "languageDescription": "Switch application language",
+  "passwordDescription": "Update your account security",
+  "passwordHint": "Minimum 6 characters",
+  "delete": "Delete",
+  "confirmDelete": "Are you sure?",
+  "deleteSubjectConfirm": "This will delete the subject and all its grades.",
+  "editSubject": "Edit Subject",
+  "editGrade": "Edit Grade",
+  "save": "Save"
 }

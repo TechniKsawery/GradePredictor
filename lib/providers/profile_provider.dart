@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/profile.dart';
+import '../services/supabase_service.dart';
 import '../providers/grade_provider.dart';
 
 final profileProvider = StateNotifierProvider<ProfileNotifier, Profile?>((ref) {
@@ -8,8 +9,8 @@ final profileProvider = StateNotifierProvider<ProfileNotifier, Profile?>((ref) {
 });
 
 class ProfileNotifier extends StateNotifier<Profile?> {
-  final _service = SupabaseService();
-  ProfileNotifier(SupabaseService service) : super(null) {
+  final SupabaseService _service;
+  ProfileNotifier(this._service) : super(null) {
     loadProfile();
   }
 
