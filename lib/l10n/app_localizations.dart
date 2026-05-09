@@ -585,6 +585,510 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Email updated! Check your inbox.'**
   String get emailUpdated;
+
+  /// No description provided for @appearanceTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Appearance'**
+  String get appearanceTitle;
+
+  /// No description provided for @appearanceSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Theme and app style'**
+  String get appearanceSubtitle;
+
+  /// No description provided for @themeLight.
+  ///
+  /// In en, this message translates to:
+  /// **'Light ☀️'**
+  String get themeLight;
+
+  /// No description provided for @themeSystem.
+  ///
+  /// In en, this message translates to:
+  /// **'System'**
+  String get themeSystem;
+
+  /// No description provided for @themeDark.
+  ///
+  /// In en, this message translates to:
+  /// **'Dark 🌙'**
+  String get themeDark;
+
+  /// No description provided for @settingsHeroTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Your study zone ✨'**
+  String get settingsHeroTitle;
+
+  /// No description provided for @settingsHeroSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Themes, accounts, and grading scale in one place.'**
+  String get settingsHeroSubtitle;
+
+  /// No description provided for @remainingToggle.
+  ///
+  /// In en, this message translates to:
+  /// **'Multiple assignments'**
+  String get remainingToggle;
+
+  /// No description provided for @remainingWeightsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Remaining assignments (weights)'**
+  String get remainingWeightsTitle;
+
+  /// No description provided for @addWeight.
+  ///
+  /// In en, this message translates to:
+  /// **'Add weight'**
+  String get addWeight;
+
+  /// No description provided for @remainingImpossible.
+  ///
+  /// In en, this message translates to:
+  /// **'Impossible! You need an average of {needed}'**
+  String remainingImpossible(Object needed);
+
+  /// No description provided for @remainingEasy.
+  ///
+  /// In en, this message translates to:
+  /// **'Easy! You only need 1.0 on average (or less: {needed})'**
+  String remainingEasy(Object needed);
+
+  /// No description provided for @remainingNeededAtLeast.
+  ///
+  /// In en, this message translates to:
+  /// **'You need an average of at least: {needed}'**
+  String remainingNeededAtLeast(Object needed);
+
+  /// No description provided for @calendarTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Exam calendar'**
+  String get calendarTitle;
+
+  /// No description provided for @addExam.
+  ///
+  /// In en, this message translates to:
+  /// **'Add exam'**
+  String get addExam;
+
+  /// No description provided for @editExam.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit exam'**
+  String get editExam;
+
+  /// No description provided for @examTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Exam name'**
+  String get examTitle;
+
+  /// No description provided for @examDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Date'**
+  String get examDate;
+
+  /// No description provided for @examSubject.
+  ///
+  /// In en, this message translates to:
+  /// **'Subject'**
+  String get examSubject;
+
+  /// No description provided for @maxPoints.
+  ///
+  /// In en, this message translates to:
+  /// **'Max points'**
+  String get maxPoints;
+
+  /// No description provided for @pointsMode.
+  ///
+  /// In en, this message translates to:
+  /// **'Points'**
+  String get pointsMode;
+
+  /// No description provided for @pointsEarned.
+  ///
+  /// In en, this message translates to:
+  /// **'Points earned'**
+  String get pointsEarned;
+
+  /// No description provided for @gradingModeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Grading type'**
+  String get gradingModeLabel;
+
+  /// No description provided for @gradingModeGrades.
+  ///
+  /// In en, this message translates to:
+  /// **'Grades 1-6'**
+  String get gradingModeGrades;
+
+  /// No description provided for @gradingModePoints.
+  ///
+  /// In en, this message translates to:
+  /// **'Points'**
+  String get gradingModePoints;
+
+  /// No description provided for @gradingModeMixed.
+  ///
+  /// In en, this message translates to:
+  /// **'Mixed'**
+  String get gradingModeMixed;
+
+  /// No description provided for @maxNormalPoints.
+  ///
+  /// In en, this message translates to:
+  /// **'Max points (regular)'**
+  String get maxNormalPoints;
+
+  /// No description provided for @maxBonusPoints.
+  ///
+  /// In en, this message translates to:
+  /// **'Max points (bonus)'**
+  String get maxBonusPoints;
+
+  /// No description provided for @chooseDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose date'**
+  String get chooseDate;
+
+  /// No description provided for @noExams.
+  ///
+  /// In en, this message translates to:
+  /// **'No exams yet. Add your first one!'**
+  String get noExams;
+
+  /// No description provided for @deleteExamConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'This will remove the exam from your calendar.'**
+  String get deleteExamConfirm;
+
+  /// No description provided for @infoTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'How it works'**
+  String get infoTitle;
+
+  /// No description provided for @infoBody.
+  ///
+  /// In en, this message translates to:
+  /// **'The app calculates your current average and shows what you need on remaining exams to keep or raise your grade. Progress charts and stats highlight which subjects you are \"saving\" at the last moment.'**
+  String get infoBody;
+
+  /// No description provided for @ok.
+  ///
+  /// In en, this message translates to:
+  /// **'OK'**
+  String get ok;
+
+  /// No description provided for @validationAllFields.
+  ///
+  /// In en, this message translates to:
+  /// **'Please fill in all fields!'**
+  String get validationAllFields;
+
+  /// No description provided for @unknownSubject.
+  ///
+  /// In en, this message translates to:
+  /// **'Unknown Subject'**
+  String get unknownSubject;
+
+  /// No description provided for @validationSubjectName.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a subject name'**
+  String get validationSubjectName;
+
+  /// No description provided for @validationMaxPoints.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter valid max points'**
+  String get validationMaxPoints;
+
+  /// No description provided for @validationGrade.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a valid grade (1-6)'**
+  String get validationGrade;
+
+  /// No description provided for @validationPoints.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter points and max points'**
+  String get validationPoints;
+
+  /// No description provided for @validationWeight.
+  ///
+  /// In en, this message translates to:
+  /// **'Weight must be greater than 0'**
+  String get validationWeight;
+
+  /// No description provided for @validationExamTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter an exam name'**
+  String get validationExamTitle;
+
+  /// No description provided for @noSubjectsForExams.
+  ///
+  /// In en, this message translates to:
+  /// **'Add subjects first to plan exams'**
+  String get noSubjectsForExams;
+
+  /// No description provided for @noSubjectsShort.
+  ///
+  /// In en, this message translates to:
+  /// **'No subjects'**
+  String get noSubjectsShort;
+
+  /// No description provided for @predictionFirstAddGrade.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a grade first!'**
+  String get predictionFirstAddGrade;
+
+  /// No description provided for @predictionPointsSurplus.
+  ///
+  /// In en, this message translates to:
+  /// **'You already have enough points for this goal!'**
+  String get predictionPointsSurplus;
+
+  /// No description provided for @predictionPointsCurrentStatus.
+  ///
+  /// In en, this message translates to:
+  /// **'Your current score is {current}%, and the goal is {target}%.'**
+  String predictionPointsCurrentStatus(Object current, Object target);
+
+  /// No description provided for @predictionPointsMissing.
+  ///
+  /// In en, this message translates to:
+  /// **'With current grades you are missing {remaining} pts to reach {target}%'**
+  String predictionPointsMissing(Object remaining, Object target);
+
+  /// No description provided for @predictionPointsNoExamsRecommendation.
+  ///
+  /// In en, this message translates to:
+  /// **'Add upcoming exams to the calendar – there will surely be opportunities to earn these points!'**
+  String get predictionPointsNoExamsRecommendation;
+
+  /// No description provided for @predictionGoalEasy.
+  ///
+  /// In en, this message translates to:
+  /// **'You will reach the goal easily!'**
+  String get predictionGoalEasy;
+
+  /// No description provided for @predictionGoalEasyExplanation.
+  ///
+  /// In en, this message translates to:
+  /// **'Even with 0 pts from upcoming exams, your score won\'t drop below {target}%.'**
+  String predictionGoalEasyExplanation(Object target);
+
+  /// No description provided for @predictionImpossibleShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Unfortunately, the goal is unreachable.'**
+  String get predictionImpossibleShort;
+
+  /// No description provided for @predictionPointsImpossibleExplanation.
+  ///
+  /// In en, this message translates to:
+  /// **'Even with 100% from current exams, you are still missing {extra} pts.'**
+  String predictionPointsImpossibleExplanation(Object extra);
+
+  /// No description provided for @predictionPointsRescueRecommendation.
+  ///
+  /// In en, this message translates to:
+  /// **'In addition to calendar exams, you need to earn an extra {extra} pts (e.g., from extra projects) to reach your goal.'**
+  String predictionPointsRescueRecommendation(Object extra);
+
+  /// No description provided for @predictionPointsNeededList.
+  ///
+  /// In en, this message translates to:
+  /// **'You must pass upcoming exams with:'**
+  String get predictionPointsNeededList;
+
+  /// No description provided for @predictionPointsNeededExplanation.
+  ///
+  /// In en, this message translates to:
+  /// **'You need {remaining} pts out of {total} possible.'**
+  String predictionPointsNeededExplanation(Object remaining, Object total);
+
+  /// No description provided for @predictionPointsFocusAdvice.
+  ///
+  /// In en, this message translates to:
+  /// **'Focus especially on the largest exam – that\'s where you can gain the most!'**
+  String get predictionPointsFocusAdvice;
+
+  /// No description provided for @predictionGradesForecastTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Forecast for future grades:'**
+  String get predictionGradesForecastTitle;
+
+  /// No description provided for @predictionGradesNoExamsExplanation.
+  ///
+  /// In en, this message translates to:
+  /// **'No data in calendar. I checked what you need to get for your average to rise to {target}.'**
+  String predictionGradesNoExamsExplanation(Object target);
+
+  /// No description provided for @predictionGradesNoExamsRecommendation.
+  ///
+  /// In en, this message translates to:
+  /// **'Add upcoming exams to the calendar so we know how many weights are left until the end of the year!'**
+  String get predictionGradesNoExamsRecommendation;
+
+  /// No description provided for @predictionGradesWeightScenario.
+  ///
+  /// In en, this message translates to:
+  /// **'Grade with weight {weight}'**
+  String predictionGradesWeightScenario(Object weight);
+
+  /// No description provided for @predictionGradesImpossibleWhy.
+  ///
+  /// In en, this message translates to:
+  /// **'By getting a 6, your average will only rise to {best}.'**
+  String predictionGradesImpossibleWhy(Object best);
+
+  /// No description provided for @predictionGradesRescuePlanTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Calendar is not enough. You need a rescue plan!'**
+  String get predictionGradesRescuePlanTitle;
+
+  /// No description provided for @predictionGradesImpossibleExplanation.
+  ///
+  /// In en, this message translates to:
+  /// **'Even with straight 6s from calendar exams, your average will only rise to {best}.'**
+  String predictionGradesImpossibleExplanation(Object best);
+
+  /// No description provided for @predictionGradesRescueRecommendation.
+  ///
+  /// In en, this message translates to:
+  /// **'In addition to calendar exams, you need to earn {extra} extra \'6\' grades (weight 1.0) to reach an average of {target}.'**
+  String predictionGradesRescueRecommendation(Object extra, Object target);
+
+  /// No description provided for @predictionGradesExamsNeededList.
+  ///
+  /// In en, this message translates to:
+  /// **'You must pass upcoming exams with:'**
+  String get predictionGradesExamsNeededList;
+
+  /// No description provided for @predictionGradesExamsNeededExplanation.
+  ///
+  /// In en, this message translates to:
+  /// **'I calculated the average grade from all upcoming exams.'**
+  String get predictionGradesExamsNeededExplanation;
+
+  /// No description provided for @predictionGradesExtraCreditAdvice.
+  ///
+  /// In en, this message translates to:
+  /// **'If these exams aren\'t everything, try to get some extra credit for activity!'**
+  String get predictionGradesExtraCreditAdvice;
+
+  /// No description provided for @predictionTargetLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Target grade or %'**
+  String get predictionTargetLabel;
+
+  /// No description provided for @predictionTargetHint.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g. 4 or 90'**
+  String get predictionTargetHint;
+
+  /// No description provided for @predictionMinGrade.
+  ///
+  /// In en, this message translates to:
+  /// **'min. {grade}'**
+  String predictionMinGrade(Object grade);
+
+  /// No description provided for @predictionOrSeparator.
+  ///
+  /// In en, this message translates to:
+  /// **'OR'**
+  String get predictionOrSeparator;
+
+  /// No description provided for @gradeTypeTest.
+  ///
+  /// In en, this message translates to:
+  /// **'Test'**
+  String get gradeTypeTest;
+
+  /// No description provided for @gradeTypeQuiz.
+  ///
+  /// In en, this message translates to:
+  /// **'Quiz'**
+  String get gradeTypeQuiz;
+
+  /// No description provided for @gradeTypeHomework.
+  ///
+  /// In en, this message translates to:
+  /// **'Homework'**
+  String get gradeTypeHomework;
+
+  /// No description provided for @gradeTypeActivity.
+  ///
+  /// In en, this message translates to:
+  /// **'Activity'**
+  String get gradeTypeActivity;
+
+  /// No description provided for @gradeTypeBonus.
+  ///
+  /// In en, this message translates to:
+  /// **'Bonus'**
+  String get gradeTypeBonus;
+
+  /// No description provided for @predictionAdviceKeepItUp.
+  ///
+  /// In en, this message translates to:
+  /// **'Great job! Keep it up in future assignments.'**
+  String get predictionAdviceKeepItUp;
+
+  /// No description provided for @predictionAdviceSleepWell.
+  ///
+  /// In en, this message translates to:
+  /// **'You can sleep well, but don\'t give up completely!'**
+  String get predictionAdviceSleepWell;
+
+  /// No description provided for @predictionAdviceFocusOnBig.
+  ///
+  /// In en, this message translates to:
+  /// **'Focus especially on the largest exam – that\'s where you can gain the most!'**
+  String get predictionAdviceFocusOnBig;
+
+  /// No description provided for @predictionAdviceExtraCredit.
+  ///
+  /// In en, this message translates to:
+  /// **'If these exams aren\'t everything, try to get some extra credit for activity!'**
+  String get predictionAdviceExtraCredit;
+
+  /// No description provided for @customGradingScaleTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Custom Grading Scale'**
+  String get customGradingScaleTitle;
+
+  /// No description provided for @resetToGlobal.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset to Global Scale'**
+  String get resetToGlobal;
+
+  /// No description provided for @customScaleSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Custom scale saved!'**
+  String get customScaleSaved;
 }
 
 class _AppLocalizationsDelegate

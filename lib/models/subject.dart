@@ -1,10 +1,16 @@
 class Subject {
+  static const String gradingModeGrades = 'grades';
+  static const String gradingModePoints = 'points';
+  static const String gradingModeMixed = 'mixed';
+
   final String id;
   final String userId;
   final String name;
   final DateTime createdAt;
   final double? maxNormalPoints;
   final double? maxBonusPoints;
+  final String gradingMode;
+  final Map<String, double>? customGradingScale;
 
   Subject({
     required this.id,
@@ -13,9 +19,18 @@ class Subject {
     required this.createdAt,
     this.maxNormalPoints,
     this.maxBonusPoints,
+    this.gradingMode = gradingModeMixed,
+    this.customGradingScale,
   });
 
   factory Subject.fromJson(Map<String, dynamic> json) {
+    Map<String, double>? scale;
+    if (json['custom_grading_scale'] != null) {
+      scale = (json['custom_grading_scale'] as Map<String, dynamic>).map(
+        (key, value) => MapEntry(key, (value as num).toDouble()),
+      );
+    }
+
     return Subject(
       id: json['id'],
       userId: json['user_id'],
@@ -23,6 +38,8 @@ class Subject {
       createdAt: DateTime.parse(json['created_at']),
       maxNormalPoints: json['max_normal_points'] != null ? (json['max_normal_points'] as num).toDouble() : null,
       maxBonusPoints: json['max_bonus_points'] != null ? (json['max_bonus_points'] as num).toDouble() : null,
+      gradingMode: json['grading_mode'] ?? gradingModeMixed,
+      customGradingScale: scale,
     );
   }
 
@@ -34,6 +51,8 @@ class Subject {
       'created_at': createdAt.toIso8601String(),
       'max_normal_points': maxNormalPoints,
       'max_bonus_points': maxBonusPoints,
+      'grading_mode': gradingMode,
+      'custom_grading_scale': customGradingScale,
     };
   }
 }

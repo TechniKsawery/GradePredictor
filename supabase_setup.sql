@@ -47,6 +47,10 @@ CREATE TABLE IF NOT EXISTS subjects (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE,
   name TEXT NOT NULL,
+  grading_mode TEXT DEFAULT 'mixed',
+  max_normal_points DOUBLE PRECISION,
+  max_bonus_points DOUBLE PRECISION,
+  custom_grading_scale JSONB,
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
@@ -60,6 +64,8 @@ BEGIN
         BEGIN
             ALTER TABLE subjects ADD COLUMN IF NOT EXISTS max_normal_points DOUBLE PRECISION;
             ALTER TABLE subjects ADD COLUMN IF NOT EXISTS max_bonus_points DOUBLE PRECISION;
+            ALTER TABLE subjects ADD COLUMN IF NOT EXISTS grading_mode TEXT DEFAULT 'mixed';
+            ALTER TABLE subjects ADD COLUMN IF NOT EXISTS custom_grading_scale JSONB;
             EXIT;
         EXCEPTION WHEN SQLSTATE '40P01' THEN
             IF attempts >= 5 THEN
@@ -81,9 +87,21 @@ CREATE TABLE IF NOT EXISTS grades (
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
+-- Exams table (calendar)
+CREATE TABLE IF NOT EXISTS exams (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    subject_id UUID REFERENCES subjects(id) ON DELETE CASCADE,
+    title TEXT NOT NULL,
+    date TIMESTAMPTZ NOT NULL,
+    weight DOUBLE PRECISION NOT NULL DEFAULT 1.0,
+    max_points DOUBLE PRECISION,
+    created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
 -- Enable RLS
 ALTER TABLE subjects ENABLE ROW LEVEL SECURITY;
 ALTER TABLE grades ENABLE ROW LEVEL SECURITY;
+ALTER TABLE exams ENABLE ROW LEVEL SECURITY;
 
 -- Policies for subjects
 DO $$ BEGIN
@@ -96,6 +114,15 @@ END $$;
 DO $$ BEGIN
     IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE policyname = 'Users can manage grades of their own subjects' AND tablename = 'grades') THEN
         CREATE POLICY "Users can manage grades of their own subjects" ON grades FOR ALL USING (
+            subject_id IN (SELECT id FROM subjects WHERE user_id = auth.uid())
+        );
+    END IF;
+END $$;
+
+-- Policies for exams
+DO $$ BEGIN
+    IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE policyname = 'Users can manage exams of their own subjects' AND tablename = 'exams') THEN
+        CREATE POLICY "Users can manage exams of their own subjects" ON exams FOR ALL USING (
             subject_id IN (SELECT id FROM subjects WHERE user_id = auth.uid())
         );
     END IF;

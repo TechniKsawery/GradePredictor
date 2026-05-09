@@ -5,25 +5,28 @@
 // gestures. You can also use WidgetTester to find child widgets in the widget
 // tree, read text, and verify that the values of widget properties are correct.
 
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:gradepredictor/main.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:gradepredictor/main.dart';
+import 'package:gradepredictor/screens/login_screen.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
+  TestWidgetsFlutterBinding.ensureInitialized();
+
+  setUpAll(() async {
+    SharedPreferences.setMockInitialValues({});
+    await Supabase.initialize(
+      url: 'https://uaeimifolckkhnsofluy.supabase.co',
+      anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVhZWltaWZvbGNra2huc29mbHV5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgyODc1NzQsImV4cCI6MjA5Mzg2MzU3NH0.ChbVEAKQZkrHP25ougl8mWE1QJLwrxA_weDXx1kX_rg',
+    );
+  });
+
+  testWidgets('App builds and shows login', (WidgetTester tester) async {
     await tester.pumpWidget(const ProviderScope(child: GradePredictorApp()));
+    await tester.pumpAndSettle();
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
-
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
-
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    expect(find.byType(LoginScreen), findsOneWidget);
   });
 }

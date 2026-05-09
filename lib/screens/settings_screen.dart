@@ -48,6 +48,8 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
     final scale = ref.watch(settingsProvider);
     final savedAccounts = ref.watch(accountsProvider);
     final currentUser = ref.watch(supabaseServiceProvider).currentUser;
+    final colorScheme = Theme.of(context).colorScheme;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     // Reset controllers whenever the logged-in user changes
     final currentEmail = currentUser?.email ?? '';
@@ -70,41 +72,58 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
         backgroundColor: Colors.transparent,
         elevation: 0,
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-        child: Column(
-          children: [
-            _buildAvatarSection(profile),
-            const SizedBox(height: 32),
+      body: Stack(
+        children: [
+          _buildSettingsBackground(context, isDark),
+          SingleChildScrollView(
+            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+            child: Column(
+              children: [
+                _buildSettingsHero(context, isDark, l10n),
+                const SizedBox(height: 24),
+                _buildAvatarSection(profile),
+                const SizedBox(height: 32),
+                _buildSectionCard(
+                  context: context,
+                  title: l10n.appearanceTitle,
+                  subtitle: l10n.appearanceSubtitle,
+                  child: Consumer(builder: (context, ref, _) {
+                    final tm = ref.watch(themeProvider);
+                    final chipColor = isDark ? const Color(0xFF0B1221) : const Color(0xFFF1F5F9);
+                    return Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        ChoiceChip(
+                          label: Text(l10n.themeLight),
+                          selected: tm == ThemeMode.light,
+                          selectedColor: colorScheme.primary.withValues(alpha: 0.15),
+                          backgroundColor: chipColor,
+                          labelStyle: TextStyle(color: tm == ThemeMode.light ? colorScheme.primary : colorScheme.onSurface),
+                          onSelected: (_) => ref.read(themeProvider.notifier).setTheme(ThemeMode.light),
+                        ),
+                        ChoiceChip(
+                          label: Text(l10n.themeSystem),
+                          selected: tm == ThemeMode.system,
+                          selectedColor: colorScheme.secondary.withValues(alpha: 0.15),
+                          backgroundColor: chipColor,
+                          labelStyle: TextStyle(color: tm == ThemeMode.system ? colorScheme.secondary : colorScheme.onSurface),
+                          onSelected: (_) => ref.read(themeProvider.notifier).setTheme(ThemeMode.system),
+                        ),
+                        ChoiceChip(
+                          label: Text(l10n.themeDark),
+                          selected: tm == ThemeMode.dark,
+                          selectedColor: colorScheme.primary.withValues(alpha: 0.15),
+                          backgroundColor: chipColor,
+                          labelStyle: TextStyle(color: tm == ThemeMode.dark ? colorScheme.primary : colorScheme.onSurface),
+                          onSelected: (_) => ref.read(themeProvider.notifier).setTheme(ThemeMode.dark),
+                        ),
+                      ],
+                    );
+                  }),
+                ),
+                const SizedBox(height: 20),
             _buildSectionCard(
-              title: 'Wygląd',
-              subtitle: 'Motyw i styl aplikacji',
-              child: Consumer(builder: (context, ref, _) {
-                final tm = ref.watch(themeProvider);
-                return Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    ChoiceChip(
-                      label: const Text('Jasny ☀️'),
-                      selected: tm == ThemeMode.light,
-                      onSelected: (_) => ref.read(themeProvider.notifier).setTheme(ThemeMode.light),
-                    ),
-                    ChoiceChip(
-                      label: const Text('System'),
-                      selected: tm == ThemeMode.system,
-                      onSelected: (_) => ref.read(themeProvider.notifier).setTheme(ThemeMode.system),
-                    ),
-                    ChoiceChip(
-                      label: const Text('Ciemny 🌙'),
-                      selected: tm == ThemeMode.dark,
-                      onSelected: (_) => ref.read(themeProvider.notifier).setTheme(ThemeMode.dark),
-                    ),
-                  ],
-                );
-              }),
-            ),
-            const SizedBox(height: 20),
-            _buildSectionCard(
+              context: context,
               title: l10n.displayName,
               subtitle: l10n.profileDescription,
               child: TextField(
@@ -131,6 +150,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             ),
             const SizedBox(height: 20),
             _buildSectionCard(
+              context: context,
               title: l10n.changeLanguage,
               subtitle: l10n.languageDescription,
               child: Container(
@@ -147,6 +167,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             ),
             const SizedBox(height: 20),
             _buildSectionCard(
+              context: context,
               title: l10n.changePassword,
               subtitle: l10n.passwordDescription,
               child: TextField(
@@ -182,6 +203,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             ),
             const SizedBox(height: 20),
             _buildSectionCard(
+              context: context,
               title: l10n.changeEmail,
               subtitle: l10n.changeEmailDescription,
               child: TextFormField(
@@ -218,6 +240,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             ),
             const SizedBox(height: 20),
             _buildSectionCard(
+              context: context,
               title: l10n.multiAccount,
               subtitle: l10n.multiAccountSubtitle,
               child: Column(
@@ -244,11 +267,11 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                             },
                           ),
                         IconButton(
-                          icon: const Icon(Icons.edit_outlined, color: Colors.white24),
+                          icon: Icon(Icons.edit_outlined, color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.5)),
                           onPressed: () => _showEditAccountNameDialog(context, ref, account),
                         ),
                         IconButton(
-                          icon: const Icon(Icons.delete_outline, color: Colors.white24),
+                          icon: Icon(Icons.delete_outline, color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.5)),
                           onPressed: () => ref.read(accountsProvider.notifier).removeAccount(account.email),
                         ),
                       ],
@@ -265,6 +288,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             ),
             const SizedBox(height: 20),
             _buildSectionCard(
+              context: context,
               title: l10n.gradingScale,
               subtitle: l10n.gradingScaleSubtitle,
               child: Column(
@@ -278,13 +302,111 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
               ),
             ),
             const SizedBox(height: 40),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSettingsBackground(BuildContext context, bool isDark) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final baseTop = isDark ? const Color(0xFF0F172A) : const Color(0xFFF8FAFC);
+    final glowA = isDark ? const Color(0xFF6366F1).withValues(alpha: 0.2) : const Color(0xFF06B6D4).withValues(alpha: 0.18);
+    final glowB = isDark ? const Color(0xFF06B6D4).withValues(alpha: 0.2) : const Color(0xFF6366F1).withValues(alpha: 0.16);
+
+    return Positioned.fill(
+      child: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [baseTop, colorScheme.surface.withValues(alpha: 0.98)],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+          ),
+        ),
+        child: Stack(
+          children: [
+            Positioned(top: -40, right: -30, child: _blurCircle(140, glowA)),
+            Positioned(top: 140, left: -60, child: _blurCircle(180, glowB)),
+            Positioned(bottom: -60, right: -20, child: _blurCircle(180, glowA.withValues(alpha: 0.2))),
           ],
         ),
       ),
     );
   }
 
+  Widget _blurCircle(double size, Color color) {
+    return Container(
+      width: size,
+      height: size,
+      decoration: BoxDecoration(
+        color: color,
+        shape: BoxShape.circle,
+        boxShadow: [BoxShadow(color: color, blurRadius: 60, spreadRadius: 20)],
+      ),
+    );
+  }
+
+  Widget _buildSettingsHero(BuildContext context, bool isDark, AppLocalizations l10n) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final heroGradient = LinearGradient(
+      colors: isDark
+          ? [const Color(0xFF1E293B), const Color(0xFF0F172A)]
+          : [const Color(0xFFFFFFFF), const Color(0xFFEFF6FF)],
+      begin: Alignment.topLeft,
+      end: Alignment.bottomRight,
+    );
+
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        gradient: heroGradient,
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(color: colorScheme.onSurface.withValues(alpha: 0.06)),
+        boxShadow: [
+          BoxShadow(
+            color: colorScheme.primary.withValues(alpha: 0.12),
+            blurRadius: 20,
+            offset: const Offset(0, 10),
+          ),
+        ],
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  l10n.settingsHeroTitle,
+                  style: TextStyle(fontWeight: FontWeight.bold, color: colorScheme.onSurface, fontSize: 16),
+                ),
+                const SizedBox(height: 6),
+                Text(
+                  l10n.settingsHeroSubtitle,
+                  style: TextStyle(color: colorScheme.onSurface.withValues(alpha: 0.7), fontSize: 12),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(width: 12),
+          SizedBox(
+            width: 120,
+            height: 80,
+            child: CustomPaint(
+              painter: _LandscapePainter(isDark: isDark),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget _buildAvatarSection(profile) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Column(
       children: [
         GestureDetector(
@@ -294,10 +416,10 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
               Container(
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  border: Border.all(color: const Color(0xFF6366F1), width: 3),
+                  border: Border.all(color: colorScheme.primary, width: 3),
                   boxShadow: [
                     BoxShadow(
-                      color: const Color(0xFF6366F1).withValues(alpha: 0.3),
+                      color: colorScheme.primary.withValues(alpha: 0.3),
                       blurRadius: 20,
                       spreadRadius: 5,
                     ),
@@ -305,12 +427,12 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                 ),
                 child: CircleAvatar(
                   radius: 60,
-                  backgroundColor: const Color(0xFF1E293B),
+                  backgroundColor: isDark ? const Color(0xFF1E293B) : const Color(0xFFF1F5F9),
                   backgroundImage: profile?.avatarUrl != null 
                       ? NetworkImage(profile!.avatarUrl!) 
                       : null,
                   child: profile?.avatarUrl == null 
-                      ? const Icon(Icons.person, size: 60, color: Colors.white24) 
+                      ? Icon(Icons.person, size: 60, color: colorScheme.onSurface.withValues(alpha: 0.3)) 
                       : null,
                 ),
               ),
@@ -333,7 +455,9 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
     );
   }
 
-  Widget _buildSectionCard({required String title, required String subtitle, required Widget child}) {
+  Widget _buildSectionCard({required BuildContext context, required String title, required String subtitle, required Widget child}) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final cardColor = Theme.of(context).cardColor;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -353,7 +477,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
               ),
               Text(
                 subtitle,
-                style: const TextStyle(color: Colors.white38, fontSize: 11),
+                style: TextStyle(color: colorScheme.onSurface.withValues(alpha: 0.5), fontSize: 11),
               ),
             ],
           ),
@@ -361,9 +485,9 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
         Container(
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
-            color: const Color(0xFF1E293B),
+            color: cardColor,
             borderRadius: BorderRadius.circular(20),
-            border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
+            border: Border.all(color: colorScheme.onSurface.withValues(alpha: 0.06)),
           ),
           child: child,
         ),
@@ -427,19 +551,22 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             TextButton(onPressed: () => Navigator.pop(context), child: Text(l10n.cancel)),
             ElevatedButton(
               onPressed: () async {
+                final name = nameController.text.trim();
+                final email = emailController.text.trim();
+                final pass = passwordController.text.trim();
+
+                if (name.isEmpty || email.isEmpty || pass.isEmpty) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text(l10n.validationAllFields), backgroundColor: Colors.orange),
+                  );
+                  return;
+                }
+
                 try {
                   if (isRegister) {
-                    await ref.read(accountsProvider.notifier).signUpAndAddAccount(
-                      emailController.text,
-                      passwordController.text,
-                      nameController.text,
-                    );
+                    await ref.read(accountsProvider.notifier).signUpAndAddAccount(email, pass, name);
                   } else {
-                    await ref.read(accountsProvider.notifier).addAccount(
-                      emailController.text,
-                      passwordController.text,
-                      nameController.text,
-                    );
+                    await ref.read(accountsProvider.notifier).addAccount(email, pass, name);
                   }
                   if (context.mounted) Navigator.pop(context);
                 } catch (e) {
@@ -486,23 +613,73 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
 
   Widget _langOption(WidgetRef ref, String label, Locale locale, Locale current) {
     final isSelected = current.languageCode == locale.languageCode;
+    final colorScheme = Theme.of(context).colorScheme;
     return GestureDetector(
       onTap: () => ref.read(localeProvider.notifier).setLocale(locale),
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
         decoration: BoxDecoration(
-          color: isSelected ? const Color(0xFF6366F1).withValues(alpha: 0.2) : Colors.transparent,
+          color: isSelected ? colorScheme.primary.withValues(alpha: 0.15) : Colors.transparent,
           borderRadius: BorderRadius.circular(8),
-          border: Border.all(color: isSelected ? const Color(0xFF6366F1) : Colors.transparent),
+          border: Border.all(color: isSelected ? colorScheme.primary : Colors.transparent),
         ),
         child: Text(
           label,
           style: TextStyle(
-            color: isSelected ? const Color(0xFF6366F1) : Colors.white60,
+            color: isSelected ? colorScheme.primary : colorScheme.onSurface.withValues(alpha: 0.7),
             fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
           ),
         ),
       ),
     );
   }
+}
+
+class _LandscapePainter extends CustomPainter {
+  final bool isDark;
+  _LandscapePainter({required this.isDark});
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final skyPaint = Paint()
+      ..color = isDark ? const Color(0xFF0B1221) : const Color(0xFFE0F2FE)
+      ..style = PaintingStyle.fill;
+    final hillBack = Paint()
+      ..color = isDark ? const Color(0xFF1E293B) : const Color(0xFF93C5FD)
+      ..style = PaintingStyle.fill;
+    final hillFront = Paint()
+      ..color = isDark ? const Color(0xFF273449) : const Color(0xFF60A5FA)
+      ..style = PaintingStyle.fill;
+    final sunPaint = Paint()
+      ..color = isDark ? const Color(0xFF94A3B8) : const Color(0xFFFBBF24)
+      ..style = PaintingStyle.fill;
+
+    canvas.drawRRect(
+      RRect.fromRectAndRadius(Offset.zero & size, const Radius.circular(16)),
+      skyPaint,
+    );
+
+    canvas.drawCircle(Offset(size.width * 0.78, size.height * 0.3), size.height * 0.18, sunPaint);
+
+    final back = Path()
+      ..moveTo(0, size.height * 0.8)
+      ..quadraticBezierTo(size.width * 0.25, size.height * 0.55, size.width * 0.55, size.height * 0.7)
+      ..quadraticBezierTo(size.width * 0.8, size.height * 0.82, size.width, size.height * 0.65)
+      ..lineTo(size.width, size.height)
+      ..lineTo(0, size.height)
+      ..close();
+    canvas.drawPath(back, hillBack);
+
+    final front = Path()
+      ..moveTo(0, size.height * 0.85)
+      ..quadraticBezierTo(size.width * 0.28, size.height * 0.75, size.width * 0.55, size.height * 0.85)
+      ..quadraticBezierTo(size.width * 0.78, size.height * 0.95, size.width, size.height * 0.8)
+      ..lineTo(size.width, size.height)
+      ..lineTo(0, size.height)
+      ..close();
+    canvas.drawPath(front, hillFront);
+  }
+
+  @override
+  bool shouldRepaint(covariant _LandscapePainter oldDelegate) => oldDelegate.isDark != isDark;
 }

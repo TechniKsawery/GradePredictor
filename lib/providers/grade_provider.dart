@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/subject.dart';
 import '../models/grade.dart';
+import '../models/exam.dart';
 import '../services/supabase_service.dart';
 
 
@@ -27,13 +28,39 @@ class SubjectsNotifier extends StateNotifier<List<Subject>> {
     state = [...state, newSubject];
   }
 
-  Future<void> addSubjectWithPoints(String name, {double? maxNormalPoints, double? maxBonusPoints}) async {
-    final newSubject = await _service.addSubject(name, maxNormalPoints: maxNormalPoints, maxBonusPoints: maxBonusPoints);
+  Future<void> addSubjectWithPoints(
+    String name, {
+    double? maxNormalPoints,
+    double? maxBonusPoints,
+    String? gradingMode,
+    Map<String, double>? customGradingScale,
+  }) async {
+    final newSubject = await _service.addSubject(
+      name,
+      maxNormalPoints: maxNormalPoints,
+      maxBonusPoints: maxBonusPoints,
+      gradingMode: gradingMode,
+      customGradingScale: customGradingScale,
+    );
     state = [...state, newSubject];
   }
 
-  Future<void> updateSubject(String id, String name, {double? maxNormalPoints, double? maxBonusPoints}) async {
-    await _service.updateSubject(id, name, maxNormalPoints: maxNormalPoints, maxBonusPoints: maxBonusPoints);
+  Future<void> updateSubject(
+    String id,
+    String name, {
+    double? maxNormalPoints,
+    double? maxBonusPoints,
+    String? gradingMode,
+    Map<String, double>? customGradingScale,
+  }) async {
+    await _service.updateSubject(
+      id,
+      name,
+      maxNormalPoints: maxNormalPoints,
+      maxBonusPoints: maxBonusPoints,
+      gradingMode: gradingMode,
+      customGradingScale: customGradingScale,
+    );
     state = state.map<Subject>((s) => s.id == id ? Subject(
       id: s.id,
       userId: s.userId,
@@ -41,6 +68,8 @@ class SubjectsNotifier extends StateNotifier<List<Subject>> {
       createdAt: s.createdAt,
       maxNormalPoints: maxNormalPoints ?? s.maxNormalPoints,
       maxBonusPoints: maxBonusPoints ?? s.maxBonusPoints,
+      gradingMode: gradingMode ?? s.gradingMode,
+      customGradingScale: customGradingScale ?? s.customGradingScale,
     ) : s).toList();
   }
 
@@ -91,6 +120,41 @@ class GradesNotifier extends StateNotifier<List<Grade>> {
   Future<void> deleteGrade(String id) async {
     await _service.deleteGrade(id);
     state = state.where((g) => g.id != id).toList();
+  }
+}
+
+final examsProvider = StateNotifierProvider<ExamsNotifier, List<Exam>>((ref) {
+  return ExamsNotifier(ref.watch(supabaseServiceProvider));
+});
+
+class ExamsNotifier extends StateNotifier<List<Exam>> {
+  final SupabaseService _service;
+  ExamsNotifier(this._service) : super([]) {
+    loadExams();
+  }
+
+  Future<void> loadExams() async {
+    try {
+      state = await _service.getExams();
+    } catch (e) {
+      // Handle error
+    }
+  }
+
+  Future<void> addExam(Exam exam) async {
+    final newExam = await _service.addExam(exam);
+    state = [...state, newExam]..sort((a, b) => a.date.compareTo(b.date));
+  }
+
+  Future<void> updateExam(Exam exam) async {
+    await _service.updateExam(exam);
+    state = state.map<Exam>((e) => e.id == exam.id ? exam : e).toList()
+      ..sort((a, b) => a.date.compareTo(b.date));
+  }
+
+  Future<void> deleteExam(String id) async {
+    await _service.deleteExam(id);
+    state = state.where((e) => e.id != id).toList();
   }
 }
 

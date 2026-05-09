@@ -87,22 +87,23 @@ class SubjectDetailScreen extends ConsumerWidget {
             ),
           ),
           const SizedBox(height: 8),
-          Builder(builder: (context) {
-            final normalEarned = grades.where((g) => g.points != null && g.type != 'bonus').fold<double>(0.0, (s, g) => s + (g.points ?? 0));
-            final bonusEarned = grades.where((g) => g.points != null && g.type == 'bonus').fold<double>(0.0, (s, g) => s + (g.points ?? 0));
-            final maxNormal = subject.maxNormalPoints ?? 0.0;
-            final maxBonus = subject.maxBonusPoints ?? 0.0;
-            final normalPct = (maxNormal > 0) ? (normalEarned / maxNormal * 100) : 0.0;
-            final bonusPct = (maxBonus > 0) ? (bonusEarned / maxBonus * 100) : 0.0;
+          if (subject.gradingMode != Subject.gradingModeGrades)
+            Builder(builder: (context) {
+              final normalEarned = grades.where((g) => g.points != null && g.type != 'bonus').fold<double>(0.0, (s, g) => s + (g.points ?? 0));
+              final bonusEarned = grades.where((g) => g.points != null && g.type == 'bonus').fold<double>(0.0, (s, g) => s + (g.points ?? 0));
+              final maxNormal = subject.maxNormalPoints ?? 0.0;
+              final maxBonus = subject.maxBonusPoints ?? 0.0;
+              final normalPct = (maxNormal > 0) ? (normalEarned / maxNormal * 100) : 0.0;
+              final bonusPct = (maxBonus > 0) ? (bonusEarned / maxBonus * 100) : 0.0;
 
-            return Column(
-              children: [
-                Text('Punkty: ${normalEarned.toStringAsFixed(1)}/${maxNormal.toStringAsFixed(1)} (${normalPct.toStringAsFixed(0)}%)', style: const TextStyle(color: Colors.white70)),
-                const SizedBox(height: 4),
-                Text('Bonus: ${bonusEarned.toStringAsFixed(1)}/${maxBonus.toStringAsFixed(1)} (${bonusPct.toStringAsFixed(0)}%)', style: const TextStyle(color: Colors.white70)),
-              ],
-            );
-          }),
+              return Column(
+                children: [
+                  Text('Punkty: ${normalEarned.toStringAsFixed(1)}/${maxNormal.toStringAsFixed(1)} (${normalPct.toStringAsFixed(0)}%)', style: const TextStyle(color: Colors.white70)),
+                  const SizedBox(height: 4),
+                  Text('Bonus: ${bonusEarned.toStringAsFixed(1)}/${maxBonus.toStringAsFixed(1)} (${bonusPct.toStringAsFixed(0)}%)', style: const TextStyle(color: Colors.white70)),
+                ],
+              );
+            }),
         ],
       ),
     );
@@ -127,9 +128,9 @@ class SubjectDetailScreen extends ConsumerWidget {
             ),
           ),
             title: Text(grade.points != null
-              ? '${grade.points}/${grade.maxPoints} (${((grade.points!/grade.maxPoints!)*100).toStringAsFixed(0)}%)${grade.type == 'bonus' ? ' • BONUS' : ''}'
-              : '${l10n.weight}: ${grade.weight}${grade.type == 'bonus' ? ' • BONUS' : ''}'),
-          subtitle: Text('${grade.type}${grade.points != null ? ' • ${l10n.weight}: ${grade.weight}' : ''}'),
+              ? '${grade.points}/${grade.maxPoints} (${((grade.points!/grade.maxPoints!)*100).toStringAsFixed(0)}%)${grade.type == 'bonus' ? ' • ${l10n.gradeTypeBonus.toUpperCase()}' : ''}'
+              : '${l10n.weight}: ${grade.weight}${grade.type == 'bonus' ? ' • ${l10n.gradeTypeBonus.toUpperCase()}' : ''}'),
+          subtitle: Text('${_getLocalizedType(grade.type, l10n)}${grade.points != null ? ' • ${l10n.weight}: ${grade.weight}' : ''}'),
           trailing: IconButton(
             icon: const Icon(Icons.delete_outline, color: Colors.white24),
             onPressed: () => _showDeleteGradeConfirm(context, ref, grade),
@@ -139,14 +140,35 @@ class SubjectDetailScreen extends ConsumerWidget {
     );
   }
 
-  double _pointsToGrade(double points, double max, GradingScale scale) {
+  double _pointsToGrade(double points, double max, GradingScale globalScale) {
     final percent = (points / max) * 100;
-    if (percent >= scale.grade6) return 6.0;
-    if (percent >= scale.grade5) return 5.0;
-    if (percent >= scale.grade4) return 4.0;
-    if (percent >= scale.grade3) return 3.0;
-    if (percent >= scale.grade2) return 2.0;
+    final custom = subject.customGradingScale;
+    
+    if (custom != null) {
+      if (percent >= (custom['grade6'] ?? globalScale.grade6)) return 6.0;
+      if (percent >= (custom['grade5'] ?? globalScale.grade5)) return 5.0;
+      if (percent >= (custom['grade4'] ?? globalScale.grade4)) return 4.0;
+      if (percent >= (custom['grade3'] ?? globalScale.grade3)) return 3.0;
+      if (percent >= (custom['grade2'] ?? globalScale.grade2)) return 2.0;
+    } else {
+      if (percent >= globalScale.grade6) return 6.0;
+      if (percent >= globalScale.grade5) return 5.0;
+      if (percent >= globalScale.grade4) return 4.0;
+      if (percent >= globalScale.grade3) return 3.0;
+      if (percent >= globalScale.grade2) return 2.0;
+    }
     return 1.0;
+  }
+
+  String _getLocalizedType(String type, AppLocalizations l10n) {
+    switch (type.toLowerCase()) {
+      case 'test': return l10n.gradeTypeTest;
+      case 'quiz': return l10n.gradeTypeQuiz;
+      case 'homework': return l10n.gradeTypeHomework;
+      case 'activity': return l10n.gradeTypeActivity;
+      case 'bonus': return l10n.gradeTypeBonus;
+      default: return type;
+    }
   }
 
   void _showAddGradeDialog(BuildContext context, WidgetRef ref) {
@@ -156,7 +178,8 @@ class SubjectDetailScreen extends ConsumerWidget {
     final maxPointsController = TextEditingController();
     final l10n = AppLocalizations.of(context)!;
     String selectedType = 'test';
-    bool isPoints = false;
+    final allowToggle = subject.gradingMode == Subject.gradingModeMixed;
+    bool isPoints = subject.gradingMode == Subject.gradingModePoints || subject.gradingMode == Subject.gradingModeMixed;
 
     showDialog(
       context: context,
@@ -167,42 +190,52 @@ class SubjectDetailScreen extends ConsumerWidget {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                SwitchListTile(
-                  title: const Text('Punkty', style: TextStyle(fontSize: 14)),
-                  value: isPoints,
-                  onChanged: (v) => setState(() => isPoints = v),
-                  activeColor: const Color(0xFF6366F1),
-                ),
+                if (allowToggle)
+                  SwitchListTile(
+                    title: Text(l10n.pointsMode, style: const TextStyle(fontSize: 14)),
+                    value: isPoints,
+                    onChanged: (v) => setState(() => isPoints = v),
+                    activeColor: const Color(0xFF6366F1),
+                  ),
                 if (!isPoints)
                   TextField(
                     controller: gradeController,
-                    decoration: InputDecoration(labelText: l10n.gradeHint),
-                    keyboardType: TextInputType.number,
+                    decoration: InputDecoration(
+                      labelText: l10n.gradeHint,
+                      hintText: '1.0 - 6.0',
+                    ),
+                    keyboardType: const TextInputType.numberWithOptions(decimal: true),
                   )
                 else ...[
                   TextField(
                     controller: pointsController,
-                    decoration: const InputDecoration(labelText: 'Zdobyte punkty'),
+                    decoration: InputDecoration(labelText: l10n.pointsEarned),
                     keyboardType: TextInputType.number,
                   ),
                   TextField(
                     controller: maxPointsController,
-                    decoration: const InputDecoration(labelText: 'Maks. punktów'),
+                    decoration: InputDecoration(labelText: l10n.maxPoints),
                     keyboardType: TextInputType.number,
                   ),
                 ],
                 const SizedBox(height: 12),
-                TextField(
-                  controller: weightController,
-                  decoration: InputDecoration(labelText: l10n.weightHint),
-                  keyboardType: TextInputType.number,
-                ),
-                const SizedBox(height: 12),
+                if (!isPoints) ...[
+                  TextField(
+                    controller: weightController,
+                    decoration: InputDecoration(labelText: l10n.weight),
+                    keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                  ),
+                  const SizedBox(height: 12),
+                ],
                 DropdownButtonFormField<String>(
                   value: selectedType,
-                  items: ['test', 'quiz', 'homework', 'activity', 'bonus'].map((t) => 
-                    DropdownMenuItem(value: t, child: Text(t.toUpperCase()))
-                  ).toList(),
+                  items: [
+                    DropdownMenuItem(value: 'test', child: Text(l10n.gradeTypeTest.toUpperCase())),
+                    DropdownMenuItem(value: 'quiz', child: Text(l10n.gradeTypeQuiz.toUpperCase())),
+                    DropdownMenuItem(value: 'homework', child: Text(l10n.gradeTypeHomework.toUpperCase())),
+                    DropdownMenuItem(value: 'activity', child: Text(l10n.gradeTypeActivity.toUpperCase())),
+                    DropdownMenuItem(value: 'bonus', child: Text(l10n.gradeTypeBonus.toUpperCase())),
+                  ],
                   onChanged: (v) => selectedType = v!,
                   decoration: InputDecoration(labelText: l10n.type),
                 ),
@@ -229,6 +262,18 @@ class SubjectDetailScreen extends ConsumerWidget {
                 }
 
                 final w = double.tryParse(weightController.text) ?? 1.0;
+                if (!isPoints && g <= 0) {
+                  _showSnack(context, l10n.validationGrade);
+                  return;
+                }
+                if (isPoints && (p == null || mp == null || mp <= 0)) {
+                  _showSnack(context, l10n.validationPoints);
+                  return;
+                }
+                if (w <= 0) {
+                  _showSnack(context, l10n.validationWeight);
+                  return;
+                }
                 if (g > 0) {
                   ref.read(gradesProvider(subject.id).notifier).addGrade(g, w, selectedType, points: p, maxPoints: mp);
                   Navigator.pop(context);
@@ -249,7 +294,8 @@ class SubjectDetailScreen extends ConsumerWidget {
     final maxPointsController = TextEditingController(text: grade.maxPoints?.toString() ?? '');
     final l10n = AppLocalizations.of(context)!;
     String selectedType = grade.type;
-    bool isPoints = grade.points != null;
+    final allowToggle = subject.gradingMode == Subject.gradingModeMixed;
+    bool isPoints = allowToggle ? grade.points != null : subject.gradingMode == Subject.gradingModePoints;
 
     showDialog(
       context: context,
@@ -260,42 +306,52 @@ class SubjectDetailScreen extends ConsumerWidget {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                SwitchListTile(
-                  title: const Text('Punkty', style: TextStyle(fontSize: 14)),
-                  value: isPoints,
-                  onChanged: (v) => setState(() => isPoints = v),
-                  activeColor: const Color(0xFF6366F1),
-                ),
+                if (allowToggle)
+                  SwitchListTile(
+                    title: Text(l10n.pointsMode, style: const TextStyle(fontSize: 14)),
+                    value: isPoints,
+                    onChanged: (v) => setState(() => isPoints = v),
+                    activeColor: const Color(0xFF6366F1),
+                  ),
                 if (!isPoints)
                   TextField(
                     controller: gradeController,
-                    decoration: InputDecoration(labelText: l10n.gradeHint),
-                    keyboardType: TextInputType.number,
+                    decoration: InputDecoration(
+                      labelText: l10n.gradeHint,
+                      hintText: '1.0 - 6.0',
+                    ),
+                    keyboardType: const TextInputType.numberWithOptions(decimal: true),
                   )
                 else ...[
                   TextField(
                     controller: pointsController,
-                    decoration: const InputDecoration(labelText: 'Zdobyte punkty'),
+                    decoration: InputDecoration(labelText: l10n.pointsEarned),
                     keyboardType: TextInputType.number,
                   ),
                   TextField(
                     controller: maxPointsController,
-                    decoration: const InputDecoration(labelText: 'Maks. punktów'),
+                    decoration: InputDecoration(labelText: l10n.maxPoints),
                     keyboardType: TextInputType.number,
                   ),
                 ],
                 const SizedBox(height: 12),
-                TextField(
-                  controller: weightController,
-                  decoration: InputDecoration(labelText: l10n.weightHint),
-                  keyboardType: TextInputType.number,
-                ),
-                const SizedBox(height: 12),
+                if (!isPoints) ...[
+                  TextField(
+                    controller: weightController,
+                    decoration: InputDecoration(labelText: l10n.weight),
+                    keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                  ),
+                  const SizedBox(height: 12),
+                ],
                 DropdownButtonFormField<String>(
                   value: selectedType,
-                  items: ['test', 'quiz', 'homework', 'activity', 'bonus'].map((t) => 
-                    DropdownMenuItem(value: t, child: Text(t.toUpperCase()))
-                  ).toList(),
+                  items: [
+                    DropdownMenuItem(value: 'test', child: Text(l10n.gradeTypeTest.toUpperCase())),
+                    DropdownMenuItem(value: 'quiz', child: Text(l10n.gradeTypeQuiz.toUpperCase())),
+                    DropdownMenuItem(value: 'homework', child: Text(l10n.gradeTypeHomework.toUpperCase())),
+                    DropdownMenuItem(value: 'activity', child: Text(l10n.gradeTypeActivity.toUpperCase())),
+                    DropdownMenuItem(value: 'bonus', child: Text(l10n.gradeTypeBonus.toUpperCase())),
+                  ],
                   onChanged: (v) => selectedType = v!,
                   decoration: InputDecoration(labelText: l10n.type),
                 ),
@@ -322,6 +378,18 @@ class SubjectDetailScreen extends ConsumerWidget {
                 }
 
                 final w = double.tryParse(weightController.text) ?? 1.0;
+                if (!isPoints && g <= 0) {
+                  _showSnack(context, l10n.validationGrade);
+                  return;
+                }
+                if (isPoints && (p == null || mp == null || mp <= 0)) {
+                  _showSnack(context, l10n.validationPoints);
+                  return;
+                }
+                if (w <= 0) {
+                  _showSnack(context, l10n.validationWeight);
+                  return;
+                }
                 if (g > 0) {
                   final updatedGrade = Grade(
                     id: grade.id,
@@ -343,6 +411,10 @@ class SubjectDetailScreen extends ConsumerWidget {
         ),
       ),
     );
+  }
+
+  void _showSnack(BuildContext context, String message) {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
   }
   void _showDeleteGradeConfirm(BuildContext context, WidgetRef ref, Grade grade) {
     final l10n = AppLocalizations.of(context)!;

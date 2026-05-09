@@ -262,4 +262,300 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get emailUpdated => 'E-mail zaktualizowany! Sprawdź skrzynkę.';
+
+  @override
+  String get appearanceTitle => 'Wygląd';
+
+  @override
+  String get appearanceSubtitle => 'Motyw i styl aplikacji';
+
+  @override
+  String get themeLight => 'Jasny ☀️';
+
+  @override
+  String get themeSystem => 'System';
+
+  @override
+  String get themeDark => 'Ciemny 🌙';
+
+  @override
+  String get settingsHeroTitle => 'Twoja strefa nauki ✨';
+
+  @override
+  String get settingsHeroSubtitle =>
+      'Motywy, konta i skala ocen w jednym miejscu.';
+
+  @override
+  String get remainingToggle => 'Wiele sprawdzianów';
+
+  @override
+  String get remainingWeightsTitle => 'Pozostałe sprawdziany (wagi)';
+
+  @override
+  String get addWeight => 'Dodaj wagę';
+
+  @override
+  String remainingImpossible(Object needed) {
+    return 'Niemożliwe! Średnio potrzebujesz $needed';
+  }
+
+  @override
+  String remainingEasy(Object needed) {
+    return 'Łatwo! Średnio potrzebujesz 1.0 (lub mniej: $needed)';
+  }
+
+  @override
+  String remainingNeededAtLeast(Object needed) {
+    return 'Średnio musisz dostać co najmniej: $needed';
+  }
+
+  @override
+  String get calendarTitle => 'Kalendarz sprawdzianów';
+
+  @override
+  String get addExam => 'Dodaj sprawdzian';
+
+  @override
+  String get editExam => 'Edytuj sprawdzian';
+
+  @override
+  String get examTitle => 'Nazwa sprawdzianu';
+
+  @override
+  String get examDate => 'Data';
+
+  @override
+  String get examSubject => 'Przedmiot';
+
+  @override
+  String get maxPoints => 'Maks. punktów';
+
+  @override
+  String get pointsMode => 'Punkty';
+
+  @override
+  String get pointsEarned => 'Zdobyte punkty';
+
+  @override
+  String get gradingModeLabel => 'Rodzaj oceniania';
+
+  @override
+  String get gradingModeGrades => 'Oceny 1-6';
+
+  @override
+  String get gradingModePoints => 'Punkty';
+
+  @override
+  String get gradingModeMixed => 'Mieszane';
+
+  @override
+  String get maxNormalPoints => 'Maks. punktów (normalnych)';
+
+  @override
+  String get maxBonusPoints => 'Maks. punktów (bonusowych)';
+
+  @override
+  String get chooseDate => 'Wybierz datę';
+
+  @override
+  String get noExams => 'Brak sprawdzianów. Dodaj pierwszy!';
+
+  @override
+  String get deleteExamConfirm => 'To usunie sprawdzian z kalendarza.';
+
+  @override
+  String get infoTitle => 'Jak to działa?';
+
+  @override
+  String get infoBody =>
+      'Aplikacja liczy aktualną średnią i pokazuje ile musisz dostać z pozostałych sprawdzianów, żeby utrzymać/podnieść ocenę. Wykresy postępów, statystyki które przedmioty \"ratujesz\" w ostatniej chwili.';
+
+  @override
+  String get ok => 'OK';
+
+  @override
+  String get validationAllFields => 'Uzupełnij wszystkie pola!';
+
+  @override
+  String get unknownSubject => 'Nieznany przedmiot';
+
+  @override
+  String get validationSubjectName => 'Podaj nazwę przedmiotu';
+
+  @override
+  String get validationMaxPoints => 'Podaj prawidłową liczbę punktów';
+
+  @override
+  String get validationGrade => 'Wpisz poprawną ocenę (1-6)';
+
+  @override
+  String get validationPoints => 'Wpisz punkty i punkty maksymalne';
+
+  @override
+  String get validationWeight => 'Waga musi być większa od 0';
+
+  @override
+  String get validationExamTitle => 'Wpisz nazwę sprawdzianu';
+
+  @override
+  String get noSubjectsForExams => 'Dodaj przedmioty, aby planować sprawdziany';
+
+  @override
+  String get noSubjectsShort => 'Brak przedmiotów';
+
+  @override
+  String get predictionFirstAddGrade => 'Najpierw dodaj jakąś ocenę!';
+
+  @override
+  String get predictionPointsSurplus => 'Masz już zapas punktów na ten cel!';
+
+  @override
+  String predictionPointsCurrentStatus(Object current, Object target) {
+    return 'Twój obecny wynik to $current%, a cel to $target%.';
+  }
+
+  @override
+  String predictionPointsMissing(Object remaining, Object target) {
+    return 'Przy obecnej sumie punktów brakuje Ci jeszcze $remaining pkt do celu $target%';
+  }
+
+  @override
+  String get predictionPointsNoExamsRecommendation =>
+      'Wpisz nadchodzące sprawdziany do kalendarza – na pewno pojawią się okazje, by te punkty zdobyć!';
+
+  @override
+  String get predictionGoalEasy => 'Cel osiągniesz bez problemu!';
+
+  @override
+  String predictionGoalEasyExplanation(Object target) {
+    return 'Nawet jeśli dostaniesz 0 pkt z nadchodzących sprawdzianów, Twój wynik nie spadnie poniżej $target%.';
+  }
+
+  @override
+  String get predictionImpossibleShort => 'Niestety, cel jest nieosiągalny.';
+
+  @override
+  String predictionPointsImpossibleExplanation(Object extra) {
+    return 'Nawet ze 100% z obecnych sprawdzianów brakuje Ci jeszcze $extra pkt.';
+  }
+
+  @override
+  String predictionPointsRescueRecommendation(Object extra) {
+    return 'Oprócz sprawdzianów z kalendarza, musisz zdobyć dodatkowe $extra pkt (np. z prac nadprogramowych), aby osiągnąć cel.';
+  }
+
+  @override
+  String get predictionPointsNeededList =>
+      'Twoje nadchodzące sprawdziany musisz zaliczyć na:';
+
+  @override
+  String predictionPointsNeededExplanation(Object remaining, Object total) {
+    return 'Potrzebujesz $remaining pkt z nadchodzących $total możliwych.';
+  }
+
+  @override
+  String get predictionPointsFocusAdvice =>
+      'Skup się szczególnie na największym sprawdzianie – tam możesz najwięcej ugrać!';
+
+  @override
+  String get predictionGradesForecastTitle => 'Prognoza dla kolejnych ocen:';
+
+  @override
+  String predictionGradesNoExamsExplanation(Object target) {
+    return 'Brak danych w kalendarzu. Sprawdziłem ile musisz dostać, żeby średnia wzrosła do $target.';
+  }
+
+  @override
+  String get predictionGradesNoExamsRecommendation =>
+      'Uzupełnij kalendarz o nadchodzące sprawdziany, żebyśmy wiedzieli ile wag zostało do końca roku!';
+
+  @override
+  String predictionGradesWeightScenario(Object weight) {
+    return 'Ocena z wagą $weight';
+  }
+
+  @override
+  String predictionGradesImpossibleWhy(Object best) {
+    return 'Dostając 6, Twoja średnia wzrośnie tylko do $best.';
+  }
+
+  @override
+  String get predictionGradesRescuePlanTitle =>
+      'Kalendarz to za mało. Potrzebujesz planu ratunkowego!';
+
+  @override
+  String predictionGradesImpossibleExplanation(Object best) {
+    return 'Nawet z samymi 6-tkami ze sprawdzianów w kalendarzu Twoja średnia wzrośnie tylko do $best.';
+  }
+
+  @override
+  String predictionGradesRescueRecommendation(Object extra, Object target) {
+    return 'Oprócz sprawdzianów z kalendarza, musisz zdobyć jeszcze dodatkowe $extra oceny \'6\' (o wadze 1.0), aby osiągnąć średnią $target.';
+  }
+
+  @override
+  String get predictionGradesExamsNeededList =>
+      'Nadchodzące sprawdziany musisz zaliczyć na:';
+
+  @override
+  String get predictionGradesExamsNeededExplanation =>
+      'Wyliczyłem średnią ocenę ze wszystkich nadchodzących sprawdzianów.';
+
+  @override
+  String get predictionGradesExtraCreditAdvice =>
+      'Jeśli te sprawdziany to nie wszystko, staraj się zdobyć dodatkowe plusy za aktywność!';
+
+  @override
+  String get predictionTargetLabel => 'Docelowa ocena lub %';
+
+  @override
+  String get predictionTargetHint => 'np. 4 lub 90';
+
+  @override
+  String predictionMinGrade(Object grade) {
+    return 'min. $grade';
+  }
+
+  @override
+  String get predictionOrSeparator => 'LUB';
+
+  @override
+  String get gradeTypeTest => 'Sprawdzian';
+
+  @override
+  String get gradeTypeQuiz => 'Kartkówka';
+
+  @override
+  String get gradeTypeHomework => 'Zadanie domowe';
+
+  @override
+  String get gradeTypeActivity => 'Aktywność';
+
+  @override
+  String get gradeTypeBonus => 'Dodatkowe';
+
+  @override
+  String get predictionAdviceKeepItUp =>
+      'Dobra robota! Utrzymuj ten poziom w nadchodzących zadaniach.';
+
+  @override
+  String get predictionAdviceSleepWell =>
+      'Możesz spać spokojnie, ale nie odpuszczaj całkowicie!';
+
+  @override
+  String get predictionAdviceFocusOnBig =>
+      'Skup się szczególnie na największym sprawdzianie – tam możesz najwięcej ugrać!';
+
+  @override
+  String get predictionAdviceExtraCredit =>
+      'Jeśli te sprawdziany to nie wszystko, staraj się zdobyć dodatkowe plusy za aktywność!';
+
+  @override
+  String get customGradingScaleTitle => 'Własna skala ocen';
+
+  @override
+  String get resetToGlobal => 'Przywróć ogólną skalę';
+
+  @override
+  String get customScaleSaved => 'Własna skala zapisana!';
 }

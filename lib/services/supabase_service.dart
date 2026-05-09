@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/subject.dart';
 import '../models/grade.dart';
 import '../models/profile.dart';
+import '../models/exam.dart';
 
 final supabaseServiceProvider = Provider((ref) => SupabaseService());
 
@@ -89,12 +90,20 @@ class SupabaseService {
     return (response as List).map((json) => Subject.fromJson(json)).toList();
   }
 
-  Future<Subject> addSubject(String name, {double? maxNormalPoints, double? maxBonusPoints}) async {
+  Future<Subject> addSubject(
+    String name, {
+    double? maxNormalPoints,
+    double? maxBonusPoints,
+    String? gradingMode,
+    Map<String, double>? customGradingScale,
+  }) async {
     final insertMap = {
       'name': name,
       'user_id': currentUser!.id,
       'max_normal_points': maxNormalPoints,
       'max_bonus_points': maxBonusPoints,
+      'grading_mode': gradingMode,
+      'custom_grading_scale': customGradingScale,
     };
     final response = await client
         .from('subjects')
@@ -104,14 +113,24 @@ class SupabaseService {
     return Subject.fromJson(response);
   }
 
-  Future<void> updateSubject(String id, String name, {double? maxNormalPoints, double? maxBonusPoints}) async {
+  Future<void> updateSubject(
+    String id,
+    String name, {
+    double? maxNormalPoints,
+    double? maxBonusPoints,
+    String? gradingMode,
+    Map<String, double>? customGradingScale,
+  }) async {
     final updateMap = {
       'name': name,
       'max_normal_points': maxNormalPoints,
       'max_bonus_points': maxBonusPoints,
+      'grading_mode': gradingMode,
+      'custom_grading_scale': customGradingScale,
     };
-    // remove nulls so we don't overwrite existing values with null unintentionally
-    updateMap.removeWhere((key, value) => value == null);
+    // remove nulls so we don't overwrite existing values with null unintentionally, 
+    // but keep custom_grading_scale if explicitly provided (even if empty map)
+    updateMap.removeWhere((key, value) => value == null && key != 'custom_grading_scale');
     await client.from('subjects').update(updateMap).eq('id', id);
   }
 
@@ -144,5 +163,31 @@ class SupabaseService {
 
   Future<void> deleteGrade(String id) async {
     await client.from('grades').delete().eq('id', id);
+  }
+
+  // Exams (calendar)
+  Future<List<Exam>> getExams() async {
+    final response = await client
+        .from('exams')
+        .select()
+        .order('date', ascending: true);
+    return (response as List).map((json) => Exam.fromJson(json)).toList();
+  }
+
+  Future<Exam> addExam(Exam exam) async {
+    final response = await client
+        .from('exams')
+        .insert(exam.toJson())
+        .select()
+        .single();
+    return Exam.fromJson(response);
+  }
+
+  Future<void> updateExam(Exam exam) async {
+    await client.from('exams').update(exam.toJson()).eq('id', exam.id);
+  }
+
+  Future<void> deleteExam(String id) async {
+    await client.from('exams').delete().eq('id', id);
   }
 }
