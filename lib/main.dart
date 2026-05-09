@@ -10,8 +10,8 @@ void main() async {
 
   // Replace with your Supabase credentials
   await Supabase.initialize(
-    url: 'YOUR_SUPABASE_URL',
-    anonKey: 'YOUR_SUPABASE_ANON_KEY',
+    url: 'https://uaeimifolckkhnsofluy.supabase.co',
+    anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVhZWltaWZvbGNra2huc29mbHV5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgyODc1NzQsImV4cCI6MjA5Mzg2MzU3NH0.ChbVEAKQZkrHP25ougl8mWE1QJLwrxA_weDXx1kX_rg',
   );
 
   runApp(const ProviderScope(child: GradePredictorApp()));
