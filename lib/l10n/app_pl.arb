@@ -34,5 +34,14 @@
   "accountCreated": "Konto utworzone! Zaloguj się.",
   "impossible": "Niemożliwe! Potrzebowałbyś {needed}",
   "easy": "Łatwo! Potrzebujesz tylko 1.0 (lub mniej: {needed})",
-  "neededAtLeast": "Musisz dostać co najmniej: {needed}"
+  "neededAtLeast": "Musisz dostać co najmniej: {needed}",
+  "settings": "Ustawienia",
+  "displayName": "Nazwa wyświetlana",
+  "changePassword": "Zmień hasło",
+  "newPassword": "Nowe hasło",
+  "update": "Aktualizuj",
+  "profileUpdated": "Profil zaktualizowany pomyślnie!",
+  "passwordUpdated": "Hasło zaktualizowane pomyślnie!",
+  "error": "Błąd: {message}",
+  "changeLanguage": "Zmień język"
 }

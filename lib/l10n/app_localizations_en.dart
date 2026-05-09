@@ -121,4 +121,33 @@ class AppLocalizationsEn extends AppLocalizations {
   String neededAtLeast(Object needed) {
     return 'You need to get at least: $needed';
   }
+
+  @override
+  String get settings => 'Settings';
+
+  @override
+  String get displayName => 'Display Name';
+
+  @override
+  String get changePassword => 'Change Password';
+
+  @override
+  String get newPassword => 'New Password';
+
+  @override
+  String get update => 'Update';
+
+  @override
+  String get profileUpdated => 'Profile updated successfully!';
+
+  @override
+  String get passwordUpdated => 'Password updated successfully!';
+
+  @override
+  String error(Object message) {
+    return 'Error: $message';
+  }
+
+  @override
+  String get changeLanguage => 'Change Language';
 }

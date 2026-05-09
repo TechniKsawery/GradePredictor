@@ -4,6 +4,7 @@ import '../l10n/app_localizations.dart';
 import '../providers/grade_provider.dart';
 import 'subject_detail_screen.dart';
 import 'stats_screen.dart';
+import 'settings_screen.dart';
 import 'login_screen.dart';
 
 class HomeScreen extends ConsumerWidget {
@@ -20,6 +21,12 @@ class HomeScreen extends ConsumerWidget {
         backgroundColor: Colors.transparent,
         elevation: 0,
         actions: [
+          IconButton(
+            icon: const Icon(Icons.settings),
+            onPressed: () => Navigator.of(context).push(
+              MaterialPageRoute(builder: (_) => const SettingsScreen()),
+            ),
+          ),
           IconButton(
             icon: const Icon(Icons.bar_chart),
             onPressed: () => Navigator.of(context).push(

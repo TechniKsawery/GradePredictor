@@ -1,6 +1,8 @@
+import 'dart:io';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../models/subject.dart';
 import '../models/grade.dart';
+import '../models/profile.dart';
 
 class SupabaseService {
   final SupabaseClient client = Supabase.instance.client;
@@ -18,7 +20,42 @@ class SupabaseService {
     await client.auth.signOut();
   }
 
+  Future<void> updatePassword(String newPassword) async {
+    await client.auth.updateUser(UserAttributes(password: newPassword));
+  }
+
   User? get currentUser => client.auth.currentUser;
+
+  // Profiles
+  Future<Profile> getProfile() async {
+    final response = await client
+        .from('profiles')
+        .select()
+        .eq('id', currentUser!.id)
+        .single();
+    return Profile.fromJson(response);
+  }
+
+  Future<void> updateProfile(Profile profile) async {
+    await client
+        .from('profiles')
+        .update(profile.toJson())
+        .eq('id', currentUser!.id);
+  }
+
+  Future<String> uploadAvatar(File file) async {
+    final fileExt = file.path.split('.').last;
+    final fileName = '${currentUser!.id}.$fileExt';
+    final filePath = fileName;
+    
+    await client.storage.from('avatars').upload(
+          filePath,
+          file,
+          fileOptions: const FileOptions(upsert: true),
+        );
+    
+    return client.storage.from('avatars').getPublicUrl(filePath);
+  }
 
   // Subjects
   Future<List<Subject>> getSubjects() async {

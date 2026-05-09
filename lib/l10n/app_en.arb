@@ -34,5 +34,14 @@
   "accountCreated": "Account created! Please login.",
   "impossible": "Impossible! You would need a {needed}",
   "easy": "Easy! You only need a 1.0 (or less: {needed})",
-  "neededAtLeast": "You need to get at least: {needed}"
+  "neededAtLeast": "You need to get at least: {needed}",
+  "settings": "Settings",
+  "displayName": "Display Name",
+  "changePassword": "Change Password",
+  "newPassword": "New Password",
+  "update": "Update",
+  "profileUpdated": "Profile updated successfully!",
+  "passwordUpdated": "Password updated successfully!",
+  "error": "Error: {message}",
+  "changeLanguage": "Change Language"
 }

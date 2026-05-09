@@ -121,4 +121,33 @@ class AppLocalizationsDe extends AppLocalizations {
   String neededAtLeast(Object needed) {
     return 'Sie müssen mindestens eine $needed bekommen';
   }
+
+  @override
+  String get settings => 'Einstellungen';
+
+  @override
+  String get displayName => 'Anzeigename';
+
+  @override
+  String get changePassword => 'Kennwort ändern';
+
+  @override
+  String get newPassword => 'Neues Passwort';
+
+  @override
+  String get update => 'Aktualisieren';
+
+  @override
+  String get profileUpdated => 'Profil erfolgreich aktualisiert!';
+
+  @override
+  String get passwordUpdated => 'Passwort erfolgreich aktualisiert!';
+
+  @override
+  String error(Object message) {
+    return 'Fehler: $message';
+  }
+
+  @override
+  String get changeLanguage => 'Sprache ändern';
 }
