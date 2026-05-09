@@ -7,6 +7,7 @@ import '../providers/locale_provider.dart';
 import '../providers/profile_provider.dart';
 import '../providers/accounts_provider.dart';
 import '../providers/settings_provider.dart';
+import '../providers/theme_provider.dart';
 import '../services/supabase_service.dart';
 import 'login_screen.dart';
 
@@ -75,6 +76,34 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
           children: [
             _buildAvatarSection(profile),
             const SizedBox(height: 32),
+            _buildSectionCard(
+              title: 'Wygląd',
+              subtitle: 'Motyw i styl aplikacji',
+              child: Consumer(builder: (context, ref, _) {
+                final tm = ref.watch(themeProvider);
+                return Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    ChoiceChip(
+                      label: const Text('Jasny ☀️'),
+                      selected: tm == ThemeMode.light,
+                      onSelected: (_) => ref.read(themeProvider.notifier).setTheme(ThemeMode.light),
+                    ),
+                    ChoiceChip(
+                      label: const Text('System'),
+                      selected: tm == ThemeMode.system,
+                      onSelected: (_) => ref.read(themeProvider.notifier).setTheme(ThemeMode.system),
+                    ),
+                    ChoiceChip(
+                      label: const Text('Ciemny 🌙'),
+                      selected: tm == ThemeMode.dark,
+                      onSelected: (_) => ref.read(themeProvider.notifier).setTheme(ThemeMode.dark),
+                    ),
+                  ],
+                );
+              }),
+            ),
+            const SizedBox(height: 20),
             _buildSectionCard(
               title: l10n.displayName,
               subtitle: l10n.profileDescription,
