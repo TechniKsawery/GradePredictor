@@ -3,7 +3,6 @@ import '../models/subject.dart';
 import '../models/grade.dart';
 import '../services/supabase_service.dart';
 
-final supabaseServiceProvider = Provider((ref) => SupabaseService());
 
 final subjectsProvider = StateNotifierProvider<SubjectsNotifier, List<Subject>>((ref) {
   return SubjectsNotifier(ref.watch(supabaseServiceProvider));
@@ -28,9 +27,21 @@ class SubjectsNotifier extends StateNotifier<List<Subject>> {
     state = [...state, newSubject];
   }
 
-  Future<void> updateSubject(String id, String name) async {
-    await _service.updateSubject(id, name);
-    state = state.map((s) => s.id == id ? Subject(id: s.id, userId: s.userId, name: name) : s).toList();
+  Future<void> addSubjectWithPoints(String name, {double? maxNormalPoints, double? maxBonusPoints}) async {
+    final newSubject = await _service.addSubject(name, maxNormalPoints: maxNormalPoints, maxBonusPoints: maxBonusPoints);
+    state = [...state, newSubject];
+  }
+
+  Future<void> updateSubject(String id, String name, {double? maxNormalPoints, double? maxBonusPoints}) async {
+    await _service.updateSubject(id, name, maxNormalPoints: maxNormalPoints, maxBonusPoints: maxBonusPoints);
+    state = state.map<Subject>((s) => s.id == id ? Subject(
+      id: s.id,
+      userId: s.userId,
+      name: name,
+      createdAt: s.createdAt,
+      maxNormalPoints: maxNormalPoints ?? s.maxNormalPoints,
+      maxBonusPoints: maxBonusPoints ?? s.maxBonusPoints,
+    ) : s).toList();
   }
 
   Future<void> deleteSubject(String id) async {
@@ -58,7 +69,7 @@ class GradesNotifier extends StateNotifier<List<Grade>> {
     }
   }
 
-  Future<void> addGrade(double grade, double weight, String type) async {
+  Future<void> addGrade(double grade, double weight, String type, {double? points, double? maxPoints}) async {
     final newGrade = await _service.addGrade(Grade(
       id: '',
       subjectId: subjectId,
@@ -66,13 +77,15 @@ class GradesNotifier extends StateNotifier<List<Grade>> {
       weight: weight,
       type: type,
       date: DateTime.now(),
+      points: points,
+      maxPoints: maxPoints,
     ));
     state = [newGrade, ...state];
   }
 
   Future<void> updateGrade(Grade grade) async {
     await _service.updateGrade(grade);
-    state = state.map((g) => g.id == grade.id ? grade : g).toList();
+    state = state.map<Grade>((g) => g.id == grade.id ? grade : g).toList();
   }
 
   Future<void> deleteGrade(String id) async {

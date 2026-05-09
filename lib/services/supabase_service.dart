@@ -1,8 +1,11 @@
 import 'dart:io';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/subject.dart';
 import '../models/grade.dart';
 import '../models/profile.dart';
+
+final supabaseServiceProvider = Provider((ref) => SupabaseService());
 
 class SupabaseService {
   final SupabaseClient client = Supabase.instance.client;
@@ -24,6 +27,10 @@ class SupabaseService {
     await client.auth.updateUser(UserAttributes(password: newPassword));
   }
 
+  Future<void> updateEmail(String newEmail) async {
+    await client.auth.updateUser(UserAttributes(email: newEmail));
+  }
+
   User? get currentUser => client.auth.currentUser;
 
   // Profiles
@@ -33,7 +40,23 @@ class SupabaseService {
         .select()
         .eq('id', currentUser!.id)
         .single();
-    return Profile.fromJson(response);
+    
+    final profile = Profile.fromJson(response);
+    String? displayName = profile.displayName;
+    final email = currentUser?.email;
+
+    // If name is missing OR is identical to full email, shorten it
+    if (displayName == null || displayName.isEmpty || displayName == email) {
+      if (email != null && email.contains('@')) {
+        displayName = email.split('@')[0];
+      }
+    }
+
+    return Profile(
+      id: profile.id,
+      displayName: displayName,
+      avatarUrl: profile.avatarUrl,
+    );
   }
 
   Future<void> updateProfile(Profile profile) async {
@@ -66,17 +89,30 @@ class SupabaseService {
     return (response as List).map((json) => Subject.fromJson(json)).toList();
   }
 
-  Future<Subject> addSubject(String name) async {
+  Future<Subject> addSubject(String name, {double? maxNormalPoints, double? maxBonusPoints}) async {
+    final insertMap = {
+      'name': name,
+      'user_id': currentUser!.id,
+      'max_normal_points': maxNormalPoints,
+      'max_bonus_points': maxBonusPoints,
+    };
     final response = await client
         .from('subjects')
-        .insert({'name': name, 'user_id': currentUser!.id})
+        .insert(insertMap)
         .select()
         .single();
     return Subject.fromJson(response);
   }
 
-  Future<void> updateSubject(String id, String name) async {
-    await client.from('subjects').update({'name': name}).eq('id', id);
+  Future<void> updateSubject(String id, String name, {double? maxNormalPoints, double? maxBonusPoints}) async {
+    final updateMap = {
+      'name': name,
+      'max_normal_points': maxNormalPoints,
+      'max_bonus_points': maxBonusPoints,
+    };
+    // remove nulls so we don't overwrite existing values with null unintentionally
+    updateMap.removeWhere((key, value) => value == null);
+    await client.from('subjects').update(updateMap).eq('id', id);
   }
 
   Future<void> deleteSubject(String id) async {

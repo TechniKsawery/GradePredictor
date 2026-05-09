@@ -4,6 +4,8 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import '../l10n/app_localizations.dart';
 import '../providers/grade_provider.dart';
 import '../providers/locale_provider.dart';
+import '../services/supabase_service.dart';
+import '../providers/accounts_provider.dart';
 import 'home_screen.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
@@ -29,6 +31,12 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         final response = await supabase.signUp(_emailController.text, _passwordController.text);
         if (mounted) {
           if (response.session != null) {
+            // Auto-save to multi-account list
+            await ref.read(accountsProvider.notifier).addAccount(
+              _emailController.text, 
+              _passwordController.text, 
+              'Moje Konto'
+            );
             Navigator.of(context).pushReplacement(
               MaterialPageRoute(builder: (_) => const HomeScreen()),
             );
@@ -42,6 +50,12 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       } else {
         await supabase.signIn(_emailController.text, _passwordController.text);
         if (mounted) {
+          // Auto-save to multi-account list
+          await ref.read(accountsProvider.notifier).addAccount(
+            _emailController.text, 
+            _passwordController.text, 
+            'Moje Konto'
+          );
           Navigator.of(context).pushReplacement(
             MaterialPageRoute(builder: (_) => const HomeScreen()),
           );

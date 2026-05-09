@@ -106,6 +106,12 @@ abstract class AppLocalizations {
   /// **'GradePredictor'**
   String get appTitle;
 
+  /// No description provided for @appName.
+  ///
+  /// In en, this message translates to:
+  /// **'GradePredictor'**
+  String get appName;
+
   /// No description provided for @login.
   ///
   /// In en, this message translates to:
@@ -133,7 +139,7 @@ abstract class AppLocalizations {
   /// No description provided for @welcomeBack.
   ///
   /// In en, this message translates to:
-  /// **'Welcome back, student!'**
+  /// **'Welcome Back!'**
   String get welcomeBack;
 
   /// No description provided for @newHere.
@@ -169,7 +175,7 @@ abstract class AppLocalizations {
   /// No description provided for @subjectNameHint.
   ///
   /// In en, this message translates to:
-  /// **'Subject Name (e.g. Mathematics)'**
+  /// **'Subject name (e.g. Math)'**
   String get subjectNameHint;
 
   /// No description provided for @cancel.
@@ -184,221 +190,17 @@ abstract class AppLocalizations {
   /// **'Add'**
   String get add;
 
-  /// No description provided for @currentAverage.
+  /// No description provided for @save.
   ///
   /// In en, this message translates to:
-  /// **'Current Average'**
-  String get currentAverage;
+  /// **'Save'**
+  String get save;
 
-  /// No description provided for @addGrade.
+  /// No description provided for @edit.
   ///
   /// In en, this message translates to:
-  /// **'Add Grade'**
-  String get addGrade;
-
-  /// No description provided for @predict.
-  ///
-  /// In en, this message translates to:
-  /// **'Predict'**
-  String get predict;
-
-  /// No description provided for @weight.
-  ///
-  /// In en, this message translates to:
-  /// **'Weight'**
-  String get weight;
-
-  /// No description provided for @type.
-  ///
-  /// In en, this message translates to:
-  /// **'Type'**
-  String get type;
-
-  /// No description provided for @gradeHint.
-  ///
-  /// In en, this message translates to:
-  /// **'Grade (e.g. 5)'**
-  String get gradeHint;
-
-  /// No description provided for @weightHint.
-  ///
-  /// In en, this message translates to:
-  /// **'Weight (e.g. 1.0)'**
-  String get weightHint;
-
-  /// No description provided for @gradePredictor.
-  ///
-  /// In en, this message translates to:
-  /// **'Grade Predictor'**
-  String get gradePredictor;
-
-  /// No description provided for @targetAverage.
-  ///
-  /// In en, this message translates to:
-  /// **'Target Average'**
-  String get targetAverage;
-
-  /// No description provided for @nextAssignmentWeight.
-  ///
-  /// In en, this message translates to:
-  /// **'Weight of next assignment'**
-  String get nextAssignmentWeight;
-
-  /// No description provided for @calculate.
-  ///
-  /// In en, this message translates to:
-  /// **'Calculate'**
-  String get calculate;
-
-  /// No description provided for @statistics.
-  ///
-  /// In en, this message translates to:
-  /// **'Statistics'**
-  String get statistics;
-
-  /// No description provided for @performance.
-  ///
-  /// In en, this message translates to:
-  /// **'Subject Performance'**
-  String get performance;
-
-  /// No description provided for @insights.
-  ///
-  /// In en, this message translates to:
-  /// **'Quick Insights'**
-  String get insights;
-
-  /// No description provided for @subjectsToRescue.
-  ///
-  /// In en, this message translates to:
-  /// **'Subjects to \'Rescue\''**
-  String get subjectsToRescue;
-
-  /// No description provided for @bestSubject.
-  ///
-  /// In en, this message translates to:
-  /// **'Best Subject'**
-  String get bestSubject;
-
-  /// No description provided for @noSubjects.
-  ///
-  /// In en, this message translates to:
-  /// **'No subjects added yet.'**
-  String get noSubjects;
-
-  /// No description provided for @checkEmail.
-  ///
-  /// In en, this message translates to:
-  /// **'Check your email for confirmation!'**
-  String get checkEmail;
-
-  /// No description provided for @accountCreated.
-  ///
-  /// In en, this message translates to:
-  /// **'Account created! Please login.'**
-  String get accountCreated;
-
-  /// No description provided for @impossible.
-  ///
-  /// In en, this message translates to:
-  /// **'Impossible! You would need a {needed}'**
-  String impossible(Object needed);
-
-  /// No description provided for @easy.
-  ///
-  /// In en, this message translates to:
-  /// **'Easy! You only need a 1.0 (or less: {needed})'**
-  String easy(Object needed);
-
-  /// No description provided for @neededAtLeast.
-  ///
-  /// In en, this message translates to:
-  /// **'You need to get at least: {needed}'**
-  String neededAtLeast(Object needed);
-
-  /// No description provided for @settings.
-  ///
-  /// In en, this message translates to:
-  /// **'Settings'**
-  String get settings;
-
-  /// No description provided for @displayName.
-  ///
-  /// In en, this message translates to:
-  /// **'Display Name'**
-  String get displayName;
-
-  /// No description provided for @changePassword.
-  ///
-  /// In en, this message translates to:
-  /// **'Change Password'**
-  String get changePassword;
-
-  /// No description provided for @newPassword.
-  ///
-  /// In en, this message translates to:
-  /// **'New Password'**
-  String get newPassword;
-
-  /// No description provided for @update.
-  ///
-  /// In en, this message translates to:
-  /// **'Update'**
-  String get update;
-
-  /// No description provided for @profileUpdated.
-  ///
-  /// In en, this message translates to:
-  /// **'Profile updated successfully!'**
-  String get profileUpdated;
-
-  /// No description provided for @passwordUpdated.
-  ///
-  /// In en, this message translates to:
-  /// **'Password updated successfully!'**
-  String get passwordUpdated;
-
-  /// No description provided for @error.
-  ///
-  /// In en, this message translates to:
-  /// **'Error: {message}'**
-  String error(Object message);
-
-  /// No description provided for @changeLanguage.
-  ///
-  /// In en, this message translates to:
-  /// **'Change Language'**
-  String get changeLanguage;
-
-  /// No description provided for @profileDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'How other students will see you'**
-  String get profileDescription;
-
-  /// No description provided for @enterName.
-  ///
-  /// In en, this message translates to:
-  /// **'Enter your name'**
-  String get enterName;
-
-  /// No description provided for @languageDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'Switch application language'**
-  String get languageDescription;
-
-  /// No description provided for @passwordDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'Update your account security'**
-  String get passwordDescription;
-
-  /// No description provided for @passwordHint.
-  ///
-  /// In en, this message translates to:
-  /// **'Minimum 6 characters'**
-  String get passwordHint;
+  /// **'Edit'**
+  String get edit;
 
   /// No description provided for @delete.
   ///
@@ -424,17 +226,365 @@ abstract class AppLocalizations {
   /// **'Edit Subject'**
   String get editSubject;
 
+  /// No description provided for @noSubjects.
+  ///
+  /// In en, this message translates to:
+  /// **'No subjects. Add your first one!'**
+  String get noSubjects;
+
+  /// No description provided for @currentAverage.
+  ///
+  /// In en, this message translates to:
+  /// **'Current Average'**
+  String get currentAverage;
+
+  /// No description provided for @tapToSeeGrades.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap to see grades'**
+  String get tapToSeeGrades;
+
+  /// No description provided for @addGrade.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Grade'**
+  String get addGrade;
+
   /// No description provided for @editGrade.
   ///
   /// In en, this message translates to:
   /// **'Edit Grade'**
   String get editGrade;
 
-  /// No description provided for @save.
+  /// No description provided for @gradeHint.
   ///
   /// In en, this message translates to:
-  /// **'Save'**
-  String get save;
+  /// **'Grade (e.g. 5.0)'**
+  String get gradeHint;
+
+  /// No description provided for @weight.
+  ///
+  /// In en, this message translates to:
+  /// **'Weight'**
+  String get weight;
+
+  /// No description provided for @weightHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Weight (e.g. 2.0)'**
+  String get weightHint;
+
+  /// No description provided for @type.
+  ///
+  /// In en, this message translates to:
+  /// **'Type'**
+  String get type;
+
+  /// No description provided for @predict.
+  ///
+  /// In en, this message translates to:
+  /// **'Predict'**
+  String get predict;
+
+  /// No description provided for @settings.
+  ///
+  /// In en, this message translates to:
+  /// **'Settings'**
+  String get settings;
+
+  /// No description provided for @displayName.
+  ///
+  /// In en, this message translates to:
+  /// **'Display Name'**
+  String get displayName;
+
+  /// No description provided for @profileDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Change your display name'**
+  String get profileDescription;
+
+  /// No description provided for @enterName.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter name'**
+  String get enterName;
+
+  /// No description provided for @profileUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile updated!'**
+  String get profileUpdated;
+
+  /// No description provided for @changeLanguage.
+  ///
+  /// In en, this message translates to:
+  /// **'Change Language'**
+  String get changeLanguage;
+
+  /// No description provided for @languageDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Select your preferred language'**
+  String get languageDescription;
+
+  /// No description provided for @chooseLanguage.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose language'**
+  String get chooseLanguage;
+
+  /// No description provided for @changePassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Change Password'**
+  String get changePassword;
+
+  /// No description provided for @passwordDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Update account security'**
+  String get passwordDescription;
+
+  /// No description provided for @newPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'New Password'**
+  String get newPassword;
+
+  /// No description provided for @passwordHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Min. 6 characters'**
+  String get passwordHint;
+
+  /// No description provided for @passwordUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'Password updated!'**
+  String get passwordUpdated;
+
+  /// No description provided for @multiAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Multiple Accounts'**
+  String get multiAccount;
+
+  /// No description provided for @multiAccountSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Switch between profiles of children or friends'**
+  String get multiAccountSubtitle;
+
+  /// No description provided for @addAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Account'**
+  String get addAccount;
+
+  /// No description provided for @addRegisterAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Add / Register Account'**
+  String get addRegisterAccount;
+
+  /// No description provided for @gradingScale.
+  ///
+  /// In en, this message translates to:
+  /// **'Grading Scale (%)'**
+  String get gradingScale;
+
+  /// No description provided for @gradingScaleSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Custom percentage thresholds'**
+  String get gradingScaleSubtitle;
+
+  /// No description provided for @newRegistration.
+  ///
+  /// In en, this message translates to:
+  /// **'New registration?'**
+  String get newRegistration;
+
+  /// No description provided for @registerNewChild.
+  ///
+  /// In en, this message translates to:
+  /// **'Register New Child'**
+  String get registerNewChild;
+
+  /// No description provided for @addExistingAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Existing Account'**
+  String get addExistingAccount;
+
+  /// No description provided for @childUserName.
+  ///
+  /// In en, this message translates to:
+  /// **'Child/User Name'**
+  String get childUserName;
+
+  /// No description provided for @nameHint.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g. Ania'**
+  String get nameHint;
+
+  /// No description provided for @user.
+  ///
+  /// In en, this message translates to:
+  /// **'User'**
+  String get user;
+
+  /// No description provided for @editName.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Name'**
+  String get editName;
+
+  /// No description provided for @switchedTo.
+  ///
+  /// In en, this message translates to:
+  /// **'Switched to {name}'**
+  String switchedTo(Object name);
+
+  /// No description provided for @grade6Label.
+  ///
+  /// In en, this message translates to:
+  /// **'Grade 6 (Excellent)'**
+  String get grade6Label;
+
+  /// No description provided for @grade5Label.
+  ///
+  /// In en, this message translates to:
+  /// **'Grade 5 (Very Good)'**
+  String get grade5Label;
+
+  /// No description provided for @grade4Label.
+  ///
+  /// In en, this message translates to:
+  /// **'Grade 4 (Good)'**
+  String get grade4Label;
+
+  /// No description provided for @grade3Label.
+  ///
+  /// In en, this message translates to:
+  /// **'Grade 3 (Satisfactory)'**
+  String get grade3Label;
+
+  /// No description provided for @grade2Label.
+  ///
+  /// In en, this message translates to:
+  /// **'Grade 2 (Fair)'**
+  String get grade2Label;
+
+  /// No description provided for @error.
+  ///
+  /// In en, this message translates to:
+  /// **'Error: {message}'**
+  String error(Object message);
+
+  /// No description provided for @accountCreated.
+  ///
+  /// In en, this message translates to:
+  /// **'Account created!'**
+  String get accountCreated;
+
+  /// No description provided for @statistics.
+  ///
+  /// In en, this message translates to:
+  /// **'Statistics'**
+  String get statistics;
+
+  /// No description provided for @performance.
+  ///
+  /// In en, this message translates to:
+  /// **'Subject Performance'**
+  String get performance;
+
+  /// No description provided for @insights.
+  ///
+  /// In en, this message translates to:
+  /// **'Quick Insights'**
+  String get insights;
+
+  /// No description provided for @subjectsToRescue.
+  ///
+  /// In en, this message translates to:
+  /// **'Subjects to Rescue'**
+  String get subjectsToRescue;
+
+  /// No description provided for @bestSubject.
+  ///
+  /// In en, this message translates to:
+  /// **'Best Subject'**
+  String get bestSubject;
+
+  /// No description provided for @calculate.
+  ///
+  /// In en, this message translates to:
+  /// **'Calculate'**
+  String get calculate;
+
+  /// No description provided for @targetAverage.
+  ///
+  /// In en, this message translates to:
+  /// **'Target Average'**
+  String get targetAverage;
+
+  /// No description provided for @nextAssignmentWeight.
+  ///
+  /// In en, this message translates to:
+  /// **'Next Grade Weight'**
+  String get nextAssignmentWeight;
+
+  /// No description provided for @impossible.
+  ///
+  /// In en, this message translates to:
+  /// **'Impossible! You\'d need {needed}'**
+  String impossible(Object needed);
+
+  /// No description provided for @easy.
+  ///
+  /// In en, this message translates to:
+  /// **'Easy! You only need 1.0 (or less: {needed})'**
+  String easy(Object needed);
+
+  /// No description provided for @neededAtLeast.
+  ///
+  /// In en, this message translates to:
+  /// **'You need to get at least: {needed}'**
+  String neededAtLeast(Object needed);
+
+  /// No description provided for @gradePredictor.
+  ///
+  /// In en, this message translates to:
+  /// **'Grade Predictor'**
+  String get gradePredictor;
+
+  /// No description provided for @changeEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'Change Email'**
+  String get changeEmail;
+
+  /// No description provided for @changeEmailDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Update your account email address'**
+  String get changeEmailDescription;
+
+  /// No description provided for @newEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'New email address'**
+  String get newEmail;
+
+  /// No description provided for @emailUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'Email updated! Check your inbox.'**
+  String get emailUpdated;
 }
 
 class _AppLocalizationsDelegate
