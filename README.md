@@ -1,9 +1,9 @@
-# GradePredictor
+# GradePredictor ✨
 
-Aplikacja Flutter do zarządzania ocenami, przedmiotami, egzaminami i prognozami wyników.
-Projekt korzysta z Riverpod, Supabase, lokalizacji językowych oraz integracji ze szkołami typu Librus i Vulcan.
+> Aplikacja Flutter, która pomaga ogarnąć oceny, przedmioty, egzaminy i przewidywanie wyników bez chaosu.
+> Prosto, czytelnie i pod szkołę.
 
-## Funkcje
+## Dlaczego warto 📚
 
 - logowanie i synchronizacja danych użytkownika
 - lista przedmiotów, ocen i egzaminów
@@ -14,7 +14,7 @@ Projekt korzysta z Riverpod, Supabase, lokalizacji językowych oraz integracji z
 - przełączanie języka: polski, angielski, niemiecki
 - jasny i ciemny motyw
 
-## Stack
+## Co siedzi pod spodem 🛠️
 
 - Flutter
 - Riverpod
@@ -24,35 +24,31 @@ Projekt korzysta z Riverpod, Supabase, lokalizacji językowych oraz integracji z
 - google_fonts
 - shared_preferences
 
-## Uruchomienie
-
-Zainstaluj zależności:
+## Jak uruchomić 🚀
 
 ```bash
 flutter pub get
 ```
 
-Uruchom aplikację na wybranym urządzeniu:
-
 ```bash
 flutter run
 ```
 
-Jeśli chcesz uruchomić aplikację na konkretnym emulatorze, podaj jego identyfikator, na przykład:
+Jeśli chcesz odpalić appkę na konkretnym emulatorze:
 
 ```bash
 flutter run -d emulator-5554
 ```
 
-## Struktura projektu
+## Jak to jest zorganizowane 🧩
 
-- `lib/main.dart` - wejście aplikacji i konfiguracja motywu oraz lokalizacji
+- `lib/main.dart` - start aplikacji i konfiguracja motywu oraz lokalizacji
 - `lib/screens/` - ekrany aplikacji
 - `lib/providers/` - stan aplikacji i logika Riverpod
 - `lib/services/` - integracje z Supabase i systemami szkolnymi
 - `lib/widgets/` - współdzielone komponenty UI
 - `lib/l10n/` - tłumaczenia aplikacji
 
-## Uwagi
+## Na koniec 💡
 
-Projekt jest przygotowany jako aplikacja prywatna i nie jest publikowany na pub.dev.
+Projekt jest prywatny i nie jest publikowany na pub.dev. 
