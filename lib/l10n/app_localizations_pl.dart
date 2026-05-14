@@ -401,6 +401,10 @@ class AppLocalizationsPl extends AppLocalizations {
   String get noSubjectsForExams => 'Dodaj przedmioty, aby planować sprawdziany';
 
   @override
+  String get calendarNoSubjectsInfo =>
+      'Nie możesz dodać sprawdzianu, dopóki nie dodasz chociaż jednego przedmiotu w zakładce Przedmioty.';
+
+  @override
   String get noSubjectsShort => 'Brak przedmiotów';
 
   @override
@@ -558,4 +562,232 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get customScaleSaved => 'Własna skala zapisana!';
+
+  @override
+  String get syncTitle => 'Import z e-dziennika';
+
+  @override
+  String get syncSubtitle =>
+      'Połącz się ze swoim e-dziennikiem, aby automatycznie pobrać oceny i sprawdziany.';
+
+  @override
+  String get syncLoginLibrus => 'Login (Librus)';
+
+  @override
+  String get syncPassword => 'Hasło';
+
+  @override
+  String get syncStart => 'Rozpocznij synchronizację';
+
+  @override
+  String get syncSecurityNote =>
+      'Twoje dane są bezpieczne i używane wyłącznie do pobrania ocen. Nie przechowujemy Twojego hasła.';
+
+  @override
+  String get syncDataFound => 'Znaleziono dane do importu:';
+
+  @override
+  String get syncGradesDetail => 'Szczegóły ocen (automatycznie wykryte):';
+
+  @override
+  String get syncConfirmImport => 'Zatwierdź i importuj';
+
+  @override
+  String get syncCancelReturn => 'Anuluj i wróć';
+
+  @override
+  String syncError(Object error) {
+    return 'Błąd synchronizacji: $error';
+  }
+
+  @override
+  String syncImportedCount(Object exams, Object grades) {
+    return 'Zaimportowano: $grades ocen, $exams wydarzeń!';
+  }
+
+  @override
+  String get syncLibrusLoginHint => 'Login (Librus)';
+
+  @override
+  String get syncVulcanTokenHint => 'Token (Vulcan)';
+
+  @override
+  String get syncVulcanSymbolLabel => 'Symbol (Vulcan)';
+
+  @override
+  String get syncVulcanPinLabel => 'Kod PIN';
+
+  @override
+  String get syncLibrusSyncButton => 'Importuj dane z e-dziennika';
+
+  @override
+  String syncTypeLabel(Object type) {
+    return 'Typ: $type';
+  }
+
+  @override
+  String syncWeightLabel(Object weight) {
+    return 'Waga: $weight';
+  }
+
+  @override
+  String syncPointsLabel(Object max, Object points) {
+    return 'Pkt: $points/$max';
+  }
+
+  @override
+  String get unknown => 'Nieznany';
+
+  @override
+  String get gradeLabel => 'Ocena';
+
+  @override
+  String get points => 'Punkty';
+
+  @override
+  String get bonus => 'Bonus';
+
+  @override
+  String get none => 'Brak';
+
+  @override
+  String get pdfReportTitle => 'Raport GradePredictor';
+
+  @override
+  String get pdfSummaryHeader => 'Podsumowanie aktualnych wyników:';
+
+  @override
+  String get pdfFooter => 'Wygenerowano przez aplikację GradePredictor';
+
+  @override
+  String get myAccount => 'Moje Konto';
+
+  @override
+  String get passwordTooShort => 'Hasło jest za krótkie';
+
+  @override
+  String get monthJanuary => 'Styczeń';
+
+  @override
+  String get monthFebruary => 'Luty';
+
+  @override
+  String get monthMarch => 'Marzec';
+
+  @override
+  String get monthApril => 'Kwiecień';
+
+  @override
+  String get monthMay => 'Maj';
+
+  @override
+  String get monthJune => 'Czerwiec';
+
+  @override
+  String get monthJuly => 'Lipiec';
+
+  @override
+  String get monthAugust => 'Sierpień';
+
+  @override
+  String get monthSeptember => 'Wrzesień';
+
+  @override
+  String get monthOctober => 'Październik';
+
+  @override
+  String get monthNovember => 'Listopad';
+
+  @override
+  String get monthDecember => 'Grudzień';
+
+  @override
+  String get dayMonday => 'Poniedziałek';
+
+  @override
+  String get dayTuesday => 'Wtorek';
+
+  @override
+  String get dayWednesday => 'Środa';
+
+  @override
+  String get dayThursday => 'Czwartek';
+
+  @override
+  String get dayFriday => 'Piątek';
+
+  @override
+  String get daySaturday => 'Sobota';
+
+  @override
+  String get daySunday => 'Niedziela';
+
+  @override
+  String get dayShortMonday => 'Pn';
+
+  @override
+  String get dayShortTuesday => 'Wt';
+
+  @override
+  String get dayShortWednesday => 'Śr';
+
+  @override
+  String get dayShortThursday => 'Cz';
+
+  @override
+  String get dayShortFriday => 'Pt';
+
+  @override
+  String get dayShortSaturday => 'So';
+
+  @override
+  String get dayShortSunday => 'Nd';
+
+  @override
+  String get monthShortJanuary => 'Sty';
+
+  @override
+  String get monthShortFebruary => 'Lut';
+
+  @override
+  String get monthShortMarch => 'Mar';
+
+  @override
+  String get monthShortApril => 'Kwi';
+
+  @override
+  String get monthShortMay => 'Maj';
+
+  @override
+  String get monthShortJune => 'Cze';
+
+  @override
+  String get monthShortJuly => 'Lip';
+
+  @override
+  String get monthShortAugust => 'Sie';
+
+  @override
+  String get monthShortSeptember => 'Wrz';
+
+  @override
+  String get monthShortOctober => 'Paź';
+
+  @override
+  String get monthShortNovember => 'Lis';
+
+  @override
+  String get monthShortDecember => 'Gru';
+
+  @override
+  String get disable => 'Wyłącz';
+
+  @override
+  String get librus => 'Librus';
+
+  @override
+  String get vulcan => 'Vulcan';
+
+  @override
+  String get autoSync => 'Auto-sync (co 15 minut)';
 }

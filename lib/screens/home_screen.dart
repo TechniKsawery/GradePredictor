@@ -13,6 +13,7 @@ import 'settings_screen.dart';
 import 'login_screen.dart';
 import 'calendar_screen.dart';
 import 'school_sync_screen.dart';
+import '../widgets/translated_text.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -23,10 +24,13 @@ class HomeScreen extends ConsumerStatefulWidget {
 
 class _HomeScreenState extends ConsumerState<HomeScreen> {
   int _currentIndex = 0;
+  final Set<int> _loadedTabs = {0};
 
   @override
   Widget build(BuildContext context) {
     final subjects = ref.watch(subjectsProvider);
+    final averagesAsync = ref.watch(subjectAveragesProvider);
+    final averages = averagesAsync.valueOrNull ?? const <String, double>{};
     final profile = ref.watch(profileProvider);
     final locale = ref.watch(localeProvider);
     final l10n = AppLocalizations.of(context)!;
@@ -57,6 +61,13 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             icon: const Icon(Icons.logout),
             onPressed: () async {
               await ref.read(supabaseServiceProvider).signOut();
+              
+              // Invalidate providers to clear data for next user
+              ref.invalidate(subjectsProvider);
+              ref.invalidate(examsProvider);
+              ref.invalidate(profileProvider);
+              ref.invalidate(gradesProvider);
+              
               if (context.mounted) {
                 Navigator.of(context).pushReplacement(
                   MaterialPageRoute(builder: (_) => const LoginScreen()),
@@ -69,14 +80,15 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       body: IndexedStack(
         index: _currentIndex,
         children: [
-          _buildHomeTab(context, subjects, profile, locale, l10n, colorScheme, isDark),
-          const CalendarScreen(),
-          const StatsScreen(),
-          const SettingsScreen(),
+          _buildHomeTab(context, subjects, averages, profile, locale, l10n, colorScheme, isDark),
+          _loadedTabs.contains(1) ? const CalendarScreen() : const SizedBox.shrink(),
+          _loadedTabs.contains(2) ? const StatsScreen() : const SizedBox.shrink(),
+          _loadedTabs.contains(3) ? const SettingsScreen() : const SizedBox.shrink(),
         ],
       ),
       floatingActionButton: _currentIndex == 0
           ? FloatingActionButton.extended(
+              heroTag: 'home_fab',
               onPressed: () => _showAddSubjectDialog(context, ref),
               label: Text(l10n.addSubject),
               icon: const Icon(Icons.add),
@@ -86,7 +98,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           : null,
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
-        onTap: (idx) => setState(() => _currentIndex = idx),
+        onTap: (idx) => setState(() {
+          _currentIndex = idx;
+          _loadedTabs.add(idx);
+        }),
         type: BottomNavigationBarType.fixed,
         items: [
           BottomNavigationBarItem(
@@ -112,7 +127,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
   Widget _buildHomeTab(
     BuildContext context,
-    List subjects,
+    List<Subject> subjects,
+    Map<String, double> averages,
     profile,
     Locale locale,
     AppLocalizations l10n,
@@ -130,7 +146,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               child: OutlinedButton.icon(
                 onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const SchoolSyncScreen())),
                 icon: const Icon(Icons.sync, size: 18),
-                label: const Text('Importuj dane z e-dziennika'),
+                label: Text(l10n.syncLibrusSyncButton),
                 style: OutlinedButton.styleFrom(
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                   side: BorderSide(color: colorScheme.primary.withValues(alpha: 0.5)),
@@ -158,7 +174,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         itemCount: subjects.length,
                         itemBuilder: (context, index) {
                           final subject = subjects[index];
-                          final average = ref.watch(averageProvider(subject.id));
+                          final average = averages[subject.id] ?? 0.0;
                           return _buildSubjectCard(context, ref, subject, average, l10n);
                         },
                       ),
@@ -391,7 +407,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
+                    TranslatedText(
                       subject.name,
                       style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                     ),

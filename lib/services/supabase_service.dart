@@ -148,6 +148,32 @@ class SupabaseService {
     return (response as List).map((json) => Grade.fromJson(json)).toList();
   }
 
+  Future<Map<String, double>> getSubjectAverages() async {
+    final response = await client
+        .from('grades')
+        .select('subject_id,grade,weight');
+
+    final Map<String, double> weightedSum = {};
+    final Map<String, double> totalWeights = {};
+
+    for (final row in (response as List)) {
+      final subjectId = row['subject_id']?.toString();
+      if (subjectId == null || subjectId.isEmpty) continue;
+      final grade = (row['grade'] as num?)?.toDouble() ?? 0.0;
+      final weight = (row['weight'] as num?)?.toDouble() ?? 0.0;
+
+      weightedSum[subjectId] = (weightedSum[subjectId] ?? 0.0) + (grade * weight);
+      totalWeights[subjectId] = (totalWeights[subjectId] ?? 0.0) + weight;
+    }
+
+    final Map<String, double> averages = {};
+    for (final entry in weightedSum.entries) {
+      final weights = totalWeights[entry.key] ?? 0.0;
+      averages[entry.key] = weights == 0 ? 0.0 : entry.value / weights;
+    }
+    return averages;
+  }
+
   Future<Grade> addGrade(Grade grade) async {
     final response = await client
         .from('grades')

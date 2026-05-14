@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../l10n/app_localizations.dart';
 import '../models/subject.dart';
 import '../models/grade.dart';
+import '../utils/subject_translator.dart';
+import '../widgets/translated_text.dart';
 import '../providers/grade_provider.dart';
 import '../providers/settings_provider.dart';
 import '../widgets/prediction_dialog.dart';
@@ -19,7 +21,7 @@ class SubjectDetailScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(subject.name),
+        title: TranslatedText(subject.name),
         backgroundColor: Colors.transparent,
         elevation: 0,
         actions: [
@@ -98,9 +100,9 @@ class SubjectDetailScreen extends ConsumerWidget {
 
               return Column(
                 children: [
-                  Text('Punkty: ${normalEarned.toStringAsFixed(1)}/${maxNormal.toStringAsFixed(1)} (${normalPct.toStringAsFixed(0)}%)', style: const TextStyle(color: Colors.white70)),
+                  Text('${l10n.points}: ${normalEarned.toStringAsFixed(1)}/${maxNormal.toStringAsFixed(1)} (${normalPct.toStringAsFixed(0)}%)', style: const TextStyle(color: Colors.white70)),
                   const SizedBox(height: 4),
-                  Text('Bonus: ${bonusEarned.toStringAsFixed(1)}/${maxBonus.toStringAsFixed(1)} (${bonusPct.toStringAsFixed(0)}%)', style: const TextStyle(color: Colors.white70)),
+                  Text('${l10n.bonus}: ${bonusEarned.toStringAsFixed(1)}/${maxBonus.toStringAsFixed(1)} (${bonusPct.toStringAsFixed(0)}%)', style: const TextStyle(color: Colors.white70)),
                 ],
               );
             }),
@@ -123,13 +125,26 @@ class SubjectDetailScreen extends ConsumerWidget {
           leading: CircleAvatar(
             backgroundColor: const Color(0xFF6366F1).withValues(alpha: 0.1),
             child: Text(
-              grade.grade.toString(),
-              style: const TextStyle(color: Color(0xFF6366F1), fontWeight: FontWeight.bold),
+              grade.points != null
+                  ? (grade.grade > 0 ? grade.grade.toStringAsFixed(0) : '•')
+                  : grade.grade.toStringAsFixed(0),
+              style: const TextStyle(color: Color(0xFF6366F1), fontWeight: FontWeight.bold, fontSize: 13),
             ),
           ),
-            title: Text(grade.points != null
-              ? '${grade.points}/${grade.maxPoints} (${((grade.points!/grade.maxPoints!)*100).toStringAsFixed(0)}%)${grade.type == 'bonus' ? ' • ${l10n.gradeTypeBonus.toUpperCase()}' : ''}'
-              : '${l10n.weight}: ${grade.weight}${grade.type == 'bonus' ? ' • ${l10n.gradeTypeBonus.toUpperCase()}' : ''}'),
+            title: Builder(builder: (ctx) {
+              if (grade.points != null) {
+                final pts = grade.points!;
+                final maxPts = grade.maxPoints;
+                final pctStr = (maxPts != null && maxPts > 0)
+                    ? ' (${((pts / maxPts) * 100).toStringAsFixed(0)}%)'
+                    : '';
+                final maxStr = maxPts != null ? '/$maxPts' : '';
+                final bonusTag = grade.type == 'bonus' ? ' • ${l10n.gradeTypeBonus.toUpperCase()}' : '';
+                return Text('$pts$maxStr$pctStr$bonusTag');
+              }
+              final bonusTag = grade.type == 'bonus' ? ' • ${l10n.gradeTypeBonus.toUpperCase()}' : '';
+              return Text('${l10n.weight}: ${grade.weight}$bonusTag');
+            }),
           subtitle: Text('${_getLocalizedType(grade.type, l10n)}${grade.points != null ? ' • ${l10n.weight}: ${grade.weight}' : ''}'),
           trailing: IconButton(
             icon: const Icon(Icons.delete_outline, color: Colors.white24),
@@ -161,14 +176,66 @@ class SubjectDetailScreen extends ConsumerWidget {
   }
 
   String _getLocalizedType(String type, AppLocalizations l10n) {
-    switch (type.toLowerCase()) {
+    final locale = l10n.localeName; // 'pl', 'en', 'de'
+    
+    switch (type.toLowerCase().trim()) {
+      // Standard built-in types
       case 'test': return l10n.gradeTypeTest;
       case 'quiz': return l10n.gradeTypeQuiz;
       case 'homework': return l10n.gradeTypeHomework;
       case 'activity': return l10n.gradeTypeActivity;
       case 'bonus': return l10n.gradeTypeBonus;
-      default: return type;
     }
+    
+    if (locale == 'pl') return type; // Polish: show raw
+    
+    // Comprehensive Polish → EN/DE translation dictionary for grade types
+    const Map<String, Map<String, String>> gradeTypeMap = {
+      // Semester types
+      'śródroczna':                 {'en': 'Midterm',              'de': 'Halbjahres'},
+      'sródroczna':                 {'en': 'Midterm',              'de': 'Halbjahres'},
+      'roczna':                     {'en': 'Annual',               'de': 'Jahres'},
+      'przewidywana śródroczna':    {'en': 'Predicted Midterm',    'de': 'Vorh. Halbjahres'},
+      'przewidywana sródroczna':    {'en': 'Predicted Midterm',    'de': 'Vorh. Halbjahres'},
+      'przewidywana roczna':        {'en': 'Predicted Annual',     'de': 'Vorh. Jahres'},
+      'proponowana śródroczna':     {'en': 'Proposed Midterm',     'de': 'Vorgesch. Halbjahres'},
+      'proponowana roczna':         {'en': 'Proposed Annual',      'de': 'Vorgesch. Jahres'},
+      // Activity / behavior
+      'aktywność':                  {'en': 'Activity',             'de': 'Aktivität'},
+      'zachowanie':                 {'en': 'Behavior',             'de': 'Verhalten'},
+      'praca klasowa':              {'en': 'Class Test',           'de': 'Klassenarbeit'},
+      'kartkówka':                  {'en': 'Short Test',           'de': 'Kurztest'},
+      'odpowiedź ustna':            {'en': 'Oral Answer',          'de': 'Mündliche Antwort'},
+      'zadanie domowe':             {'en': 'Homework',             'de': 'Hausaufgabe'},
+      'projekt':                    {'en': 'Project',              'de': 'Projekt'},
+      'prezentacja':                {'en': 'Presentation',         'de': 'Präsentation'},
+      'referat':                    {'en': 'Paper',                'de': 'Referat'},
+      'praca dodatkowa':            {'en': 'Extra Work',           'de': 'Zusatzarbeit'},
+      'konkurs':                    {'en': 'Competition',          'de': 'Wettbewerb'},
+      'dyktando':                   {'en': 'Dictation',            'de': 'Diktat'},
+      'wypracowanie':               {'en': 'Essay',                'de': 'Aufsatz'},
+      'lektura':                    {'en': 'Reading',              'de': 'Lektüre'},
+      'ćwiczenia':                  {'en': 'Exercises',            'de': 'Übungen'},
+      'laboratorium':               {'en': 'Lab',                  'de': 'Labor'},
+      'egzamin':                    {'en': 'Exam',                 'de': 'Prüfung'},
+      'sprawdzian':                 {'en': 'Test',                 'de': 'Test'},
+      'ocena semestralna':          {'en': 'Semester Grade',       'de': 'Semesternote'},
+      'ocena końcowa':              {'en': 'Final Grade',          'de': 'Endnote'},
+    };
+    
+    final normalized = type.toLowerCase().trim();
+    // Exact match
+    if (gradeTypeMap.containsKey(normalized)) {
+      return gradeTypeMap[normalized]![locale] ?? type;
+    }
+    // Partial match
+    for (final entry in gradeTypeMap.entries) {
+      if (normalized.contains(entry.key)) {
+        return entry.value[locale] ?? type;
+      }
+    }
+    
+    return type; // Unknown type: show as-is
   }
 
   void _showAddGradeDialog(BuildContext context, WidgetRef ref) {

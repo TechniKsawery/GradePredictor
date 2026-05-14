@@ -1,0 +1,680 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+    <html lang="pl-PL">
+   <head><title>LIBRUS Synergia</title>
+   <meta http-equiv="Content-type" content="text/html; charset=UTF-8">
+   <meta http-equiv="Reply-to" content="administrator@dziennik.librus.pl">
+   <meta http-equiv="Content-Language" content="pl">
+   <meta name="Keywords" content="dziennik, elektroniczny, edukacja, oświata, programy, komputerowe, edziennik, e-dziennik, synergia">
+   <meta name="Description" content="Dziennik elektroniczny">
+   <meta name="robots" content="noindex, nofollow" />
+        <link rel="shortcut icon" href="/images/synergia.ico">
+                    <link rel="stylesheet" href="/js/librus-component/data-table/librus-data-table.css?v2" />
+        <link rel="stylesheet" href="/js/librus-component/panel/librus-panel.css?v1" />
+        <link rel="stylesheet" href="/js/librus-component/notification/librus-notification.css?v4" />
+        <link rel="stylesheet" href="/js/librus-component/dialog/librus-dialog.css?v1" />
+        <link rel="stylesheet" href="/js/jquery/themes/base/jquery.ui.all.1285316921.css" type="text/css"><link rel="stylesheet" href="/js/jquery/jquery-ui-1.9.2.custom/css/librus/jquery-ui-1.9.2.custom.min.1422664051.css" type="text/css"><link rel="stylesheet" href="/js/jquery/jquery-ui-1.9.2.custom/css/librus/librus-aditional.1507325373.css" type="text/css"><script type="text/javascript" src="/js/jquery/jquery-ui-1.9.2.custom/js/jquery-1.8.3.1360569100.js"></script><script type="text/javascript" src="/js/jquery/jquery.form.1615587149.js"></script><script type="text/javascript" src="/js/jquery/jquery-ui-1.9.2.custom/js/jquery-ui-1.9.2.custom.min.1361447290.js"></script>        <script type="text/javascript" src="/js/newLayout/jquery.mask.min.js"></script>
+        <script type="text/javascript" src="/js/LibrusJQueryTheme.js"></script>
+        <script type="text/javascript" src="/js/rowCollection.js"></script>
+        <script type="text/javascript" src="/js/quickSearchTool.js"></script>
+        <script type="text/javascript" src="/js/CsrfProtection.js"></script>
+        <script type="text/javascript">
+            var csrfTokenName = "requestkey";
+            var csrfTokenValue = "MC44NjgwMDkwMCAxNzc4MzI5MjU2X2ZmN2ZjZWQ3MWJiMjE2OTIwZWMwMzRlNGRjZTcyZDg5";
+        </script>
+            <script type='text/javascript'>
+        var APP_SETTINGS = new Object();
+        Object.defineProperties(APP_SETTINGS, {
+            idw_content_domain: {
+                value: "https://synergia.indywidualni.pl",
+                enumerable: true
+            }
+        });
+    </script>
+    <script type="text/javascript" src="/js/fileValidator.1535145151.js"></script><script type="text/javascript" src="/js/CloudStorageBrowseTool.1507325373.js"></script><script type="text/javascript" src="/js/indywidualni.1666094592.js"></script><script type="text/javascript" src="/js/connectRMNToLesson.1507325373.js"></script><script type="text/javascript" src="/js/libs/redom/redom.min.1575670839.js"></script><script type="text/javascript" src="/js/libs/lodash/lodash.min.1575670839.js"></script><script type="text/javascript" src="/js/libs/moment/moment.min.1596795859.js"></script><script type="text/javascript" src="/js/libs/navigo/navigo.min.1581718575.js"></script><script type="text/javascript" src="/js/util/util.1581718575.js"></script><script type="text/javascript" src="/js/librus-component/data-table/librus-data-table.1596795859.js"></script><script type="text/javascript" src="/js/librus-component/panel/librus-panel.1581718575.js"></script><script type="text/javascript" src="/js/librus-component/notification/librus-notification.1596795859.js"></script><script type="text/javascript" src="/js/librus-component/dialog/librus-dialog.1585948224.js"></script><script type="text/javascript" src="/js/jquery/fancybox/jquery.fancybox-1.3.4.1332493810.js"></script>        <script type="text/javascript">
+            CSRF_PROTECTION.startAddingCsrfTokenTo($, csrfTokenName, csrfTokenValue);
+        </script>
+           <script src="/js/jquery/jquery-ui-timepicker-addon.js"></script>      <script src="/assets/js/fancybox/jquery.fancybox-1.3.4.pack.js" type="text/javascript"></script>
+   <link href="/assets/css/fancybox/jquery.fancybox-1.3.4.css" rel="stylesheet" type="text/css"/>
+   <script>// HOTFIX: We can't upgrade to jQuery UI 1.8.6 (yet)
+    // This hotfix makes older versions of jQuery UI drag-and-drop work in IE9
+    (function($){var a=$.ui.mouse.prototype._mouseMove;$.ui.mouse.prototype._mouseMove=function(b){if($.browser.msie&&document.documentMode>=9){b.button=1};a.apply(this,[b]);}}(jQuery));</script>
+
+              <!--<script type="module" src="/js/2fa.js"></script>-->
+        <script type="module" src="/js/strefa-klienta-info.js"></script>
+        <script type="module" src="/js/specialist_register.js"></script>
+        <link rel="stylesheet" href="/LibrusStyleSheet2.1777065863.css" type="text/css" media="screen">        <link rel="stylesheet" href="/LibrusPrintStyleSheet2.1495831305.css" type="text/css" media="print">        <!--[if !IE]><!-->
+        <link rel="stylesheet" href="/LibrusStyleSheet2NonIE.1361960241.css" type="text/css" media="screen">        <!--<![endif]-->
+        <!--[if IE]>
+        <link rel="stylesheet" href="/LibrusStyleSheet2IE.1615587149.css" type="text/css" media="screen">        <![endif]-->
+        <!--[if IE 7]>
+        <link rel="stylesheet" href="/LibrusStyleSheet2IE7.1371460280.css" type="text/css" media="screen">        <![endif]-->
+        <!--[if IE 8]>
+        <link rel="stylesheet" href="/LibrusStyleSheet2IE8.1367217179.css" type="text/css" media="screen">        <![endif]-->
+        <!--[if IE 9]>
+        <link rel="stylesheet" href="/LibrusStyleSheet2IE9.1366628972.css" type="text/css" media="screen">        <![endif]-->
+        <link rel="stylesheet" href="/LibrusStyleSheet2Light.1774650888.css" type="text/css" media="screen"><link rel="stylesheet" href="/assets/css/synergia.1731710352.css" type="text/css" media="screen"><link rel="stylesheet" href="/assets/css/style.1679696063.css" type="text/css" media="screen"><script type="text/javascript" src="/assets/js/synergia/main.1438948866.js"></script>        <script type="text/javascript">
+            var appName1 = 'LIBRUS Synergia';
+            var appName2 = 'LIBRUS Synergia';
+            var appName3 = 'LIBRUS Synergia';
+            var appName4 = 'LIBRUS Synergia';
+            var appName5 = 'LIBRUS Synergia';
+            var appName6 = 'LIBRUS Synergia';
+            var appName7 = 'LIBRUS Synergia';
+        </script>
+        <link rel="stylesheet" type="text/css" media="screen" href="/js/newLayout/SparkBoxSelect/sparkbox-select.css" />
+        <link rel="stylesheet" type="text/css" media="screen" href="/jquery.treeview.css" />
+
+            <script type="text/javascript" src="/js/cookie.js" ></script>
+       <script type="text/javascript" src="/js/uklad_strony2.1697232820.js"></script>       <script type="text/javascript" src="/js/ZeroClipboard.min.js"></script>
+       <script type="text/javascript">
+           ZeroClipboard.setDefaults( { moviePath: '/swf/ZeroClipboard.swf' } );
+       </script>
+
+
+   <script type="text/javascript" src="/js/newLayout/SparkBoxSelect/jquery.sparkbox-select.js" ></script>
+        <link rel="stylesheet" href="/assets/css/tippy/tippy.css" />
+        <link rel="stylesheet" href="/assets/css/tippy-theme.css" />
+        <script type="text/javascript" src="/assets/js/polyfilles/object-assign.min.js"></script>
+        <script type="text/javascript" src="/assets/js/polyfilles/promise-polyfill.min.js"></script>
+        <script type="text/javascript" src="/assets/js/polyfilles/find.js"></script>
+        <script type="text/javascript" src="/assets/js/popper/popper.min.js"></script>
+        <script type="text/javascript" src="/assets/js/tippy/tippy.umd.min.js"></script>
+        <script src="/js/newLayout/amCharts.js" type="text/javascript"></script>
+        <script src="/js/validators.js" type="text/javascript" ></script>
+        <script src="/js/ErrorProvider.js" type="text/javascript"></script>
+        <script src="/js/newLayout/rgbcolor.js" type="text/javascript"></script>
+    <script type="text/javascript" src="/modules/Sekretariat/js/SKFOldInterface/Utils.1628259749.js"></script><script type="text/javascript" src="/js/newLayout/newLayoutJS.1772235712.js"></script><script type="text/javascript" src="/js/newLayout/newLayoutJSExecutes.1754074247.js"></script>    <!--[if IE 7]>
+    <script type="text/javascript" src="/js/newLayout/newLayoutJSIE7.1368708313.js"></script>    <![endif]-->
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="/js/newLayout/newLauoutJSltIE9.1375344710.js"></script>    <![endif]-->
+    <link rel="stylesheet" href="/js/jquery/jquery.multiselect.1628259749.css" type="text/css">    <script type="text/javascript" src="/js/jquery/jquery.multiselect.1422664051.js"></script>    <script type="text/javascript" src="/assets/js/synergia/MultiselectLibrus.1565269166.js"></script>    <script type="text/javascript" src="/js/pobierz_date_wywiadowki2.1495831305.js"></script>    <script type="text/javascript" src="/js/pobierz_email4.1535749794.js"></script>       <!--[if lt IE 9]>
+   <script type="text/javascript">
+   $(document).ready(function(){
+        $(window).on("resize", function(){
+            simMediaQuery();
+        });
+
+        simMediaQuery();
+
+        function simMediaQuery(){
+            var widthTrigger = 1100;
+            var viewportW = parseInt($(window).width());
+            if (viewportW > widthTrigger){
+                if( $('#interfejs-lekcyjny').length <= 0 || parseInt( $('#body').css("padding-left") ) < 50 ) {
+                    $('#body').css({"padding-left" : "50px"});
+                }
+                $('#body').css({"padding-right" : "50px"});
+            } else {
+                if( $('#interfejs-lekcyjny').length <= 0 ) {
+                    $('#body').css({"padding-left" : "0"});
+                }
+                $('#body').css({"padding-right" : "0"});
+            }
+        }
+
+    });
+   </script>
+   <![endif]-->
+   <script type="text/javascript" src="/ajax.js"></script>
+   <script type="text/javascript">
+
+	<!--
+	var ajax = new sack();
+	var ajax1 = new sack();
+	var ajax2 = new sack();
+	var ajax3 = new sack();
+	var ajax4 = new sack();
+	var ajaxLesBar = new sack();
+	var ajaxKomMenu = new sack();
+	var edit_success = false; // wykorzystywane w onload przy hospitacjach
+	var isInterfaceMinimalize = 0;
+	var isInterfaceHide = 0;
+
+	/*
+       Function: getLessonsList
+
+       Function gets lessons list.
+
+       Author:
+            Dariusz Kozka <dariusz.kozka[at]librus.pl>
+
+       Parameters:
+
+            int 	sel - idetifier of class.
+            int 	pick - identifier of selected lesson.
+
+    */
+	function getLessonsList(sel, pick)
+	{
+		var klasa = sel;
+		if(klasa > 0)
+		{
+			if(pick)
+			{
+				var selected = '&selected=' + pick;
+			}
+			else
+			{
+				var selected = '';
+			}
+			document.getElementById('lekcja').options.length = 0;
+			if(klasa.length>0)
+			{
+				ajax2.requestFile = "https:\/\/synergia.librus.pl" + '/ajax/combos_lekcje.php?klasa=' + klasa + selected;
+				ajax2.onCompletion = createLessons;
+				ajax2.onLoading = showLessonWaitMessage;
+				ajax2.runAJAX();
+			}
+		}
+	}
+
+    /*
+       Function: createLessons
+
+       Function create lessons.
+
+       Author:
+            Dariusz Kozka <dariusz.kozka[at]librus.pl>
+
+    */
+	function createLessons()
+	{
+		document.getElementById('lekcja').options.length = 0;
+		var obj = document.getElementById('lekcja');
+		eval(ajax2.response);
+	}
+
+    /*
+       Function: showLessonWaitMessage
+
+       Function shows lesson wait message.
+
+       Author:
+            Dariusz Kozka <dariusz.kozka[at]librus.pl>
+
+    */
+	function showLessonWaitMessage()
+	{
+		document.getElementById('lekcja').options[document.getElementById('lekcja').options.length] = new Option('Trwa generowanie listy...', '');
+	}
+
+    /*
+       Function: hideSubmenuLayer
+
+       Function hide submenu layer.
+
+       Author:
+            Dariusz Kozka <dariusz.kozka[at]librus.pl>
+
+    */
+	function hideSubmenuLayer()
+	{
+		var tool = document.getElementById('tooltip');
+		if(tool)
+		{
+			document.body.removeChild(tool);
+		}
+		var ajax_loader = '<div style="text-align: center;">Ładowanie ustawień ...</div>';
+		ajax.requestFile = "https:\/\/synergia.librus.pl" + '/ajax/pozycje_obiektow.php?action=hide&objectType=interfejsSubmenu&isInterfaceMin='+isInterfaceMinimalize;
+		ajax.onCompletion = loadCoords;
+		ajax.onLoading = showWaitMessage;
+		ajax.runAJAX();
+		dd.elements.interfejsSubmenu.hide(true);
+		function showWaitMessage()
+		{
+			document.getElementById('interfejsSubmenu').innerHTML = ajax_loader;
+		}
+
+		function loadCoords()
+		{
+			document.getElementById('interfejsSubmenu').innerHTML = ajax.response;
+		}
+	}
+
+    /*
+       Function: minimalizeInterface
+
+       Function minimalize interface.
+
+       Author:
+            Dariusz Kozka <dariusz.kozka[at]librus.pl>
+
+    */
+	function minimalizeInterface()
+	{
+		var menu = document.getElementById('interfejsmenu');
+		var minImg = document.getElementById('minimalizeInterfaceIMG');
+		var maxImg = document.getElementById('maximalizeInterfaceIMG');
+		if(menu && maxImg && minImg){
+			menu.style.display = 'none';
+			minImg.style.display = 'none';
+			maxImg.style.display = '';
+			isInterfaceMinimalize = 1;
+			ajax4.requestFile = "https:\/\/synergia.librus.pl" + '/ajax/stan_minimalizacji_interfejsu.php?isInterfaceMin='+isInterfaceMinimalize;
+			ajax4.runAJAX();
+
+		}
+	}
+
+    /*
+       Function: maximalizeInterface
+
+       Function maximalize interface.
+
+       Author:
+            Dariusz Kozka <dariusz.kozka[at]librus.pl>
+
+    */
+	function maximalizeInterface()
+	{
+		var minImg = document.getElementById('minimalizeInterfaceIMG');
+		var maxImg = document.getElementById('maximalizeInterfaceIMG');
+		var menu = document.getElementById('interfejsmenu');
+		if(menu && maxImg && minImg){
+			menu.style.display = '';
+			minImg.style.display = '';
+			maxImg.style.display = 'none';
+			isInterfaceMinimalize = 0;
+			ajax4.requestFile = "https:\/\/synergia.librus.pl" + '/ajax/stan_minimalizacji_interfejsu.php?isInterfaceMin='+isInterfaceMinimalize;
+			ajax4.runAJAX();
+		}
+	}
+
+    /*
+      Class: lessonBarStatus
+
+      Description:
+      LessonBar object with refresh functionality
+
+      Author:
+      Krzysztof Żerucha <krzysztof.zerucha[at]librus.pl>
+    */
+
+    var lessonBarStatus = function(lessonStart, lessonEnd, now, lessonNumber)
+    {
+        if (!Number.isInteger(lessonStart) || lessonStart < 0) {
+            throw new Error("Wrong type of input variable 'lessonStart'. Expected non-negative integer.");
+        }
+
+        if (!Number.isInteger(lessonEnd) || lessonEnd < 0) {
+            throw new Error("Wrong type of input variable 'lessonEnd'. Expected non-negative integer.");
+        }
+
+        if (lessonStart >= lessonEnd) {
+            throw new Error("Wrong value of 'lessonStart' or 'lessonEnd'. 'lessonStar' is later than 'lessonEnd'.");
+        }
+
+        if (!Number.isInteger(now) || now < 0) {
+            throw new Error("Wrong type of input variable 'now'. Expected non-negative integer.");
+        }
+
+        if ((!Number.isInteger(lessonNumber) || lessonNumber < 0) && lessonNumber !== null) {
+            throw new Error("Wrong type of input variable 'lessonNumber'. Expected non-negative integer or null.");
+        }
+
+        if (document.getElementById('progressBarLekcja') === null) {
+            throw new Error("progressBarLekcja not found");
+        }
+
+        if (document.getElementById('progressBarText') === null) {
+            throw new Error("progressBarText not found");
+        }
+
+        var lessonStart = lessonStart;
+        var lessonEnd = lessonEnd;
+        var actualTimeForLessonBar = now;
+        var lessonNumber = lessonNumber;
+        var divBar = document.getElementById('progressBarLekcja');
+        var divTxtNr = document.getElementById('progressBarText');
+        var lessonBarInterval;
+        this.refresh = function() {
+            var actualTime = actualTimeForLessonBar;
+            actualTimeForLessonBar += 60;
+            var percent = 0;
+            var remainingMinutes = 0;
+            if (lessonNumber !== null) {
+                percent = 100;
+                if (actualTime <= lessonEnd) {
+                    var percent = (actualTime - lessonStart) / (lessonEnd - lessonStart) * 100;
+                    var remainingMinutes = parseInt((lessonEnd - actualTime) / 60);
+                }
+
+                divBar.style.width = percent + '%';
+                divTxtNr.innerHTML = 'Do końca lek. nr ' + lessonNumber + ': <span class="progressBarTextMinutes">' + remainingMinutes + ' min</span>';
+            } else {
+                divTxtNr.innerHTML = 'Do końca lekcji';
+                this.stopInterval();
+            }
+
+            if (percent >= 100) {
+                this.stopInterval();
+            }
+        }
+    };
+
+    lessonBarStatus.prototype.startInterval = function() {
+        var self = this;
+        lessonBarInterval = window.setInterval(function() {self.refresh();}, 60000);
+        self.refresh();
+    };
+
+    lessonBarStatus.prototype.stopInterval = function() {
+        clearInterval(lessonBarInterval);
+    };
+
+	function ustaw_komunikat_menu(stan)
+	{
+		ajaxKomMenu.requestFile = "https:\/\/synergia.librus.pl" + '/ajax/ustaw_komunikat_menu.php?stan='+stan;
+		ajaxKomMenu.execute = true;
+		ajaxKomMenu.runAJAX();
+
+	}
+
+    function ustaw_komunikat_archiwum(stan)
+	{
+		ajaxKomMenu.requestFile = "https:\/\/synergia.librus.pl" + '/ajax/ustaw_komunikat_archiwum.php?stan='+stan;
+		ajaxKomMenu.execute = true;
+		ajaxKomMenu.runAJAX();
+
+	}
+
+	function zmien_typ_menu(stan)
+	{
+            $.ajax({
+                dataType: "json",
+                type: "post",
+                url: '/ajax/zmien_typ_menu_adv.php',
+                data: 'stan='+stan,
+                success: function(data){
+                    if( data["SUCCESS"] ) {
+                        var html = $.parseHTML( data["CONTENT"], document, true );
+                        var scripts = [];
+                        var found = null;
+                        $.each( html, function( i, el ) {
+                            if(el.nodeName == 'SCRIPT') {
+                                scripts[i] = el;
+                            } else if(el.nodeName != '#text') {
+                                if($(el).attr("id") == "header") {
+                                    found = $(el);
+                                }
+                            }
+                        });
+                        if (found.length > 0) {
+                            $("#header").replaceWith(found);
+                            setTimeout(function(){
+                                $.each( scripts, function( i, el ) {
+                                    $("#header").append(el);
+                                });
+                            }, 500);
+                        }
+                    }
+                }
+            });
+	}
+
+    var interfejs_fold_object = function()
+    {
+        var res = new Object();
+        $('#interfejs-lekcyjny div[id^="g_"]').each(function() {
+            res[$(this).attr('id')] = !$(this).is(':visible');
+        });
+
+        return res;
+    };
+
+//------------
+
+//-->
+ </script>
+
+
+
+ <script type="text/javascript" src="/js/ImageSwaper.js"></script>
+
+
+<script type="text/javascript" charset="UTF-8">
+/* <![CDATA[ */
+try { if (undefined == xajax.config) xajax.config = {}; } catch (e) { xajax = {}; xajax.config = {}; };
+xajax.config.requestURI = "https://synergia.librus.pl/przegladaj_oceny/uczen?f=3";
+xajax.config.statusMessages = false;
+xajax.config.waitCursor = true;
+xajax.config.version = "xajax 0.5 rc2";
+xajax.config.legacy = false;
+xajax.config.defaultMode = "asynchronous";
+xajax.config.defaultMethod = "POST";
+/* ]]> */
+</script>
+<script type="text/javascript" src="/funkcje/xajax/xajax_js/xajax_core.js" charset="UTF-8"></script>
+<script type="text/javascript" charset="UTF-8">
+/* <![CDATA[ */
+window.setTimeout(
+ function() {
+  var scriptExists = false;
+  try { if (xajax.isLoaded) scriptExists = true; }
+  catch (e) {}
+  if (!scriptExists) {
+   alert("Error: the xajax Javascript component could not be included. Perhaps the URL is incorrect?\nURL: /funkcje/xajax/xajax_js/xajax_core.js");
+  }
+ }, 2000);
+/* ]]> */
+</script>
+
+<script type='text/javascript' charset='UTF-8'>
+/* <![CDATA[ */
+xajax_pobierzArtykulPomocy = function() { return xajax.request( { xjxfun: 'pobierzArtykulPomocy' }, { parameters: arguments } ); };
+xajax_pobierzDzialPomocy = function() { return xajax.request( { xjxfun: 'pobierzDzialPomocy' }, { parameters: arguments } ); };
+xajax_ustaw_komunikat_menu = function() { return xajax.request( { xjxfun: 'ustaw_komunikat_menu' }, { parameters: arguments } ); };
+xajax_ustaw_komunikat_archiwum = function() { return xajax.request( { xjxfun: 'ustaw_komunikat_archiwum' }, { parameters: arguments } ); };
+xajax_zmien_typ_menu = function() { return xajax.request( { xjxfun: 'zmien_typ_menu' }, { parameters: arguments } ); };
+/* ]]> */
+</script>
+        <script type="text/javascript">
+            if (xajax) {
+                xajax.config.postHeaders["requestkey"] = "MC44NjgwMDkwMCAxNzc4MzI5MjU2X2ZmN2ZjZWQ3MWJiMjE2OTIwZWMwMzRlNGRjZTcyZDg5";
+            }
+        </script>
+        </head>
+<body onload="ImageSwaper.GetInstance().Load(); ">
+
+<script type="text/javascript">
+  var toload = 0;  
+  var imageShowed = false;
+    
+  /*
+       Function: startLoading
+
+       Function show preloader.
+
+       Author:
+            Sylwester Wydmuch <sylwester.wydmuch[at]librus.pl>
+
+    */
+  function startLoading()
+  {
+    toload = toload + 1; 
+    window.setTimeout('showLoadingImage()', 700);
+    
+  }
+    
+  /*
+       Function: showLoadingImage
+
+       Function show preloader image.
+
+       Author:
+            Sylwester Wydmuch <sylwester.wydmuch[at]librus.pl>
+
+    */
+  function showLoadingImage()
+  {
+   if(!imageShowed && toload>0) 
+   {
+    if (document.getElementById('loading')) {
+        document.getElementById('loading').style.display = 'block';
+        imageShowed=true;
+    }	
+   }
+  }
+    
+  /*
+       Function: stopLoading
+
+       Function hide preloader.
+
+       Author:
+            Sylwester Wydmuch <sylwester.wydmuch[at]librus.pl>
+
+    */
+  function stopLoading() 
+  {
+    toload = toload -1;
+    if(toload==0) 
+  	{
+  		document.getElementById('preloader-box').style.display='none';
+  		imageShowed = false;
+        $( 'input[type=submit],input[type=button], button' ).not('.ui-button').not('.advanced-button').css({'z-index': $(this).parent().zIndex() }).button();
+        
+
+        $( '.button-set .advanced-button' ).not('.ui-button').button({
+            text: true,
+            icons: {
+                secondary: 'ui-icon-triangle-1-s'
+            }
+        }).click(function() {
+            $('.button-set ul').not( $( this ).parent().next() ).hide();
+            var menu = $( this ).parent().next().stop().animate({
+                height: 'toggle'
+            }, 100);
+            $( document ).one( 'click', function() {
+                menu.hide();
+            });
+            return false;
+        }).parent().next().hide().css({'z-index': $(this).parent().zIndex()+1}).menu().buttonset();
+	}
+    
+  }
+  xajax.callback.global.onRequest = function() {startLoading();}
+  xajax.callback.global.onComplete = function() {stopLoading();}
+  </script><div id="preloader-box"  style="display: none;">
+            <div id="preloader-curtain"></div>
+            <div id="preloader">
+                <span id="preloader-logo"></span>
+                <span id="preloader-loader"></span>
+            </div>
+        </div>
+<script type="text/javascript" src="/wz_dragdrop.js"></script>
+ <!--
+ <div id="kontener">
+ <div id="baner"><img src="/images/baner_top1.jpg"></div>
+  -->
+    <div id="page">
+              <div class="container static">
+            <h2 class="inside">Brak dostępu</h2>
+            <div class="container-background">
+                <div class="center">
+                    <img src="/images/stop.png"><br/>
+            <script type="text/javascript">
+        var linkButtonFnac0405a10580cc26e513921f99309414 = function () {
+            var ask = false;
+            if (ask) {
+                var buttons = [
+                    {
+                        value: "Tak",
+                        click: function () {
+                            window.location.href = "https:\/\/synergia.librus.pl\/loguj\/przenies\/przegladaj_oceny\/uczen";
+                        }
+                    },
+                    {
+                        value: "Nie",
+                        close: true
+                    }
+                ];
+
+                show_message(
+                    'question',
+                    'Potwierdzenie',
+                    "",
+                    buttons,
+                    true
+                );
+                return false;
+            } else {
+                window.location.href="https:\/\/synergia.librus.pl\/loguj\/przenies\/przegladaj_oceny\/uczen";
+            }
+        }
+    </script>
+    <input
+        type="button"
+        value="Loguj"
+        class="small"
+        onclick="linkButtonFnac0405a10580cc26e513921f99309414()"
+                title=""
+        >
+                    </div>
+            </div>
+        </div>
+        <script type="text/javascript">
+            var windowParentObj = window.opener;
+            var popup = false;
+            if (windowParentObj && 1 == 1) {
+                try {
+                    if (windowParentObj.location.host == window.location.host) {
+                        popup = true;
+                    }
+                } catch(e) {
+
+                }
+            }
+
+            if(popup){
+                document.getElementById('loginButton').style.display = 'none';
+                if (windowParentObj.location.href != "https:\/\/synergia.librus.pl\/loguj") {
+                    var a = windowParentObj.document.createElement('a');
+                    if(!a.click) //for IE
+                    {
+                                                    windowParentObj.location = "https:\/\/synergia.librus.pl\/loguj" +"/przenies" + windowParentObj.location.pathname;
+                                            }
+
+                                            a.setAttribute("href", "https:\/\/synergia.librus.pl\/loguj" +"/przenies" + windowParentObj.location.pathname);
+                                            a.style.display = "none";
+                    windowParentObj.document.body.appendChild(a);
+                    a.click();
+                }
+            } else {
+                var a = document.createElement('a');
+
+                                if(!a.click) //for IE
+                {
+                                            window.location = "https:\/\/synergia.librus.pl\/loguj\/przenies\/przegladaj_oceny\/uczen";
+                                    }
+
+                                        a.setAttribute("href", "https:\/\/synergia.librus.pl\/loguj\/przenies\/przegladaj_oceny\/uczen");
+                                    a.style.display = "none";
+                window.document.body.appendChild(a);
+                a.click();
+            }
+        </script>
+                </div>
+<script type="text/javascript">
+    $(document).ready(function(){
+        if( $('#body.have-interface').find(".container.static").length > 0 ) {
+            $('#body').css("padding-left", $('#body').css("padding-right") );
+        }
+        $('#body.have-interface').removeClass("have-interface");
+      });
+  </script>
+        <script type="text/javascript" src="/js/cookieBox.js"></script>
+    <div id="cookieBox" class="cookieBox" style="display: none;">
+        <div id="cookieBoxClose" class="cookieBoxClose"><a href="javascript: void(null);">x</a></div>
+        <p>
+            Ta strona wykorzystuje pliki cookies. Za ich pomocą zbierane są informacje, które mogą stanowić dane osobowe. Wykorzystujemy je m.in. w celach statystycznych i funkcjonalnych. Korzystając z serwisu bez zmiany konfiguracji przeglądarki, wyrażasz zgodę na zapisanie plików cookies w pamięci Twojego urządzenia. Możesz samodzielnie zarządzać cookies zmieniając odpowiednio ustawienia w Twojej przeglądarce. Więcej informacji o zasadach przetwarzania Twoich danych osobowych oraz przysługujących Ci prawach znajdziesz w <a href="https://synergia.librus.pl/polityka-prywatnosci/" target="_blank" rel="noreferrer noopener">Polityce prywatności</a>.
+        </p>
+    </div>
+        <div id="footer">
+              <hr></hr>
+                <span id="bottom-logo"></span>
+                </div>
+  </div>
+</body>
+</html>
+  

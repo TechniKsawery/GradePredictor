@@ -181,7 +181,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                     icon: const Icon(Icons.update_rounded, color: Color(0xFF6366F1)),
                     onPressed: () async {
                       try {
-                        if (_passwordController.text.length < 6) throw 'Password too short';
+                        if (_passwordController.text.length < 6) throw l10n.passwordTooShort;
                         await ref.read(supabaseServiceProvider).updatePassword(_passwordController.text);
                         if (context.mounted) {
                           ScaffoldMessenger.of(context).showSnackBar(

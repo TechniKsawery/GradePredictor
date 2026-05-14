@@ -844,6 +844,12 @@ abstract class AppLocalizations {
   /// **'Add subjects first to plan exams'**
   String get noSubjectsForExams;
 
+  /// No description provided for @calendarNoSubjectsInfo.
+  ///
+  /// In en, this message translates to:
+  /// **'You cannot add an exam until you add at least one subject in the Subjects tab.'**
+  String get calendarNoSubjectsInfo;
+
   /// No description provided for @noSubjectsShort.
   ///
   /// In en, this message translates to:
@@ -1089,6 +1095,438 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Custom scale saved!'**
   String get customScaleSaved;
+
+  /// No description provided for @syncTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'School Sync'**
+  String get syncTitle;
+
+  /// No description provided for @syncSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Connect to your school account to automatically download grades and exams.'**
+  String get syncSubtitle;
+
+  /// No description provided for @syncLoginLibrus.
+  ///
+  /// In en, this message translates to:
+  /// **'Login (Librus)'**
+  String get syncLoginLibrus;
+
+  /// No description provided for @syncPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Password'**
+  String get syncPassword;
+
+  /// No description provided for @syncStart.
+  ///
+  /// In en, this message translates to:
+  /// **'Start synchronization'**
+  String get syncStart;
+
+  /// No description provided for @syncSecurityNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Your data is secure and used only for downloading grades. We do not store your password.'**
+  String get syncSecurityNote;
+
+  /// No description provided for @syncDataFound.
+  ///
+  /// In en, this message translates to:
+  /// **'Data found for import:'**
+  String get syncDataFound;
+
+  /// No description provided for @syncGradesDetail.
+  ///
+  /// In en, this message translates to:
+  /// **'Grade details (automatically detected):'**
+  String get syncGradesDetail;
+
+  /// No description provided for @syncConfirmImport.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm and import'**
+  String get syncConfirmImport;
+
+  /// No description provided for @syncCancelReturn.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel and go back'**
+  String get syncCancelReturn;
+
+  /// No description provided for @syncError.
+  ///
+  /// In en, this message translates to:
+  /// **'Sync error: {error}'**
+  String syncError(Object error);
+
+  /// No description provided for @syncImportedCount.
+  ///
+  /// In en, this message translates to:
+  /// **'Imported: {grades} grades, {exams} events!'**
+  String syncImportedCount(Object exams, Object grades);
+
+  /// No description provided for @syncLibrusLoginHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Login (Librus)'**
+  String get syncLibrusLoginHint;
+
+  /// No description provided for @syncVulcanTokenHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Token (Vulcan)'**
+  String get syncVulcanTokenHint;
+
+  /// No description provided for @syncVulcanSymbolLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Symbol (Vulcan)'**
+  String get syncVulcanSymbolLabel;
+
+  /// No description provided for @syncVulcanPinLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'PIN Code'**
+  String get syncVulcanPinLabel;
+
+  /// No description provided for @syncLibrusSyncButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Import data from school diary'**
+  String get syncLibrusSyncButton;
+
+  /// No description provided for @syncTypeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Type: {type}'**
+  String syncTypeLabel(Object type);
+
+  /// No description provided for @syncWeightLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Weight: {weight}'**
+  String syncWeightLabel(Object weight);
+
+  /// No description provided for @syncPointsLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Pts: {points}/{max}'**
+  String syncPointsLabel(Object max, Object points);
+
+  /// No description provided for @unknown.
+  ///
+  /// In en, this message translates to:
+  /// **'Unknown'**
+  String get unknown;
+
+  /// No description provided for @gradeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Grade'**
+  String get gradeLabel;
+
+  /// No description provided for @points.
+  ///
+  /// In en, this message translates to:
+  /// **'Points'**
+  String get points;
+
+  /// No description provided for @bonus.
+  ///
+  /// In en, this message translates to:
+  /// **'Bonus'**
+  String get bonus;
+
+  /// No description provided for @none.
+  ///
+  /// In en, this message translates to:
+  /// **'None'**
+  String get none;
+
+  /// No description provided for @pdfReportTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'GradePredictor Report'**
+  String get pdfReportTitle;
+
+  /// No description provided for @pdfSummaryHeader.
+  ///
+  /// In en, this message translates to:
+  /// **'Summary of current academic standing:'**
+  String get pdfSummaryHeader;
+
+  /// No description provided for @pdfFooter.
+  ///
+  /// In en, this message translates to:
+  /// **'Generated by GradePredictor App'**
+  String get pdfFooter;
+
+  /// No description provided for @myAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'My Account'**
+  String get myAccount;
+
+  /// No description provided for @passwordTooShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Password is too short'**
+  String get passwordTooShort;
+
+  /// No description provided for @monthJanuary.
+  ///
+  /// In en, this message translates to:
+  /// **'January'**
+  String get monthJanuary;
+
+  /// No description provided for @monthFebruary.
+  ///
+  /// In en, this message translates to:
+  /// **'February'**
+  String get monthFebruary;
+
+  /// No description provided for @monthMarch.
+  ///
+  /// In en, this message translates to:
+  /// **'March'**
+  String get monthMarch;
+
+  /// No description provided for @monthApril.
+  ///
+  /// In en, this message translates to:
+  /// **'April'**
+  String get monthApril;
+
+  /// No description provided for @monthMay.
+  ///
+  /// In en, this message translates to:
+  /// **'May'**
+  String get monthMay;
+
+  /// No description provided for @monthJune.
+  ///
+  /// In en, this message translates to:
+  /// **'June'**
+  String get monthJune;
+
+  /// No description provided for @monthJuly.
+  ///
+  /// In en, this message translates to:
+  /// **'July'**
+  String get monthJuly;
+
+  /// No description provided for @monthAugust.
+  ///
+  /// In en, this message translates to:
+  /// **'August'**
+  String get monthAugust;
+
+  /// No description provided for @monthSeptember.
+  ///
+  /// In en, this message translates to:
+  /// **'September'**
+  String get monthSeptember;
+
+  /// No description provided for @monthOctober.
+  ///
+  /// In en, this message translates to:
+  /// **'October'**
+  String get monthOctober;
+
+  /// No description provided for @monthNovember.
+  ///
+  /// In en, this message translates to:
+  /// **'November'**
+  String get monthNovember;
+
+  /// No description provided for @monthDecember.
+  ///
+  /// In en, this message translates to:
+  /// **'December'**
+  String get monthDecember;
+
+  /// No description provided for @dayMonday.
+  ///
+  /// In en, this message translates to:
+  /// **'Monday'**
+  String get dayMonday;
+
+  /// No description provided for @dayTuesday.
+  ///
+  /// In en, this message translates to:
+  /// **'Tuesday'**
+  String get dayTuesday;
+
+  /// No description provided for @dayWednesday.
+  ///
+  /// In en, this message translates to:
+  /// **'Wednesday'**
+  String get dayWednesday;
+
+  /// No description provided for @dayThursday.
+  ///
+  /// In en, this message translates to:
+  /// **'Thursday'**
+  String get dayThursday;
+
+  /// No description provided for @dayFriday.
+  ///
+  /// In en, this message translates to:
+  /// **'Friday'**
+  String get dayFriday;
+
+  /// No description provided for @daySaturday.
+  ///
+  /// In en, this message translates to:
+  /// **'Saturday'**
+  String get daySaturday;
+
+  /// No description provided for @daySunday.
+  ///
+  /// In en, this message translates to:
+  /// **'Sunday'**
+  String get daySunday;
+
+  /// No description provided for @dayShortMonday.
+  ///
+  /// In en, this message translates to:
+  /// **'Mon'**
+  String get dayShortMonday;
+
+  /// No description provided for @dayShortTuesday.
+  ///
+  /// In en, this message translates to:
+  /// **'Tue'**
+  String get dayShortTuesday;
+
+  /// No description provided for @dayShortWednesday.
+  ///
+  /// In en, this message translates to:
+  /// **'Wed'**
+  String get dayShortWednesday;
+
+  /// No description provided for @dayShortThursday.
+  ///
+  /// In en, this message translates to:
+  /// **'Thu'**
+  String get dayShortThursday;
+
+  /// No description provided for @dayShortFriday.
+  ///
+  /// In en, this message translates to:
+  /// **'Fri'**
+  String get dayShortFriday;
+
+  /// No description provided for @dayShortSaturday.
+  ///
+  /// In en, this message translates to:
+  /// **'Sat'**
+  String get dayShortSaturday;
+
+  /// No description provided for @dayShortSunday.
+  ///
+  /// In en, this message translates to:
+  /// **'Sun'**
+  String get dayShortSunday;
+
+  /// No description provided for @monthShortJanuary.
+  ///
+  /// In en, this message translates to:
+  /// **'Jan'**
+  String get monthShortJanuary;
+
+  /// No description provided for @monthShortFebruary.
+  ///
+  /// In en, this message translates to:
+  /// **'Feb'**
+  String get monthShortFebruary;
+
+  /// No description provided for @monthShortMarch.
+  ///
+  /// In en, this message translates to:
+  /// **'Mar'**
+  String get monthShortMarch;
+
+  /// No description provided for @monthShortApril.
+  ///
+  /// In en, this message translates to:
+  /// **'Apr'**
+  String get monthShortApril;
+
+  /// No description provided for @monthShortMay.
+  ///
+  /// In en, this message translates to:
+  /// **'May'**
+  String get monthShortMay;
+
+  /// No description provided for @monthShortJune.
+  ///
+  /// In en, this message translates to:
+  /// **'Jun'**
+  String get monthShortJune;
+
+  /// No description provided for @monthShortJuly.
+  ///
+  /// In en, this message translates to:
+  /// **'Jul'**
+  String get monthShortJuly;
+
+  /// No description provided for @monthShortAugust.
+  ///
+  /// In en, this message translates to:
+  /// **'Aug'**
+  String get monthShortAugust;
+
+  /// No description provided for @monthShortSeptember.
+  ///
+  /// In en, this message translates to:
+  /// **'Sep'**
+  String get monthShortSeptember;
+
+  /// No description provided for @monthShortOctober.
+  ///
+  /// In en, this message translates to:
+  /// **'Oct'**
+  String get monthShortOctober;
+
+  /// No description provided for @monthShortNovember.
+  ///
+  /// In en, this message translates to:
+  /// **'Nov'**
+  String get monthShortNovember;
+
+  /// No description provided for @monthShortDecember.
+  ///
+  /// In en, this message translates to:
+  /// **'Dec'**
+  String get monthShortDecember;
+
+  /// No description provided for @disable.
+  ///
+  /// In en, this message translates to:
+  /// **'Disable'**
+  String get disable;
+
+  /// No description provided for @librus.
+  ///
+  /// In en, this message translates to:
+  /// **'Librus'**
+  String get librus;
+
+  /// No description provided for @vulcan.
+  ///
+  /// In en, this message translates to:
+  /// **'Vulcan'**
+  String get vulcan;
+
+  /// No description provided for @autoSync.
+  ///
+  /// In en, this message translates to:
+  /// **'Auto-sync (every 15 minutes)'**
+  String get autoSync;
 }
 
 class _AppLocalizationsDelegate

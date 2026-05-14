@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:intl/intl.dart';
 import '../l10n/app_localizations.dart';
+import '../utils/date_formatter.dart';
+import './translated_text.dart';
 import '../providers/grade_provider.dart';
 import '../providers/settings_provider.dart';
 import '../models/subject.dart';
@@ -114,7 +115,8 @@ class _PredictionDialogState extends ConsumerState<PredictionDialog> {
           _predictions.add({
             'title': exam.title,
             'needed': '${neededForThis.toStringAsFixed(1)} / ${exam.maxPoints?.toStringAsFixed(0)} pkt',
-            'date': DateFormat('dd MMM').format(exam.date),
+            'date': LocalizedDateFormatter.formatDateShort(exam.date, l10n),
+            'translateTitle': true,
           });
         }
       }
@@ -141,6 +143,7 @@ class _PredictionDialogState extends ConsumerState<PredictionDialog> {
           'needed': needed > 6 ? l10n.predictionImpossibleShort : l10n.predictionMinGrade(needed.toStringAsFixed(1)),
           'isBad': needed > 6,
           'why': needed > 6 ? l10n.predictionGradesImpossibleWhy(bestCase.toStringAsFixed(2)) : null,
+          'translateTitle': false,
         });
       }
     } else {
@@ -165,8 +168,9 @@ class _PredictionDialogState extends ConsumerState<PredictionDialog> {
         _predictions.add({
           'title': exam.title,
           'needed': neededAvg > 6 ? l10n.predictionImpossibleShort : l10n.predictionMinGrade(neededAvg.toStringAsFixed(1)),
-          'date': DateFormat('dd MMM').format(exam.date),
+          'date': LocalizedDateFormatter.formatDateShort(exam.date, l10n),
           'isBad': neededAvg > 6,
+          'translateTitle': true,
         });
       }
     }
@@ -314,7 +318,16 @@ class _PredictionDialogState extends ConsumerState<PredictionDialog> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(p['title'], style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13)),
+                if (p['translateTitle'] == true)
+                  TranslatedText(
+                    p['title'],
+                    style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
+                  )
+                else
+                  Text(
+                    p['title'],
+                    style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
+                  ),
                 if (p['date'] != null)
                   Text(p['date'], style: TextStyle(fontSize: 11, color: colorScheme.onSurface.withValues(alpha: 0.6))),
               ],

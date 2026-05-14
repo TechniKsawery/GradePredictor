@@ -9,6 +9,11 @@ final subjectsProvider = StateNotifierProvider<SubjectsNotifier, List<Subject>>(
   return SubjectsNotifier(ref.watch(supabaseServiceProvider));
 });
 
+final subjectAveragesProvider = FutureProvider<Map<String, double>>((ref) async {
+  final service = ref.watch(supabaseServiceProvider);
+  return service.getSubjectAverages();
+});
+
 class SubjectsNotifier extends StateNotifier<List<Subject>> {
   final SupabaseService _service;
   SubjectsNotifier(this._service) : super([]) {
@@ -80,13 +85,14 @@ class SubjectsNotifier extends StateNotifier<List<Subject>> {
 }
 
 final gradesProvider = StateNotifierProvider.family<GradesNotifier, List<Grade>, String>((ref, subjectId) {
-  return GradesNotifier(ref.watch(supabaseServiceProvider), subjectId);
+  return GradesNotifier(ref.watch(supabaseServiceProvider), subjectId, ref);
 });
 
 class GradesNotifier extends StateNotifier<List<Grade>> {
   final SupabaseService _service;
   final String subjectId;
-  GradesNotifier(this._service, this.subjectId) : super([]) {
+  final Ref _ref;
+  GradesNotifier(this._service, this.subjectId, this._ref) : super([]) {
     loadGrades();
   }
 
@@ -98,7 +104,14 @@ class GradesNotifier extends StateNotifier<List<Grade>> {
     }
   }
 
-  Future<void> addGrade(double grade, double weight, String type, {double? points, double? maxPoints}) async {
+  Future<void> addGrade(
+    double grade,
+    double weight,
+    String type, {
+    double? points,
+    double? maxPoints,
+    bool refreshAverages = true,
+  }) async {
     final newGrade = await _service.addGrade(Grade(
       id: '',
       subjectId: subjectId,
@@ -110,16 +123,21 @@ class GradesNotifier extends StateNotifier<List<Grade>> {
       maxPoints: maxPoints,
     ));
     state = [newGrade, ...state];
+    if (refreshAverages) {
+      _ref.invalidate(subjectAveragesProvider);
+    }
   }
 
   Future<void> updateGrade(Grade grade) async {
     await _service.updateGrade(grade);
     state = state.map<Grade>((g) => g.id == grade.id ? grade : g).toList();
+    _ref.invalidate(subjectAveragesProvider);
   }
 
   Future<void> deleteGrade(String id) async {
     await _service.deleteGrade(id);
     state = state.where((g) => g.id != id).toList();
+    _ref.invalidate(subjectAveragesProvider);
   }
 }
 

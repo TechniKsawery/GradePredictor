@@ -400,6 +400,10 @@ class AppLocalizationsDe extends AppLocalizations {
   String get noSubjectsForExams => 'Zuerst Fächer hinzufügen';
 
   @override
+  String get calendarNoSubjectsInfo =>
+      'Du kannst keine Arbeit hinzufügen, bis du mindestens ein Fach im Reiter Fächer hinzugefügt hast.';
+
+  @override
   String get noSubjectsShort => 'Keine Fächer';
 
   @override
@@ -558,4 +562,233 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get customScaleSaved => 'Eigene Skala gespeichert!';
+
+  @override
+  String get syncTitle => 'Schul-Synchronisation';
+
+  @override
+  String get syncSubtitle =>
+      'Verbinden Sie sich mit Ihrem Schulkonto, um Noten und Prüfungen automatisch herunterzuladen.';
+
+  @override
+  String get syncLoginLibrus => 'Benutzername (Librus)';
+
+  @override
+  String get syncPassword => 'Passwort';
+
+  @override
+  String get syncStart => 'Synchronisation starten';
+
+  @override
+  String get syncSecurityNote =>
+      'Ihre Daten sind sicher und werden nur zum Herunterladen von Noten verwendet. Wir speichern Ihr Passwort nicht.';
+
+  @override
+  String get syncDataFound => 'Daten zum Import gefunden:';
+
+  @override
+  String get syncGradesDetail => 'Notendetails (automatisch erkannt):';
+
+  @override
+  String get syncConfirmImport => 'Bestätigen und importieren';
+
+  @override
+  String get syncCancelReturn => 'Abbrechen und zurück';
+
+  @override
+  String syncError(Object error) {
+    return 'Fehler bei der Synchronisation: $error';
+  }
+
+  @override
+  String syncImportedCount(Object exams, Object grades) {
+    return '$grades Noten, $exams Termine importiert!';
+  }
+
+  @override
+  String get syncLibrusLoginHint => 'Benutzername (Librus)';
+
+  @override
+  String get syncVulcanTokenHint => 'Token (Vulcan)';
+
+  @override
+  String get syncVulcanSymbolLabel => 'Symbol (Vulcan)';
+
+  @override
+  String get syncVulcanPinLabel => 'PIN-Code';
+
+  @override
+  String get syncLibrusSyncButton => 'Daten aus dem Tagebuch importieren';
+
+  @override
+  String syncTypeLabel(Object type) {
+    return 'Typ: $type';
+  }
+
+  @override
+  String syncWeightLabel(Object weight) {
+    return 'Gewichtung: $weight';
+  }
+
+  @override
+  String syncPointsLabel(Object max, Object points) {
+    return 'Pkt: $points/$max';
+  }
+
+  @override
+  String get unknown => 'Unbekannt';
+
+  @override
+  String get gradeLabel => 'Note';
+
+  @override
+  String get points => 'Punkte';
+
+  @override
+  String get bonus => 'Bonus';
+
+  @override
+  String get none => 'Keine';
+
+  @override
+  String get pdfReportTitle => 'GradePredictor Bericht';
+
+  @override
+  String get pdfSummaryHeader =>
+      'Zusammenfassung des aktuellen akademischen Standes:';
+
+  @override
+  String get pdfFooter => 'Generiert von der GradePredictor App';
+
+  @override
+  String get myAccount => 'Mein Konto';
+
+  @override
+  String get passwordTooShort => 'Passwort ist zu kurz';
+
+  @override
+  String get monthJanuary => 'Januar';
+
+  @override
+  String get monthFebruary => 'Februar';
+
+  @override
+  String get monthMarch => 'März';
+
+  @override
+  String get monthApril => 'April';
+
+  @override
+  String get monthMay => 'Mai';
+
+  @override
+  String get monthJune => 'Juni';
+
+  @override
+  String get monthJuly => 'Juli';
+
+  @override
+  String get monthAugust => 'August';
+
+  @override
+  String get monthSeptember => 'September';
+
+  @override
+  String get monthOctober => 'Oktober';
+
+  @override
+  String get monthNovember => 'November';
+
+  @override
+  String get monthDecember => 'Dezember';
+
+  @override
+  String get dayMonday => 'Montag';
+
+  @override
+  String get dayTuesday => 'Dienstag';
+
+  @override
+  String get dayWednesday => 'Mittwoch';
+
+  @override
+  String get dayThursday => 'Donnerstag';
+
+  @override
+  String get dayFriday => 'Freitag';
+
+  @override
+  String get daySaturday => 'Samstag';
+
+  @override
+  String get daySunday => 'Sonntag';
+
+  @override
+  String get dayShortMonday => 'Mo';
+
+  @override
+  String get dayShortTuesday => 'Di';
+
+  @override
+  String get dayShortWednesday => 'Mi';
+
+  @override
+  String get dayShortThursday => 'Do';
+
+  @override
+  String get dayShortFriday => 'Fr';
+
+  @override
+  String get dayShortSaturday => 'Sa';
+
+  @override
+  String get dayShortSunday => 'So';
+
+  @override
+  String get monthShortJanuary => 'Jan';
+
+  @override
+  String get monthShortFebruary => 'Feb';
+
+  @override
+  String get monthShortMarch => 'Mär';
+
+  @override
+  String get monthShortApril => 'Apr';
+
+  @override
+  String get monthShortMay => 'Mai';
+
+  @override
+  String get monthShortJune => 'Jun';
+
+  @override
+  String get monthShortJuly => 'Jul';
+
+  @override
+  String get monthShortAugust => 'Aug';
+
+  @override
+  String get monthShortSeptember => 'Sep';
+
+  @override
+  String get monthShortOctober => 'Okt';
+
+  @override
+  String get monthShortNovember => 'Nov';
+
+  @override
+  String get monthShortDecember => 'Dez';
+
+  @override
+  String get disable => 'Deaktivieren';
+
+  @override
+  String get librus => 'Librus';
+
+  @override
+  String get vulcan => 'Vulcan';
+
+  @override
+  String get autoSync => 'Automatische Synchronisierung (alle 15 Minuten)';
 }

@@ -6,6 +6,7 @@ import '../providers/grade_provider.dart';
 import '../providers/locale_provider.dart';
 import '../services/supabase_service.dart';
 import '../providers/accounts_provider.dart';
+import '../providers/profile_provider.dart';
 import 'home_screen.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
@@ -35,8 +36,14 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
             await ref.read(accountsProvider.notifier).addAccount(
               _emailController.text, 
               _passwordController.text, 
-              'Moje Konto'
+              l10n.myAccount
             );
+            // Invalidate providers to ensure fresh data for the new user
+            ref.invalidate(subjectsProvider);
+            ref.invalidate(examsProvider);
+            ref.invalidate(profileProvider);
+            ref.invalidate(gradesProvider);
+
             Navigator.of(context).pushReplacement(
               MaterialPageRoute(builder: (_) => const HomeScreen()),
             );
@@ -54,8 +61,14 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
           await ref.read(accountsProvider.notifier).addAccount(
             _emailController.text, 
             _passwordController.text, 
-            'Moje Konto'
+            l10n.myAccount
           );
+          // Invalidate providers to ensure fresh data for the new user
+          ref.invalidate(subjectsProvider);
+          ref.invalidate(examsProvider);
+          ref.invalidate(profileProvider);
+          ref.invalidate(gradesProvider);
+
           Navigator.of(context).pushReplacement(
             MaterialPageRoute(builder: (_) => const HomeScreen()),
           );

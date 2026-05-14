@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:intl/intl.dart';
 import '../l10n/app_localizations.dart';
 import '../models/exam.dart';
 import '../models/subject.dart';
 import '../providers/grade_provider.dart';
+import '../utils/date_formatter.dart';
+import '../widgets/translated_text.dart';
 
 class CalendarScreen extends ConsumerWidget {
   const CalendarScreen({super.key});
@@ -33,20 +34,39 @@ class CalendarScreen extends ConsumerWidget {
       body: RefreshIndicator(
         onRefresh: () => ref.read(examsProvider.notifier).loadExams(),
         child: subjects.isEmpty
-            ? ListView(
-                physics: const AlwaysScrollableScrollPhysics(),
-                children: [
-                  const SizedBox(height: 32),
-                  Center(
-                    child: Text(
-                      l10n.noSubjectsForExams,
-                      style: TextStyle(
-                        color: colorScheme.onSurface.withValues(alpha: 0.6),
+          ? Center(
+              child: Padding(
+                padding: const EdgeInsets.all(24.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(20),
+                      decoration: BoxDecoration(
+                        color: colorScheme.primary.withValues(alpha: 0.1),
+                        shape: BoxShape.circle,
                       ),
+                      child: Icon(Icons.info_outline, size: 48, color: colorScheme.primary),
                     ),
-                  ),
-                ],
-              )
+                    const SizedBox(height: 24),
+                    Text(
+                      l10n.noSubjectsForExams,
+                      style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 12),
+                    Text(
+                      l10n.calendarNoSubjectsInfo,
+                      style: TextStyle(
+                        color: colorScheme.onSurface.withValues(alpha: 0.7),
+                        height: 1.5,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                ),
+              ),
+            )
             : exams.isEmpty
             ? ListView(
                 physics: const AlwaysScrollableScrollPhysics(),
@@ -80,6 +100,7 @@ class CalendarScreen extends ConsumerWidget {
       floatingActionButton: subjects.isEmpty
           ? null
           : FloatingActionButton.extended(
+              heroTag: 'calendar_fab',
               onPressed: () => _showExamDialog(context, ref, l10n, subjects),
               icon: const Icon(Icons.event_note),
               label: Text(l10n.addExam),
@@ -96,7 +117,7 @@ class CalendarScreen extends ConsumerWidget {
   ) {
     final colorScheme = Theme.of(context).colorScheme;
     final cardColor = Theme.of(context).cardColor;
-    final dateStr = DateFormat('dd MMM yyyy').format(exam.date);
+    final dateStr = LocalizedDateFormatter.formatDateShort(exam.date, l10n);
 
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
@@ -119,12 +140,17 @@ class CalendarScreen extends ConsumerWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
+                      TranslatedText(
                         exam.title,
                         style: const TextStyle(fontWeight: FontWeight.bold),
                       ),
                       const SizedBox(height: 4),
-                      Text('$subjectName • $dateStr'),
+                      Row(
+                        children: [
+                          TranslatedText(subjectName),
+                          Text(' • $dateStr'),
+                        ],
+                      ),
                     ],
                   ),
                 ),
@@ -246,7 +272,7 @@ class CalendarScreen extends ConsumerWidget {
                   items: subjects
                       .map(
                         (s) =>
-                            DropdownMenuItem(value: s.id, child: Text(s.name)),
+                            DropdownMenuItem(value: s.id, child: TranslatedText(s.name)),
                       )
                       .toList(),
                   onChanged: (v) {
@@ -300,7 +326,7 @@ class CalendarScreen extends ConsumerWidget {
                   children: [
                     Expanded(
                       child: Text(
-                        '${l10n.examDate}: ${DateFormat('dd MMM yyyy').format(selectedDate)}',
+                        '${l10n.examDate}: ${LocalizedDateFormatter.formatDateShort(selectedDate, l10n)}',
                       ),
                     ),
                     TextButton(
