@@ -4,11 +4,28 @@ import '../l10n/app_localizations.dart';
 import '../models/exam.dart';
 import '../models/subject.dart';
 import '../providers/grade_provider.dart';
+import '../services/google_calendar_service.dart';
 import '../utils/date_formatter.dart';
 import '../widgets/translated_text.dart';
 
 class CalendarScreen extends ConsumerWidget {
   const CalendarScreen({super.key});
+
+  Future<void> _exportExamToCalendar(
+    BuildContext context,
+    Exam exam,
+    String subjectName,
+  ) async {
+    final service = GoogleCalendarService();
+    final messenger = ScaffoldMessenger.of(context);
+    final success = await service.addExamToCalendar(exam, subjectName);
+
+    messenger.showSnackBar(
+      SnackBar(
+        content: Text(success ? 'Dodano do Google Calendar' : 'Nie udało się dodać do Google Calendar'),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -143,12 +160,22 @@ class CalendarScreen extends ConsumerWidget {
                       TranslatedText(
                         exam.title,
                         style: const TextStyle(fontWeight: FontWeight.bold),
+                        overflow: TextOverflow.ellipsis,
                       ),
                       const SizedBox(height: 4),
                       Row(
                         children: [
-                          TranslatedText(subjectName),
-                          Text(' • $dateStr'),
+                          Expanded(
+                            child: TranslatedText(
+                              subjectName,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                          Text(
+                            ' • $dateStr',
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
                         ],
                       ),
                     ],
@@ -173,6 +200,13 @@ class CalendarScreen extends ConsumerWidget {
                     color: colorScheme.onSurface.withValues(alpha: 0.6),
                   ),
                   onPressed: () => _confirmDelete(context, ref, l10n, exam),
+                ),
+                IconButton(
+                  icon: Icon(
+                    Icons.calendar_month_outlined,
+                    color: colorScheme.onSurface.withValues(alpha: 0.6),
+                  ),
+                  onPressed: () => _exportExamToCalendar(context, exam, subjectName),
                 ),
               ],
             ),

@@ -191,3 +191,52 @@ final averageProvider = Provider.family<double, String>((ref, subjectId) {
   
   return totalWeights == 0 ? 0.0 : totalWeightedSum / totalWeights;
 });
+
+final semesterFilterProvider = StateProvider<int>((ref) => 0);
+
+final gradeSortProvider = StateProvider<String>((ref) => 'date_desc');
+
+final filteredGradesProvider = Provider.family<List<Grade>, String>((ref, subjectId) {
+  final grades = ref.watch(gradesProvider(subjectId));
+  final semester = ref.watch(semesterFilterProvider);
+  final sort = ref.watch(gradeSortProvider);
+  final currentYear = DateTime.now().year;
+  final semester2Start = DateTime(currentYear, 2, 1);
+
+  final filtered = grades.where((grade) {
+    if (semester == 1) return grade.date.isBefore(semester2Start);
+    if (semester == 2) return grade.date.isAtSameMomentAs(semester2Start) || grade.date.isAfter(semester2Start);
+    return true;
+  }).toList();
+
+  filtered.sort((a, b) {
+    switch (sort) {
+      case 'date_asc':
+        return a.date.compareTo(b.date);
+      case 'grade_desc':
+        return b.grade.compareTo(a.grade);
+      case 'grade_asc':
+        return a.grade.compareTo(b.grade);
+      case 'date_desc':
+      default:
+        return b.date.compareTo(a.date);
+    }
+  });
+
+  return filtered;
+});
+
+final filteredAverageProvider = Provider.family<double, String>((ref, subjectId) {
+  final grades = ref.watch(filteredGradesProvider(subjectId));
+  if (grades.isEmpty) return 0.0;
+
+  var totalWeightedSum = 0.0;
+  var totalWeights = 0.0;
+
+  for (final grade in grades) {
+    totalWeightedSum += grade.grade * grade.weight;
+    totalWeights += grade.weight;
+  }
+
+  return totalWeights == 0 ? 0.0 : totalWeightedSum / totalWeights;
+});

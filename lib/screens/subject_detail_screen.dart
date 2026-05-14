@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../l10n/app_localizations.dart';
 import '../models/subject.dart';
 import '../models/grade.dart';
-import '../utils/subject_translator.dart';
 import '../widgets/translated_text.dart';
 import '../providers/grade_provider.dart';
 import '../providers/settings_provider.dart';
@@ -15,16 +14,27 @@ class SubjectDetailScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final grades = ref.watch(gradesProvider(subject.id));
-    final average = ref.watch(averageProvider(subject.id));
+    final grades = ref.watch(filteredGradesProvider(subject.id));
+    final average = ref.watch(filteredAverageProvider(subject.id));
     final l10n = AppLocalizations.of(context)!;
+    final currentSemester = ref.watch(semesterFilterProvider);
 
     return Scaffold(
       appBar: AppBar(
-        title: TranslatedText(subject.name),
+        title: TranslatedText(subject.name, overflow: TextOverflow.ellipsis),
         backgroundColor: Colors.transparent,
         elevation: 0,
         actions: [
+          PopupMenuButton<String>(
+            icon: const Icon(Icons.sort),
+            onSelected: (value) => ref.read(gradeSortProvider.notifier).state = value,
+            itemBuilder: (context) => const [
+              PopupMenuItem(value: 'date_desc', child: Text('Najnowsze')),
+              PopupMenuItem(value: 'date_asc', child: Text('Najstarsze')),
+              PopupMenuItem(value: 'grade_desc', child: Text('Najwyższe oceny')),
+              PopupMenuItem(value: 'grade_asc', child: Text('Najniższe oceny')),
+            ],
+          ),
           IconButton(
             icon: const Icon(Icons.refresh),
             onPressed: () {
@@ -37,6 +47,21 @@ class SubjectDetailScreen extends ConsumerWidget {
       body: Column(
         children: [
           _buildAverageHeader(context, subject, grades, average, l10n),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: SegmentedButton<int>(
+              segments: const [
+                ButtonSegment(value: 1, label: Text('Półrocze 1')),
+                ButtonSegment(value: 0, label: Text('Cały rok')),
+                ButtonSegment(value: 2, label: Text('Półrocze 2')),
+              ],
+              selected: {currentSemester},
+              onSelectionChanged: (newSelection) {
+                ref.read(semesterFilterProvider.notifier).state = newSelection.first;
+              },
+            ),
+          ),
+          const SizedBox(height: 8),
           Expanded(
             child: RefreshIndicator(
               onRefresh: () => ref.read(gradesProvider(subject.id).notifier).loadGrades(),
@@ -131,7 +156,8 @@ class SubjectDetailScreen extends ConsumerWidget {
               style: const TextStyle(color: Color(0xFF6366F1), fontWeight: FontWeight.bold, fontSize: 13),
             ),
           ),
-            title: Builder(builder: (ctx) {
+          title: Builder(
+            builder: (ctx) {
               if (grade.points != null) {
                 final pts = grade.points!;
                 final maxPts = grade.maxPoints;
@@ -140,12 +166,25 @@ class SubjectDetailScreen extends ConsumerWidget {
                     : '';
                 final maxStr = maxPts != null ? '/$maxPts' : '';
                 final bonusTag = grade.type == 'bonus' ? ' • ${l10n.gradeTypeBonus.toUpperCase()}' : '';
-                return Text('$pts$maxStr$pctStr$bonusTag');
+                return Text(
+                  '$pts$maxStr$pctStr$bonusTag',
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                );
               }
               final bonusTag = grade.type == 'bonus' ? ' • ${l10n.gradeTypeBonus.toUpperCase()}' : '';
-              return Text('${l10n.weight}: ${grade.weight}$bonusTag');
-            }),
-          subtitle: Text('${_getLocalizedType(grade.type, l10n)}${grade.points != null ? ' • ${l10n.weight}: ${grade.weight}' : ''}'),
+              return Text(
+                '${l10n.weight}: ${grade.weight}$bonusTag',
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              );
+            },
+          ),
+          subtitle: Text(
+            '${_getLocalizedType(grade.type, l10n)}${grade.points != null ? ' • ${l10n.weight}: ${grade.weight}' : ''}',
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
           trailing: IconButton(
             icon: const Icon(Icons.delete_outline, color: Colors.white24),
             onPressed: () => _showDeleteGradeConfirm(context, ref, grade),
