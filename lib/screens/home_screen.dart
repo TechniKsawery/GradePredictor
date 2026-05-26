@@ -29,8 +29,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final subjects = ref.watch(subjectsProvider);
-    final averagesAsync = ref.watch(subjectAveragesProvider);
-    final averages = averagesAsync.valueOrNull ?? const <String, double>{};
+    final averages = ref.watch(subjectAveragesProvider);
     final profile = ref.watch(profileProvider);
     final locale = ref.watch(localeProvider);
     final l10n = AppLocalizations.of(context)!;
@@ -280,6 +279,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                             profile?.displayName ?? l10n.user,
                             style: TextStyle(color: colorScheme.onPrimary, fontWeight: FontWeight.bold),
                             overflow: TextOverflow.ellipsis,
+                            maxLines: 1,
                           ),
                           Text(
                             l10n.settings,
@@ -410,6 +410,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     TranslatedText(
                       subject.name,
                       style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                      overflow: TextOverflow.ellipsis,
                     ),
                     Text(
                       '${l10n.currentAverage}: ${average.toStringAsFixed(2)}',
@@ -481,6 +482,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 ),
                 const SizedBox(height: 8),
                 DropdownButtonFormField<String>(
+                  isExpanded: true,
                   value: gradingMode,
                   items: [
                     DropdownMenuItem(value: Subject.gradingModeGrades, child: Text(l10n.gradingModeGrades)),
@@ -569,6 +571,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 ),
                 const SizedBox(height: 8),
                 DropdownButtonFormField<String>(
+                  isExpanded: true,
                   value: gradingMode,
                   items: [
                     DropdownMenuItem(value: Subject.gradingModeGrades, child: Text(l10n.gradingModeGrades)),

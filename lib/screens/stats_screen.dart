@@ -16,8 +16,7 @@ class StatsScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final subjects = ref.watch(subjectsProvider);
-    final averagesAsync = ref.watch(subjectAveragesProvider);
-    final averages = averagesAsync.valueOrNull ?? const <String, double>{};
+    final averages = ref.watch(subjectAveragesProvider);
     final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
@@ -99,19 +98,25 @@ class StatsScreen extends ConsumerWidget {
                     getTitlesWidget: (value, meta) {
                       if (value.toInt() < 0 || value.toInt() >= subjects.length) return const Text('');
                       final originalName = subjects[value.toInt()].name;
-                      final name = SubjectTranslator.translate(context, originalName);
-                      final label = name.length > 6 ? '${name.substring(0, 5)}.' : name;
-                      return SideTitleWidget(
-                        meta: meta,
-                        space: 8,
-                        child: Text(
-                          label.toUpperCase(),
-                          style: TextStyle(
-                            fontSize: 9,
-                            fontWeight: FontWeight.bold,
-                            color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.7),
-                          ),
-                        ),
+                      return FutureBuilder<String>(
+                        future: SubjectTranslator.translateAsync(context, originalName),
+                        initialData: SubjectTranslator.translate(context, originalName),
+                        builder: (context, snapshot) {
+                          final name = snapshot.data ?? originalName;
+                          final label = name.length > 6 ? '${name.substring(0, 5)}.' : name;
+                          return SideTitleWidget(
+                            meta: meta,
+                            space: 8,
+                            child: Text(
+                              label.toUpperCase(),
+                              style: TextStyle(
+                                  fontSize: 9,
+                                  fontWeight: FontWeight.bold,
+                                  color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.7),
+                              ),
+                            ),
+                          );
+                        },
                       );
                     },
                   ),
@@ -137,6 +142,7 @@ class StatsScreen extends ConsumerWidget {
 
   Widget _buildInsights(BuildContext context, List<Subject> subjects, Map<String, double> averages, AppLocalizations l10n) {
     if (subjects.isEmpty) return const SizedBox();
+    final colorScheme = Theme.of(context).colorScheme;
 
     final lowPerformers = subjects.where((s) => (averages[s.id] ?? 0.0) < 3.0).toList();
 
@@ -145,7 +151,13 @@ class StatsScreen extends ConsumerWidget {
         _insightCard(
           context,
           l10n.subjectsToRescue,
-          '${lowPerformers.length} ${l10n.subjects}',
+          Text(
+            '${lowPerformers.length} ${l10n.subjects}',
+            style: TextStyle(
+              color: colorScheme.onSurface.withValues(alpha: 0.6),
+              fontSize: 13,
+            ),
+          ),
           lowPerformers.isNotEmpty ? Colors.redAccent : Colors.greenAccent,
           Icons.warning_amber_rounded,
           onTap: lowPerformers.isEmpty ? null : () => _showLowPerformersDialog(context, lowPerformers, averages, l10n),
@@ -154,7 +166,19 @@ class StatsScreen extends ConsumerWidget {
         _insightCard(
           context,
           l10n.bestSubject,
-          _getBestSubject(context, subjects, averages, l10n),
+          FutureBuilder<String>(
+            future: SubjectTranslator.translateAsync(context, _getBestSubjectRaw(subjects, averages)),
+            initialData: SubjectTranslator.translate(context, _getBestSubjectRaw(subjects, averages)),
+            builder: (context, snapshot) {
+              return Text(
+                snapshot.data ?? '',
+                style: TextStyle(
+                  color: colorScheme.onSurface.withValues(alpha: 0.6),
+                  fontSize: 13,
+                ),
+              );
+            },
+          ),
           const Color(0xFF06B6D4),
           Icons.star_outline,
         ),
@@ -192,7 +216,7 @@ class StatsScreen extends ConsumerWidget {
     );
   }
 
-  Widget _insightCard(BuildContext context, String title, String subtitle, Color color, IconData icon, {VoidCallback? onTap}) {
+  Widget _insightCard(BuildContext context, String title, Widget subtitleWidget, Color color, IconData icon, {VoidCallback? onTap}) {
     final colorScheme = Theme.of(context).colorScheme;
     final isDark = Theme.of(context).brightness == Brightness.dark;
     
@@ -229,13 +253,7 @@ class StatsScreen extends ConsumerWidget {
                         color: colorScheme.onSurface,
                       ),
                     ),
-                    Text(
-                      subtitle,
-                      style: TextStyle(
-                        color: colorScheme.onSurface.withValues(alpha: 0.6),
-                        fontSize: 13,
-                      ),
-                    ),
+                    subtitleWidget,
                   ],
                 ),
               ),
@@ -248,8 +266,8 @@ class StatsScreen extends ConsumerWidget {
     );
   }
 
-  String _getBestSubject(BuildContext context, List<Subject> subjects, Map<String, double> averages, AppLocalizations l10n) {
-    if (subjects.isEmpty) return l10n.none;
+  String _getBestSubjectRaw(List<Subject> subjects, Map<String, double> averages) {
+    if (subjects.isEmpty) return '';
     var best = subjects[0];
     var bestAvg = averages[best.id] ?? 0.0;
     
@@ -260,7 +278,7 @@ class StatsScreen extends ConsumerWidget {
         bestAvg = avg;
       }
     }
-    return SubjectTranslator.translate(context, best.name);
+    return best.name;
   }
 
   Future<void> _exportToPdf(BuildContext context, WidgetRef ref, List<Subject> subjects, AppLocalizations l10n) async {
@@ -273,9 +291,9 @@ class StatsScreen extends ConsumerWidget {
 
     // 1. Collect data before async operations using BuildContext
     final List<List<String>> tableData = [];
-    final averages = ref.read(subjectAveragesProvider).valueOrNull ?? const <String, double>{};
+    final averages = ref.read(subjectAveragesProvider);
     for (final s in subjects) {
-      final translatedName = SubjectTranslator.translate(context, s.name);
+      final translatedName = await SubjectTranslator.translateAsync(context, s.name);
       final avg = averages[s.id] ?? 0.0;
       tableData.add([translatedName, avg.toStringAsFixed(2)]);
     }

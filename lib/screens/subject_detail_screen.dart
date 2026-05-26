@@ -7,6 +7,7 @@ import '../widgets/translated_text.dart';
 import '../providers/grade_provider.dart';
 import '../providers/settings_provider.dart';
 import '../widgets/prediction_dialog.dart';
+import '../utils/grade_converter.dart';
 
 class SubjectDetailScreen extends ConsumerWidget {
   final Subject subject;
@@ -18,6 +19,28 @@ class SubjectDetailScreen extends ConsumerWidget {
     final average = ref.watch(filteredAverageProvider(subject.id));
     final l10n = AppLocalizations.of(context)!;
     final currentSemester = ref.watch(semesterFilterProvider);
+    final showPointGrades = ref.watch(showPointGradesProvider(subject.id));
+    final globalScale = ref.watch(settingsProvider);
+
+    double displayAverage = average;
+    if (showPointGrades) {
+      double sum = 0.0;
+      double weights = 0.0;
+      for (final g in grades) {
+        double val = g.grade;
+        if (g.points != null && g.maxPoints != null && g.maxPoints! > 0) {
+          val = GradeConverter.pointsToGrade(g.points!, g.maxPoints!, subject, globalScale);
+        } else if (GradeConverter.isPercentageGrade(g) && g.grade > 0) {
+          // Ocena procentowa – przelicz przez własne progi ucznia
+          val = GradeConverter.percentToGrade(g.grade, subject, globalScale);
+        }
+        if (val > 0) {
+          sum += val * g.weight;
+          weights += g.weight;
+        }
+      }
+      displayAverage = weights > 0 ? sum / weights : 0.0;
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -25,14 +48,24 @@ class SubjectDetailScreen extends ConsumerWidget {
         backgroundColor: Colors.transparent,
         elevation: 0,
         actions: [
+          IconButton(
+            icon: Icon(
+              showPointGrades ? Icons.auto_awesome : Icons.auto_awesome_outlined,
+              color: showPointGrades ? const Color(0xFF06B6D4) : Colors.white,
+            ),
+            tooltip: showPointGrades ? l10n.showRawPoints : l10n.convertPointsToGrades,
+            onPressed: () {
+              ref.read(showPointGradesProvider(subject.id).notifier).state = !showPointGrades;
+            },
+          ),
           PopupMenuButton<String>(
             icon: const Icon(Icons.sort),
             onSelected: (value) => ref.read(gradeSortProvider.notifier).state = value,
-            itemBuilder: (context) => const [
-              PopupMenuItem(value: 'date_desc', child: Text('Najnowsze')),
-              PopupMenuItem(value: 'date_asc', child: Text('Najstarsze')),
-              PopupMenuItem(value: 'grade_desc', child: Text('Najwyższe oceny')),
-              PopupMenuItem(value: 'grade_asc', child: Text('Najniższe oceny')),
+            itemBuilder: (context) => [
+              PopupMenuItem(value: 'date_desc', child: Text(l10n.sortLatest)),
+              PopupMenuItem(value: 'date_asc', child: Text(l10n.sortOldest)),
+              PopupMenuItem(value: 'grade_desc', child: Text(l10n.sortHighestGrade)),
+              PopupMenuItem(value: 'grade_asc', child: Text(l10n.sortLowestGrade)),
             ],
           ),
           IconButton(
@@ -46,14 +79,14 @@ class SubjectDetailScreen extends ConsumerWidget {
       ),
       body: Column(
         children: [
-          _buildAverageHeader(context, subject, grades, average, l10n),
+          _buildAverageHeader(context, subject, grades, displayAverage, l10n),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: SegmentedButton<int>(
-              segments: const [
-                ButtonSegment(value: 1, label: Text('Półrocze 1')),
-                ButtonSegment(value: 0, label: Text('Cały rok')),
-                ButtonSegment(value: 2, label: Text('Półrocze 2')),
+              segments: [
+                ButtonSegment(value: 1, label: Text(l10n.semester1)),
+                ButtonSegment(value: 0, label: Text(l10n.allYear)),
+                ButtonSegment(value: 2, label: Text(l10n.semester2)),
               ],
               selected: {currentSemester},
               onSelectionChanged: (newSelection) {
@@ -61,6 +94,8 @@ class SubjectDetailScreen extends ConsumerWidget {
               },
             ),
           ),
+          const SizedBox(height: 8),
+          _buildCategoryFilters(context, ref, grades),
           const SizedBox(height: 8),
           Expanded(
             child: RefreshIndicator(
@@ -70,14 +105,7 @@ class SubjectDetailScreen extends ConsumerWidget {
                       physics: const AlwaysScrollableScrollPhysics(),
                       children: [Center(child: Text(l10n.noSubjects))],
                     )
-                  : ListView.builder(
-                      padding: const EdgeInsets.all(16),
-                      itemCount: grades.length,
-                      itemBuilder: (context, index) {
-                        final grade = grades[index];
-                        return _buildGradeCard(context, ref, grade, l10n);
-                      },
-                    ),
+                  : _buildGradesList(context, ref, grades, currentSemester, l10n),
             ),
           ),
           _buildActionButtons(context, ref, l10n),
@@ -137,6 +165,17 @@ class SubjectDetailScreen extends ConsumerWidget {
   }
 
   Widget _buildGradeCard(BuildContext context, WidgetRef ref, Grade grade, AppLocalizations l10n) {
+    final showPointGrades = ref.watch(showPointGradesProvider(subject.id));
+    final globalScale = ref.watch(settingsProvider);
+
+    double displayGradeValue = grade.grade;
+    if (showPointGrades && grade.points != null && grade.maxPoints != null && grade.maxPoints! > 0) {
+      displayGradeValue = GradeConverter.pointsToGrade(grade.points!, grade.maxPoints!, subject, globalScale);
+    } else if (showPointGrades && GradeConverter.isPercentageGrade(grade) && grade.grade > 0) {
+      // Ocena procentowa – przelicz przez własne progi ucznia
+      displayGradeValue = GradeConverter.percentToGrade(grade.grade, subject, globalScale);
+    }
+
     return Container(
       margin: const EdgeInsets.only(bottom: 8),
       decoration: BoxDecoration(
@@ -150,9 +189,11 @@ class SubjectDetailScreen extends ConsumerWidget {
           leading: CircleAvatar(
             backgroundColor: const Color(0xFF6366F1).withValues(alpha: 0.1),
             child: Text(
-              grade.points != null
-                  ? (grade.grade > 0 ? grade.grade.toStringAsFixed(0) : '•')
-                  : grade.grade.toStringAsFixed(0),
+              grade.rawText != null && grade.rawText!.isNotEmpty && grade.points == null
+                  ? grade.rawText!
+                  : (grade.points != null
+                      ? (displayGradeValue > 0 ? displayGradeValue.toStringAsFixed(0) : '•')
+                      : displayGradeValue.toStringAsFixed(0)),
               style: const TextStyle(color: Color(0xFF6366F1), fontWeight: FontWeight.bold, fontSize: 13),
             ),
           ),
@@ -166,8 +207,21 @@ class SubjectDetailScreen extends ConsumerWidget {
                     : '';
                 final maxStr = maxPts != null ? '/$maxPts' : '';
                 final bonusTag = grade.type == 'bonus' ? ' • ${l10n.gradeTypeBonus.toUpperCase()}' : '';
+                final convertedGradeText = showPointGrades && displayGradeValue > 0 ? ' [ocena: ${displayGradeValue.toStringAsFixed(0)}]' : '';
                 return Text(
-                  '$pts$maxStr$pctStr$bonusTag',
+                  '$pts$maxStr$pctStr$bonusTag$convertedGradeText',
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                );
+              }
+              // Ocena procentowa (np. z Librusa, typ "procenty")
+              if (GradeConverter.isPercentageGrade(grade) && grade.grade > 0) {
+                final bonusTag = grade.type == 'bonus' ? ' • ${l10n.gradeTypeBonus.toUpperCase()}' : '';
+                final convertedGradeText = showPointGrades && displayGradeValue > 0
+                    ? ' [ocena: ${displayGradeValue.toStringAsFixed(0)}]'
+                    : '';
+                return Text(
+                  '${grade.grade.toStringAsFixed(0)}%$bonusTag$convertedGradeText',
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 );
@@ -180,10 +234,12 @@ class SubjectDetailScreen extends ConsumerWidget {
               );
             },
           ),
-          subtitle: Text(
-            '${_getLocalizedType(grade.type, l10n)}${grade.points != null ? ' • ${l10n.weight}: ${grade.weight}' : ''}',
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
+          subtitle: Wrap(
+            crossAxisAlignment: WrapCrossAlignment.center,
+            children: [
+              TranslatedText(grade.type),
+              if (grade.points != null) Text(' • ${l10n.weight}: ${grade.weight}'),
+            ],
           ),
           trailing: IconButton(
             icon: const Icon(Icons.delete_outline, color: Colors.white24),
@@ -192,89 +248,6 @@ class SubjectDetailScreen extends ConsumerWidget {
         ),
       ),
     );
-  }
-
-  double _pointsToGrade(double points, double max, GradingScale globalScale) {
-    final percent = (points / max) * 100;
-    final custom = subject.customGradingScale;
-    
-    if (custom != null) {
-      if (percent >= (custom['grade6'] ?? globalScale.grade6)) return 6.0;
-      if (percent >= (custom['grade5'] ?? globalScale.grade5)) return 5.0;
-      if (percent >= (custom['grade4'] ?? globalScale.grade4)) return 4.0;
-      if (percent >= (custom['grade3'] ?? globalScale.grade3)) return 3.0;
-      if (percent >= (custom['grade2'] ?? globalScale.grade2)) return 2.0;
-    } else {
-      if (percent >= globalScale.grade6) return 6.0;
-      if (percent >= globalScale.grade5) return 5.0;
-      if (percent >= globalScale.grade4) return 4.0;
-      if (percent >= globalScale.grade3) return 3.0;
-      if (percent >= globalScale.grade2) return 2.0;
-    }
-    return 1.0;
-  }
-
-  String _getLocalizedType(String type, AppLocalizations l10n) {
-    final locale = l10n.localeName; // 'pl', 'en', 'de'
-    
-    switch (type.toLowerCase().trim()) {
-      // Standard built-in types
-      case 'test': return l10n.gradeTypeTest;
-      case 'quiz': return l10n.gradeTypeQuiz;
-      case 'homework': return l10n.gradeTypeHomework;
-      case 'activity': return l10n.gradeTypeActivity;
-      case 'bonus': return l10n.gradeTypeBonus;
-    }
-    
-    if (locale == 'pl') return type; // Polish: show raw
-    
-    // Comprehensive Polish → EN/DE translation dictionary for grade types
-    const Map<String, Map<String, String>> gradeTypeMap = {
-      // Semester types
-      'śródroczna':                 {'en': 'Midterm',              'de': 'Halbjahres'},
-      'sródroczna':                 {'en': 'Midterm',              'de': 'Halbjahres'},
-      'roczna':                     {'en': 'Annual',               'de': 'Jahres'},
-      'przewidywana śródroczna':    {'en': 'Predicted Midterm',    'de': 'Vorh. Halbjahres'},
-      'przewidywana sródroczna':    {'en': 'Predicted Midterm',    'de': 'Vorh. Halbjahres'},
-      'przewidywana roczna':        {'en': 'Predicted Annual',     'de': 'Vorh. Jahres'},
-      'proponowana śródroczna':     {'en': 'Proposed Midterm',     'de': 'Vorgesch. Halbjahres'},
-      'proponowana roczna':         {'en': 'Proposed Annual',      'de': 'Vorgesch. Jahres'},
-      // Activity / behavior
-      'aktywność':                  {'en': 'Activity',             'de': 'Aktivität'},
-      'zachowanie':                 {'en': 'Behavior',             'de': 'Verhalten'},
-      'praca klasowa':              {'en': 'Class Test',           'de': 'Klassenarbeit'},
-      'kartkówka':                  {'en': 'Short Test',           'de': 'Kurztest'},
-      'odpowiedź ustna':            {'en': 'Oral Answer',          'de': 'Mündliche Antwort'},
-      'zadanie domowe':             {'en': 'Homework',             'de': 'Hausaufgabe'},
-      'projekt':                    {'en': 'Project',              'de': 'Projekt'},
-      'prezentacja':                {'en': 'Presentation',         'de': 'Präsentation'},
-      'referat':                    {'en': 'Paper',                'de': 'Referat'},
-      'praca dodatkowa':            {'en': 'Extra Work',           'de': 'Zusatzarbeit'},
-      'konkurs':                    {'en': 'Competition',          'de': 'Wettbewerb'},
-      'dyktando':                   {'en': 'Dictation',            'de': 'Diktat'},
-      'wypracowanie':               {'en': 'Essay',                'de': 'Aufsatz'},
-      'lektura':                    {'en': 'Reading',              'de': 'Lektüre'},
-      'ćwiczenia':                  {'en': 'Exercises',            'de': 'Übungen'},
-      'laboratorium':               {'en': 'Lab',                  'de': 'Labor'},
-      'egzamin':                    {'en': 'Exam',                 'de': 'Prüfung'},
-      'sprawdzian':                 {'en': 'Test',                 'de': 'Test'},
-      'ocena semestralna':          {'en': 'Semester Grade',       'de': 'Semesternote'},
-      'ocena końcowa':              {'en': 'Final Grade',          'de': 'Endnote'},
-    };
-    
-    final normalized = type.toLowerCase().trim();
-    // Exact match
-    if (gradeTypeMap.containsKey(normalized)) {
-      return gradeTypeMap[normalized]![locale] ?? type;
-    }
-    // Partial match
-    for (final entry in gradeTypeMap.entries) {
-      if (normalized.contains(entry.key)) {
-        return entry.value[locale] ?? type;
-      }
-    }
-    
-    return type; // Unknown type: show as-is
   }
 
   void _showAddGradeDialog(BuildContext context, WidgetRef ref) {
@@ -334,6 +307,7 @@ class SubjectDetailScreen extends ConsumerWidget {
                   const SizedBox(height: 12),
                 ],
                 DropdownButtonFormField<String>(
+                  isExpanded: true,
                   value: selectedType,
                   items: [
                     DropdownMenuItem(value: 'test', child: Text(l10n.gradeTypeTest.toUpperCase())),
@@ -361,7 +335,7 @@ class SubjectDetailScreen extends ConsumerWidget {
                   mp = double.tryParse(maxPointsController.text);
                   if (p != null && mp != null && mp > 0) {
                     final scale = ref.read(settingsProvider);
-                    g = _pointsToGrade(p, mp, scale);
+                    g = GradeConverter.pointsToGrade(p, mp, subject, scale);
                   }
                 } else {
                   g = double.tryParse(gradeController.text) ?? 0;
@@ -450,6 +424,7 @@ class SubjectDetailScreen extends ConsumerWidget {
                   const SizedBox(height: 12),
                 ],
                 DropdownButtonFormField<String>(
+                  isExpanded: true,
                   value: selectedType,
                   items: [
                     DropdownMenuItem(value: 'test', child: Text(l10n.gradeTypeTest.toUpperCase())),
@@ -477,7 +452,7 @@ class SubjectDetailScreen extends ConsumerWidget {
                   mp = double.tryParse(maxPointsController.text);
                   if (p != null && mp != null && mp > 0) {
                     final scale = ref.read(settingsProvider);
-                    g = _pointsToGrade(p, mp, scale);
+                    g = GradeConverter.pointsToGrade(p, mp, subject, scale);
                   }
                 } else {
                   g = double.tryParse(gradeController.text) ?? 0;
@@ -571,6 +546,83 @@ class SubjectDetailScreen extends ConsumerWidget {
           ),
         ],
       ),
+    );
+  }
+  Widget _buildCategoryFilters(BuildContext context, WidgetRef ref, List<Grade> grades) {
+    final allGrades = ref.watch(gradesProvider(subject.id));
+    final types = allGrades.map((g) => g.type).toSet().toList()..sort();
+    final selectedCategory = ref.watch(gradeCategoryFilterProvider);
+    final l10n = AppLocalizations.of(context)!;
+
+    if (types.isEmpty) return const SizedBox.shrink();
+
+    return SizedBox(
+      height: 40,
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        itemCount: types.length + 1,
+        itemBuilder: (context, index) {
+          if (index == 0) {
+            return Padding(
+              padding: const EdgeInsets.only(right: 8.0),
+              child: FilterChip(
+                label: Text(l10n.filterAll),
+                selected: selectedCategory == null,
+                onSelected: (bool selected) {
+                  ref.read(gradeCategoryFilterProvider.notifier).state = null;
+                },
+              ),
+            );
+          }
+          final type = types[index - 1];
+          return Padding(
+            padding: const EdgeInsets.only(right: 8.0),
+            child: FilterChip(
+              label: TranslatedText(type),
+              selected: selectedCategory == type,
+              onSelected: (bool selected) {
+                ref.read(gradeCategoryFilterProvider.notifier).state = selected ? type : null;
+              },
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _buildGradesList(BuildContext context, WidgetRef ref, List<Grade> grades, int currentSemester, AppLocalizations l10n) {
+    if (currentSemester != 0) {
+      return ListView.builder(
+        padding: const EdgeInsets.all(16),
+        itemCount: grades.length,
+        itemBuilder: (context, index) {
+          return _buildGradeCard(context, ref, grades[index], l10n);
+        },
+      );
+    }
+
+    final s1Grades = grades.where((g) => g.semester == 1).toList();
+    final s2Grades = grades.where((g) => g.semester == 2).toList();
+
+    return ListView(
+      padding: const EdgeInsets.all(16),
+      children: [
+        if (s2Grades.isNotEmpty) ...[
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 4.0),
+            child: Text(l10n.semester2, style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold)),
+          ),
+          ...s2Grades.map((g) => _buildGradeCard(context, ref, g, l10n)),
+        ],
+        if (s1Grades.isNotEmpty) ...[
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 4.0),
+            child: Text(l10n.semester1, style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold)),
+          ),
+          ...s1Grades.map((g) => _buildGradeCard(context, ref, g, l10n)),
+        ],
+      ],
     );
   }
 }

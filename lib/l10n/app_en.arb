@@ -236,5 +236,76 @@
   "disable": "Disable",
   "librus": "Librus",
   "vulcan": "Vulcan",
-  "autoSync": "Auto-sync (every 15 minutes)"
+  "autoSync": "Auto-sync (every 15 minutes)",
+  "googleCalendarIntegrationSubtitle": "Google Calendar integration",
+  "googleCalendarSignedOut": "Signed out of Google Calendar",
+  "googleCalendarSignOut": "Sign out",
+  "googleCalendarSignOutDescription": "Sign out of Google account to change calendar",
+  "googleCalendarAdded": "Added to Google Calendar",
+  "googleCalendarFailedToAdd": "Failed to add to Google Calendar",
+  "examSummaryPrefix": "Exam",
+  "showRawPoints": "Show raw points",
+  "convertPointsToGrades": "Convert points to grades",
+  "sortLatest": "Newest",
+  "sortOldest": "Oldest",
+  "sortHighestGrade": "Highest grades",
+  "sortLowestGrade": "Lowest grades",
+  "semester1": "Semester 1",
+  "semester2": "Semester 2",
+  "allYear": "Full year",
+  "filterAll": "All",
+  "syncSyncing": "Sync in progress...",
+  "syncErrorTitle": "Sync error",
+  "syncActiveInterval": "Auto-sync active (every 15 min)",
+  "syncLastSync": "Last sync: {time}",
+  "@syncLastSync": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "timeJustNow": "just now",
+  "timeMinutesAgo": "{minutes} min ago",
+  "@timeMinutesAgo": {
+    "placeholders": {
+      "minutes": {
+        "type": "String"
+      }
+    }
+  },
+  "vulcanTokenHint": "e.g. 3H6K9...",
+  "vulcanSymbolHint": "e.g. powiat-warszawski",
+  "autoSyncSubtitle": "Automatically download new grades in the background",
+  "syncLibrusEvents": "Dates and events (Librus Calendar)",
+  "syncEventDefault": "Event",
+  "syncTerminLabel": "Due date: {date}",
+  "@syncTerminLabel": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "syncSaveAndAuto": "Save & auto-sync",
+  "syncSaveAndAutoSubtitle": "Refresh grades automatically every 15 min",
+  "syncSyncNowTooltip": "Sync now",
+  "syncDefaultSubject": "Subject",
+  "predictionPointsStatus": "You have {current} / {max} pts ({pct}%).",
+  "@predictionPointsStatus": {
+    "placeholders": {
+      "current": { "type": "String" },
+      "max": { "type": "String" },
+      "pct": { "type": "String" }
+    }
+  },
+  "predictionPointsNeededVal": "{points} / {max} pts",
+  "@predictionPointsNeededVal": {
+    "placeholders": {
+      "points": { "type": "String" },
+      "max": { "type": "String" }
+    }
+  },
+  "vulcanNotSupportedError": "Vulcan integration requires PIN pairing. Under development."
 }
+

@@ -9,7 +9,7 @@ class GoogleCalendarService {
     scopes: [calendar.CalendarApi.calendarEventsScope],
   );
 
-  Future<bool> addExamToCalendar(Exam exam, String subjectName) async {
+  Future<bool> addExamToCalendar(Exam exam, String summary) async {
     try {
       final account = await _googleSignIn.signIn();
       if (account == null) {
@@ -23,7 +23,7 @@ class GoogleCalendarService {
 
       final calendarApi = calendar.CalendarApi(authClient);
       final event = calendar.Event(
-        summary: 'Sprawdzian: $subjectName',
+        summary: summary,
         description: exam.title,
         start: calendar.EventDateTime(
           dateTime: exam.date,

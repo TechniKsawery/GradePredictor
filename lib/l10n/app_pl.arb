@@ -236,5 +236,76 @@
   "disable": "Wyłącz",
   "librus": "Librus",
   "vulcan": "Vulcan",
-  "autoSync": "Auto-sync (co 15 minut)"
+  "autoSync": "Auto-sync (co 15 minut)",
+  "googleCalendarIntegrationSubtitle": "Integracja z Google Calendar",
+  "googleCalendarSignedOut": "Wylogowano z kalendarza Google",
+  "googleCalendarSignOut": "Wyloguj",
+  "googleCalendarSignOutDescription": "Wyloguj konto Google by zmienić kalendarz",
+  "googleCalendarAdded": "Dodano do Google Calendar",
+  "googleCalendarFailedToAdd": "Nie udało się dodać do Google Calendar",
+  "examSummaryPrefix": "Sprawdzian",
+  "showRawPoints": "Pokaż surowe punkty",
+  "convertPointsToGrades": "Przelicz punkty na oceny",
+  "sortLatest": "Najnowsze",
+  "sortOldest": "Najstarsze",
+  "sortHighestGrade": "Najwyższe oceny",
+  "sortLowestGrade": "Najniższe oceny",
+  "semester1": "Półrocze 1",
+  "semester2": "Półrocze 2",
+  "allYear": "Cały rok",
+  "filterAll": "Wszystkie",
+  "syncSyncing": "Synchronizacja w toku...",
+  "syncErrorTitle": "Błąd synchronizacji",
+  "syncActiveInterval": "Auto-sync aktywny (co 15 min)",
+  "syncLastSync": "Ostatnia: {time}",
+  "@syncLastSync": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "timeJustNow": "przed chwilą",
+  "timeMinutesAgo": "{minutes} min temu",
+  "@timeMinutesAgo": {
+    "placeholders": {
+      "minutes": {
+        "type": "String"
+      }
+    }
+  },
+  "vulcanTokenHint": "np. 3H6K9...",
+  "vulcanSymbolHint": "np. powiat-warszawski",
+  "autoSyncSubtitle": "Automatycznie pobieraj nowe oceny w tle",
+  "syncLibrusEvents": "Terminy i wydarzenia (Kalendarz Librus)",
+  "syncEventDefault": "Zdarzenie",
+  "syncTerminLabel": "Termin: {date}",
+  "@syncTerminLabel": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "syncSaveAndAuto": "Zapisz i auto-sync",
+  "syncSaveAndAutoSubtitle": "Odświeżaj oceny automatycznie co 15 min",
+  "syncSyncNowTooltip": "Synchronizuj teraz",
+  "syncDefaultSubject": "Przedmiot",
+  "predictionPointsStatus": "Masz {current} / {max} pkt ({pct}%).",
+  "@predictionPointsStatus": {
+    "placeholders": {
+      "current": { "type": "String" },
+      "max": { "type": "String" },
+      "pct": { "type": "String" }
+    }
+  },
+  "predictionPointsNeededVal": "{points} / {max} pkt",
+  "@predictionPointsNeededVal": {
+    "placeholders": {
+      "points": { "type": "String" },
+      "max": { "type": "String" }
+    }
+  },
+  "vulcanNotSupportedError": "Integracja z Vulcan wymaga parowania kodem PIN. Funkcja w przygotowaniu."
 }
+

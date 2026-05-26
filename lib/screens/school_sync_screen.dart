@@ -5,6 +5,7 @@ import '../services/school_integration_service.dart';
 import '../services/auto_sync_service.dart';
 import '../providers/grade_provider.dart';
 import '../l10n/app_localizations.dart';
+import '../widgets/translated_text.dart';
 
 class SchoolSyncScreen extends ConsumerStatefulWidget {
   const SchoolSyncScreen({super.key});
@@ -64,11 +65,18 @@ class _SchoolSyncScreenState extends ConsumerState<SchoolSyncScreen> {
     } catch (e) {
       setState(() => _isLoading = false);
       if (mounted) {
+        final errorMsg = e.toString().toLowerCase().contains('vulcan')
+            ? l10n.vulcanNotSupportedError
+            : l10n.syncError(e.toString());
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(l10n.syncError(e.toString()))),
+          SnackBar(content: Text(errorMsg)),
         );
       }
     }
+  }
+
+  bool _isSameDay(DateTime a, DateTime b) {
+    return a.year == b.year && a.month == b.month && a.day == b.day;
   }
 
   Future<void> _importData() async {
@@ -77,10 +85,12 @@ class _SchoolSyncScreenState extends ConsumerState<SchoolSyncScreen> {
     setState(() => _isLoading = true);
 
     try {
+      final addedSubjects = <String>{};
       for (final rawSubject in _result!.subjects) {
-        final subName = rawSubject['name']?.toString() ?? 'Przedmiot';
+        final subName = rawSubject['name']?.toString() ?? l10n.syncDefaultSubject;
         final existing = ref.read(subjectsProvider).where((s) => s.name == subName);
-        if (existing.isEmpty) {
+        if (existing.isEmpty && !addedSubjects.contains(subName)) {
+          addedSubjects.add(subName);
           await ref.read(subjectsProvider.notifier).addSubjectWithPoints(
             subName,
             gradingMode: (rawSubject['grading_mode'] ?? 'mixed').toString(),
@@ -94,19 +104,60 @@ class _SchoolSyncScreenState extends ConsumerState<SchoolSyncScreen> {
       final subjectsByName = <String, String>{
         for (final s in subjects) s.name: s.id,
       };
-      // Batch grade imports to avoid blocking UI with many awaits
+
+      // 1. Pre-load all grades and exams to ensure we have local cache for duplicate checking
+      for (final subjectId in subjectsByName.values) {
+        await ref.read(gradesProvider(subjectId).notifier).loadGrades();
+      }
+      await ref.read(examsProvider.notifier).loadExams();
+      final existingExams = ref.read(examsProvider);
+
+      int importedGradesCount = 0;
+      int importedExamsCount = 0;
+
+      // 2. Batch grade imports, skipping duplicates
       const int batchSize = 10;
       List<Future> futures = [];
       for (final rawGrade in _result!.grades) {
         final subName = rawGrade['subject_name']?.toString() ?? '';
         final subjectId = subjectsByName[subName];
         if (subjectId == null) continue;
+
+        final double gradeVal = (rawGrade['grade'] as num?)?.toDouble() ?? 0;
+        final double weightVal = (rawGrade['weight'] as num?)?.toDouble() ?? 1;
+        final String typeVal = rawGrade['type']?.toString() ?? 'test';
+        final double? ptsVal = (rawGrade['points'] as num?)?.toDouble();
+        final double? maxPtsVal = (rawGrade['max_points'] as num?)?.toDouble();
+        final String? dateRaw = rawGrade['date'];
+        final DateTime gradeDate = dateRaw != null ? DateTime.tryParse(dateRaw) ?? DateTime.now() : DateTime.now();
+
+        // Check if grade already exists in memory cache
+        final existingGrades = ref.read(gradesProvider(subjectId));
+        final parts = typeVal.split('|');
+        final actualType = parts[0];
+        final semester = parts.length > 1 ? (int.tryParse(parts[1]) ?? 1) : 1;
+        final rawText = parts.length > 2 ? parts[2] : null;
+
+        final isDuplicate = existingGrades.any((g) =>
+          g.grade == gradeVal &&
+          g.weight == weightVal &&
+          g.type == actualType &&
+          g.semester == semester &&
+          g.points == ptsVal &&
+          g.maxPoints == maxPtsVal &&
+          g.rawText == rawText &&
+          _isSameDay(g.date, gradeDate)
+        );
+
+        if (isDuplicate) continue;
+
+        importedGradesCount++;
         futures.add(ref.read(gradesProvider(subjectId).notifier).addGrade(
-          (rawGrade['grade'] as num?)?.toDouble() ?? 0,
-          (rawGrade['weight'] as num?)?.toDouble() ?? 1,
-          rawGrade['type']?.toString() ?? 'test',
-          points: (rawGrade['points'] as num?)?.toDouble(),
-          maxPoints: (rawGrade['max_points'] as num?)?.toDouble(),
+          gradeVal,
+          weightVal,
+          typeVal,
+          points: ptsVal,
+          maxPoints: maxPtsVal,
           refreshAverages: false,
         ));
 
@@ -117,26 +168,43 @@ class _SchoolSyncScreenState extends ConsumerState<SchoolSyncScreen> {
       }
       if (futures.isNotEmpty) await Future.wait(futures);
 
-      // Batch exam imports as well
+      // 3. Batch exam imports, skipping duplicates
       futures = [];
       for (final rawExam in _result!.exams) {
         final subName = rawExam['subject_name']?.toString() ?? '';
         final subjectId = subjectsByName[subName];
         if (subjectId == null) continue;
+
         final examDateRaw = rawExam['date'];
         final examDate = examDateRaw != null
             ? DateTime.tryParse(examDateRaw.toString()) ?? DateTime.now()
             : DateTime.now();
+        final String titleVal = rawExam['title']?.toString() ?? l10n.gradeTypeTest;
+        final double weightVal = (rawExam['weight'] as num?)?.toDouble() ?? 1.0;
+        final double? maxPointsVal = rawExam['max_points'] != null
+            ? (rawExam['max_points'] as num).toDouble()
+            : null;
+
+        // Check if exam already exists in memory cache
+        final isDuplicate = existingExams.any((e) =>
+          e.subjectId == subjectId &&
+          e.title.toLowerCase().trim() == titleVal.toLowerCase().trim() &&
+          e.weight == weightVal &&
+          e.maxPoints == maxPointsVal &&
+          _isSameDay(e.date, examDate)
+        );
+
+        if (isDuplicate) continue;
+
+        importedExamsCount++;
         futures.add(ref.read(examsProvider.notifier).addExam(
           Exam(
             id: '',
             subjectId: subjectId,
-            title: rawExam['title']?.toString() ?? l10n.gradeTypeTest,
+            title: titleVal,
             date: examDate,
-            weight: (rawExam['weight'] as num?)?.toDouble() ?? 1.0,
-            maxPoints: rawExam['max_points'] != null
-                ? (rawExam['max_points'] as num).toDouble()
-                : null,
+            weight: weightVal,
+            maxPoints: maxPointsVal,
           ),
         ));
 
@@ -154,19 +222,20 @@ class _SchoolSyncScreenState extends ConsumerState<SchoolSyncScreen> {
         provider: _selectedProvider,
         enableAutoSync: _enableAutoSync,
       );
+
+      if (mounted) {
+        setState(() => _isLoading = false);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(l10n.syncImportedCount(
+            importedGradesCount.toString(),
+            importedExamsCount.toString(),
+          ))),
+        );
+        Navigator.pop(context);
+      }
     } catch (e) {
       debugPrint('[Import] Error: $e');
-    }
-
-    if (mounted) {
       setState(() => _isLoading = false);
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(l10n.syncImportedCount(
-          _result!.grades.length.toString(),
-          _result!.exams.length.toString(),
-        ))),
-      );
-      Navigator.pop(context);
     }
   }
 
@@ -196,7 +265,7 @@ class _SchoolSyncScreenState extends ConsumerState<SchoolSyncScreen> {
                       child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
                     )
                   : const Icon(Icons.sync, color: Colors.white),
-              tooltip: 'Synchronizuj teraz',
+              tooltip: l10n.syncSyncNowTooltip,
               onPressed: autoSyncStatus.isSyncing
                   ? null
                   : () async {
@@ -221,6 +290,7 @@ class _SchoolSyncScreenState extends ConsumerState<SchoolSyncScreen> {
   }
 
   Widget _buildStatusBanner(AutoSyncStatus status) {
+    final l10n = AppLocalizations.of(context)!;
     final hasError = status.lastError != null;
     final bannerColor = hasError ? Colors.red : Colors.green;
     return Container(
@@ -247,15 +317,15 @@ class _SchoolSyncScreenState extends ConsumerState<SchoolSyncScreen> {
               children: [
                 Text(
                   status.isSyncing
-                      ? 'Synchronizacja w toku...'
+                      ? l10n.syncSyncing
                       : hasError
-                          ? 'Błąd synchronizacji'
-                          : 'Auto-sync aktywny (co 15 min)',
+                          ? l10n.syncErrorTitle
+                          : l10n.syncActiveInterval,
                   style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
                 ),
                 if (status.lastSync != null && !status.isSyncing)
                   Text(
-                    'Ostatnia: ${_formatTime(status.lastSync!)}',
+                    l10n.syncLastSync(_formatTime(status.lastSync!, l10n)),
                     style: TextStyle(fontSize: 11, color: Colors.grey[600]),
                   ),
                 if (hasError)
@@ -280,10 +350,10 @@ class _SchoolSyncScreenState extends ConsumerState<SchoolSyncScreen> {
     );
   }
 
-  String _formatTime(DateTime dt) {
+  String _formatTime(DateTime dt, AppLocalizations l10n) {
     final diff = DateTime.now().difference(dt);
-    if (diff.inMinutes < 1) return 'przed chwilą';
-    if (diff.inMinutes < 60) return '${diff.inMinutes} min temu';
+    if (diff.inMinutes < 1) return l10n.timeJustNow;
+    if (diff.inMinutes < 60) return l10n.timeMinutesAgo(diff.inMinutes.toString());
     return '${dt.hour.toString().padLeft(2, '0')}:${dt.minute.toString().padLeft(2, '0')}';
   }
 
@@ -315,7 +385,7 @@ class _SchoolSyncScreenState extends ConsumerState<SchoolSyncScreen> {
                 ? l10n.syncLoginLibrus
                 : l10n.syncVulcanTokenHint,
             prefixIcon: const Icon(Icons.person_outline),
-            hintText: _selectedProvider == SchoolProvider.vulcan ? 'np. 3H6K9...' : null,
+            hintText: _selectedProvider == SchoolProvider.vulcan ? l10n.vulcanTokenHint : null,
           ),
         ),
         const SizedBox(height: 16),
@@ -324,7 +394,7 @@ class _SchoolSyncScreenState extends ConsumerState<SchoolSyncScreen> {
             decoration: InputDecoration(
               labelText: l10n.syncVulcanSymbolLabel,
               prefixIcon: const Icon(Icons.domain),
-              hintText: 'np. powiat-warszawski',
+              hintText: l10n.vulcanSymbolHint,
             ),
           ),
           const SizedBox(height: 16),
@@ -350,8 +420,7 @@ class _SchoolSyncScreenState extends ConsumerState<SchoolSyncScreen> {
               AppLocalizations.of(context)!.autoSync,
               style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
             ),
-            subtitle: const Text('Automatycznie pobieraj nowe oceny w tle',
-                style: TextStyle(fontSize: 12)),
+            subtitle: Text(l10n.autoSyncSubtitle),
             value: _enableAutoSync,
             onChanged: (v) => setState(() => _enableAutoSync = v),
             activeColor: const Color(0xFF6366F1),
@@ -379,6 +448,20 @@ class _SchoolSyncScreenState extends ConsumerState<SchoolSyncScreen> {
   }
 
   Widget _buildSummaryView(AppLocalizations l10n) {
+    final sortedGrades = List<Map<String, dynamic>>.from(_result!.grades)
+      ..sort((a, b) {
+        final ad = DateTime.tryParse(a['date']?.toString() ?? '') ?? DateTime.fromMillisecondsSinceEpoch(0);
+        final bd = DateTime.tryParse(b['date']?.toString() ?? '') ?? DateTime.fromMillisecondsSinceEpoch(0);
+        return bd.compareTo(ad); // Newest first
+      });
+
+    final sortedExams = List<Map<String, dynamic>>.from(_result!.exams)
+      ..sort((a, b) {
+        final ad = DateTime.tryParse(a['date']?.toString() ?? '') ?? DateTime.fromMillisecondsSinceEpoch(0);
+        final bd = DateTime.tryParse(b['date']?.toString() ?? '') ?? DateTime.fromMillisecondsSinceEpoch(0);
+        return bd.compareTo(ad); // Newest first
+      });
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -401,34 +484,76 @@ class _SchoolSyncScreenState extends ConsumerState<SchoolSyncScreen> {
             ),
           ),
         ),
-        const SizedBox(height: 24),
-        Text(l10n.syncGradesDetail, style: const TextStyle(fontWeight: FontWeight.bold)),
-        const SizedBox(height: 8),
-        ListView.builder(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          itemCount: _result!.grades.length,
-          itemBuilder: (context, index) {
-            final grade = _result!.grades[index];
-            final subName = grade['subject_name']?.toString() ?? l10n.unknown;
-            final gradeVal = grade['grade']?.toString() ?? '0';
-            final gradeType = grade['type']?.toString() ?? l10n.gradeLabel;
-            final gradeWeight = grade['weight']?.toString() ?? '1';
-            return ListTile(
-              title: Text('$subName: $gradeVal'),
-              subtitle: Text(
-                '${l10n.syncTypeLabel(gradeType)} | ${l10n.syncWeightLabel(gradeWeight)} | ${l10n.syncPointsLabel(grade['points']?.toString() ?? '-', grade['max_points']?.toString() ?? '-')}',
-              ),
-              leading: CircleAvatar(
-                backgroundColor: _getTypeColor(gradeType),
-                child: Text(
-                  gradeVal.isNotEmpty ? gradeVal.substring(0, 1) : '?',
-                  style: const TextStyle(color: Colors.white),
+        if (sortedGrades.isNotEmpty) ...[
+          const SizedBox(height: 24),
+          Text(l10n.syncGradesDetail, style: const TextStyle(fontWeight: FontWeight.bold)),
+          const SizedBox(height: 8),
+          ListView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: sortedGrades.length,
+            itemBuilder: (context, index) {
+              final grade = sortedGrades[index];
+              final subName = grade['subject_name']?.toString() ?? l10n.unknown;
+              final rawText = grade['raw_grade_text']?.toString() ?? '';
+              final gradeVal = rawText.isNotEmpty ? rawText : (grade['grade']?.toString() ?? '0');
+              final rawType = grade['type']?.toString() ?? l10n.gradeLabel;
+              final gradeType = rawType.split('|')[0];
+              final gradeWeight = grade['weight']?.toString() ?? '1';
+              return ListTile(
+                title: Wrap(
+                  children: [
+                    TranslatedText(subName),
+                    Text(': $gradeVal'),
+                  ],
                 ),
-              ),
-            );
-          },
-        ),
+                subtitle: Text(
+                  '${l10n.syncTypeLabel(gradeType)} | ${l10n.syncWeightLabel(gradeWeight)} | ${l10n.syncPointsLabel(grade['max_points']?.toString() ?? '-', grade['points']?.toString() ?? '-')}',
+                ),
+                leading: CircleAvatar(
+                  backgroundColor: _getTypeColor(gradeType),
+                  child: Text(
+                    gradeVal.isNotEmpty ? gradeVal.substring(0, gradeVal.length > 2 ? 2 : gradeVal.length) : '?',
+                    style: const TextStyle(color: Colors.white, fontSize: 12),
+                  ),
+                ),
+              );
+            },
+          ),
+        ],
+        if (sortedExams.isNotEmpty) ...[
+          const SizedBox(height: 24),
+          Text(l10n.syncLibrusEvents, style: const TextStyle(fontWeight: FontWeight.bold)),
+          const SizedBox(height: 8),
+          ListView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: sortedExams.length,
+            itemBuilder: (context, index) {
+              final exam = sortedExams[index];
+              final subName = exam['subject_name']?.toString() ?? l10n.unknown;
+              final title = exam['title']?.toString() ?? l10n.syncEventDefault;
+              final examDateRaw = exam['date'];
+              final examDate = examDateRaw != null
+                  ? DateTime.tryParse(examDateRaw.toString()) ?? DateTime.now()
+                  : DateTime.now();
+              final formattedDate = '${examDate.day.toString().padLeft(2, '0')}.${examDate.month.toString().padLeft(2, '0')}.${examDate.year}';
+              return ListTile(
+                title: Wrap(
+                  children: [
+                    TranslatedText(subName),
+                    Text(': $title'),
+                  ],
+                ),
+                subtitle: Text(l10n.syncTerminLabel(formattedDate)),
+                leading: const CircleAvatar(
+                  backgroundColor: Color(0xFF06B6D4),
+                  child: Icon(Icons.calendar_month, color: Colors.white, size: 18),
+                ),
+              );
+            },
+          ),
+        ],
         const SizedBox(height: 24),
         Container(
           decoration: BoxDecoration(
@@ -436,10 +561,10 @@ class _SchoolSyncScreenState extends ConsumerState<SchoolSyncScreen> {
             borderRadius: BorderRadius.circular(12),
           ),
           child: SwitchListTile(
-            title: const Text('Zapisz i auto-sync',
-                style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
-            subtitle: const Text('Odświeżaj oceny automatycznie co 15 min',
-                style: TextStyle(fontSize: 12)),
+            title: Text(l10n.syncSaveAndAuto,
+                style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
+            subtitle: Text(l10n.syncSaveAndAutoSubtitle,
+                style: const TextStyle(fontSize: 12)),
             value: _enableAutoSync,
             onChanged: (v) => setState(() => _enableAutoSync = v),
             activeColor: const Color(0xFF6366F1),

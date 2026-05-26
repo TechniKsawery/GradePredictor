@@ -791,4 +791,127 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get autoSync => 'Automatische Synchronisierung (alle 15 Minuten)';
+
+  @override
+  String get googleCalendarIntegrationSubtitle => 'Google Kalender-Integration';
+
+  @override
+  String get googleCalendarSignedOut => 'Vom Google Kalender abgemeldet';
+
+  @override
+  String get googleCalendarSignOut => 'Abmelden';
+
+  @override
+  String get googleCalendarSignOutDescription =>
+      'Vom Google-Konto abmelden, um den Kalender zu ändern';
+
+  @override
+  String get googleCalendarAdded => 'Zu Google Kalender hinzugefügt';
+
+  @override
+  String get googleCalendarFailedToAdd =>
+      'Fehler beim Hinzufügen zu Google Kalender';
+
+  @override
+  String get examSummaryPrefix => 'Klassenarbeit';
+
+  @override
+  String get showRawPoints => 'Rohe Punkte anzeigen';
+
+  @override
+  String get convertPointsToGrades => 'Punkte in Noten umrechnen';
+
+  @override
+  String get sortLatest => 'Neueste';
+
+  @override
+  String get sortOldest => 'Älteste';
+
+  @override
+  String get sortHighestGrade => 'Beste Noten';
+
+  @override
+  String get sortLowestGrade => 'Schlechteste Noten';
+
+  @override
+  String get semester1 => 'Halbjahr 1';
+
+  @override
+  String get semester2 => 'Halbjahr 2';
+
+  @override
+  String get allYear => 'Ganzes Jahr';
+
+  @override
+  String get filterAll => 'Alle';
+
+  @override
+  String get syncSyncing => 'Synchronisierung läuft...';
+
+  @override
+  String get syncErrorTitle => 'Fehler bei der Synchronisation';
+
+  @override
+  String get syncActiveInterval => 'Auto-Sync aktiv (alle 15 Min.)';
+
+  @override
+  String syncLastSync(String time) {
+    return 'Letzte: $time';
+  }
+
+  @override
+  String get timeJustNow => 'gerade eben';
+
+  @override
+  String timeMinutesAgo(String minutes) {
+    return 'vor $minutes Min.';
+  }
+
+  @override
+  String get vulcanTokenHint => 'z.B. 3H6K9...';
+
+  @override
+  String get vulcanSymbolHint => 'z.B. powiat-warszawski';
+
+  @override
+  String get autoSyncSubtitle =>
+      'Neue Noten automatisch im Hintergrund herunterladen';
+
+  @override
+  String get syncLibrusEvents => 'Termine und Ereignisse (Librus-Kalender)';
+
+  @override
+  String get syncEventDefault => 'Ereignis';
+
+  @override
+  String syncTerminLabel(String date) {
+    return 'Termin: $date';
+  }
+
+  @override
+  String get syncSaveAndAuto => 'Speichern & Auto-Sync';
+
+  @override
+  String get syncSaveAndAutoSubtitle =>
+      'Noten automatisch alle 15 Min. aktualisieren';
+
+  @override
+  String get syncSyncNowTooltip => 'Jetzt synchronisieren';
+
+  @override
+  String get syncDefaultSubject => 'Fach';
+
+  @override
+  String predictionPointsStatus(String current, String max, String pct) {
+    return 'Sie haben $current / $max Pkt ($pct%).';
+  }
+
+  @override
+  String predictionPointsNeededVal(String points, String max) {
+    return '$points / $max Pkt';
+  }
+
+  @override
+  String get vulcanNotSupportedError =>
+      'Die Vulcan-Integration erfordert eine PIN-Kopplung. In Entwicklung.';
 }

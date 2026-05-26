@@ -7,6 +7,8 @@ import '../providers/grade_provider.dart';
 import '../providers/settings_provider.dart';
 import '../models/subject.dart';
 import '../models/exam.dart';
+import '../models/grade.dart';
+import '../utils/grade_converter.dart';
 
 class PredictionDialog extends ConsumerStatefulWidget {
   final String subjectId;
@@ -35,11 +37,12 @@ class _PredictionDialogState extends ConsumerState<PredictionDialog> {
     if (rawTarget == null) return;
 
     final l10n = AppLocalizations.of(context)!;
-    final grades = ref.read(gradesProvider(widget.subjectId));
+    final grades = ref.read(filteredGradesProvider(widget.subjectId));
     final subjects = ref.read(subjectsProvider);
     final subject = subjects.firstWhere((s) => s.id == widget.subjectId);
     final exams = ref.read(examsProvider).where((e) => e.subjectId == widget.subjectId && e.date.isAfter(DateTime.now().subtract(const Duration(days: 1)))).toList();
     final scale = ref.read(settingsProvider);
+    final showPointGrades = ref.read(showPointGradesProvider(widget.subjectId));
 
     _predictions.clear();
     _result = null;
@@ -56,10 +59,10 @@ class _PredictionDialogState extends ConsumerState<PredictionDialog> {
       else targetPercent = custom?['grade6'] ?? scale.grade6;
     }
 
-    if (subject.gradingMode == Subject.gradingModePoints) {
+    if (subject.gradingMode == Subject.gradingModePoints && !showPointGrades) {
       _calculatePoints(targetPercent, grades, exams, subject, scale, l10n);
     } else {
-      _calculateGrades(rawTarget, grades, exams, l10n);
+      _calculateGrades(rawTarget, grades, exams, subject, scale, showPointGrades, l10n);
     }
 
     setState(() {});
@@ -75,7 +78,7 @@ class _PredictionDialogState extends ConsumerState<PredictionDialog> {
 
     if (exams.isEmpty) {
       if (currentMaxPoints == 0) {
-        _result = "Najpierw dodaj jakąś ocenę!";
+        _result = l10n.predictionFirstAddGrade;
         return;
       }
       final totalNeeded = (targetP / 100.0) * currentMaxPoints;
@@ -87,7 +90,11 @@ class _PredictionDialogState extends ConsumerState<PredictionDialog> {
         _recommendation = l10n.predictionAdviceKeepItUp;
       } else {
         _result = l10n.predictionPointsMissing(remaining.toStringAsFixed(1), targetP.toStringAsFixed(0));
-        _explanation = "Masz ${currentPoints.toStringAsFixed(1)} / ${currentMaxPoints.toStringAsFixed(1)} pkt (${((currentPoints / currentMaxPoints) * 100).toStringAsFixed(1)}%).";
+        _explanation = l10n.predictionPointsStatus(
+          currentPoints.toStringAsFixed(1),
+          currentMaxPoints.toStringAsFixed(1),
+          ((currentPoints / currentMaxPoints) * 100).toStringAsFixed(1),
+        );
         _recommendation = l10n.predictionPointsNoExamsRecommendation;
       }
     } else {
@@ -95,7 +102,7 @@ class _PredictionDialogState extends ConsumerState<PredictionDialog> {
       final totalPossibleMax = currentMaxPoints + totalUpcomingMax;
       final totalNeeded = (targetP / 100.0) * totalPossibleMax;
       final remaining = totalNeeded - currentPoints;
-
+ 
       if (remaining <= 0) {
         _result = l10n.predictionGoalEasy;
         _explanation = l10n.predictionGoalEasyExplanation(targetP.toStringAsFixed(0));
@@ -114,7 +121,10 @@ class _PredictionDialogState extends ConsumerState<PredictionDialog> {
           final neededForThis = remaining * share;
           _predictions.add({
             'title': exam.title,
-            'needed': '${neededForThis.toStringAsFixed(1)} / ${exam.maxPoints?.toStringAsFixed(0)} pkt',
+            'needed': l10n.predictionPointsNeededVal(
+              neededForThis.toStringAsFixed(1),
+              exam.maxPoints?.toStringAsFixed(0) ?? '0',
+            ),
             'date': LocalizedDateFormatter.formatDateShort(exam.date, l10n),
             'translateTitle': true,
           });
@@ -123,12 +133,30 @@ class _PredictionDialogState extends ConsumerState<PredictionDialog> {
     }
   }
 
-  void _calculateGrades(double target, grades, List<Exam> exams, AppLocalizations l10n) {
+  void _calculateGrades(
+    double target,
+    List<Grade> grades,
+    List<Exam> exams,
+    Subject subject,
+    GradingScale scale,
+    bool showPointGrades,
+    AppLocalizations l10n,
+  ) {
     double currentWeightedSum = 0;
     double currentTotalWeights = 0;
     for (var g in grades) {
-      currentWeightedSum += g.grade * g.weight;
-      currentTotalWeights += g.weight;
+      double val = g.grade;
+      if (showPointGrades) {
+        if (g.points != null && g.maxPoints != null && g.maxPoints! > 0) {
+          val = GradeConverter.pointsToGrade(g.points!, g.maxPoints!, subject, scale);
+        } else if (GradeConverter.isPercentageGrade(g) && g.grade > 0) {
+          val = GradeConverter.percentToGrade(g.grade, subject, scale);
+        }
+      }
+      if (val > 0) {
+        currentWeightedSum += val * g.weight;
+        currentTotalWeights += g.weight;
+      }
     }
 
     if (exams.isEmpty) {

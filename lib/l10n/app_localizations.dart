@@ -1527,6 +1527,222 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Auto-sync (every 15 minutes)'**
   String get autoSync;
+
+  /// No description provided for @googleCalendarIntegrationSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Google Calendar integration'**
+  String get googleCalendarIntegrationSubtitle;
+
+  /// No description provided for @googleCalendarSignedOut.
+  ///
+  /// In en, this message translates to:
+  /// **'Signed out of Google Calendar'**
+  String get googleCalendarSignedOut;
+
+  /// No description provided for @googleCalendarSignOut.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign out'**
+  String get googleCalendarSignOut;
+
+  /// No description provided for @googleCalendarSignOutDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign out of Google account to change calendar'**
+  String get googleCalendarSignOutDescription;
+
+  /// No description provided for @googleCalendarAdded.
+  ///
+  /// In en, this message translates to:
+  /// **'Added to Google Calendar'**
+  String get googleCalendarAdded;
+
+  /// No description provided for @googleCalendarFailedToAdd.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to add to Google Calendar'**
+  String get googleCalendarFailedToAdd;
+
+  /// No description provided for @examSummaryPrefix.
+  ///
+  /// In en, this message translates to:
+  /// **'Exam'**
+  String get examSummaryPrefix;
+
+  /// No description provided for @showRawPoints.
+  ///
+  /// In en, this message translates to:
+  /// **'Show raw points'**
+  String get showRawPoints;
+
+  /// No description provided for @convertPointsToGrades.
+  ///
+  /// In en, this message translates to:
+  /// **'Convert points to grades'**
+  String get convertPointsToGrades;
+
+  /// No description provided for @sortLatest.
+  ///
+  /// In en, this message translates to:
+  /// **'Newest'**
+  String get sortLatest;
+
+  /// No description provided for @sortOldest.
+  ///
+  /// In en, this message translates to:
+  /// **'Oldest'**
+  String get sortOldest;
+
+  /// No description provided for @sortHighestGrade.
+  ///
+  /// In en, this message translates to:
+  /// **'Highest grades'**
+  String get sortHighestGrade;
+
+  /// No description provided for @sortLowestGrade.
+  ///
+  /// In en, this message translates to:
+  /// **'Lowest grades'**
+  String get sortLowestGrade;
+
+  /// No description provided for @semester1.
+  ///
+  /// In en, this message translates to:
+  /// **'Semester 1'**
+  String get semester1;
+
+  /// No description provided for @semester2.
+  ///
+  /// In en, this message translates to:
+  /// **'Semester 2'**
+  String get semester2;
+
+  /// No description provided for @allYear.
+  ///
+  /// In en, this message translates to:
+  /// **'Full year'**
+  String get allYear;
+
+  /// No description provided for @filterAll.
+  ///
+  /// In en, this message translates to:
+  /// **'All'**
+  String get filterAll;
+
+  /// No description provided for @syncSyncing.
+  ///
+  /// In en, this message translates to:
+  /// **'Sync in progress...'**
+  String get syncSyncing;
+
+  /// No description provided for @syncErrorTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Sync error'**
+  String get syncErrorTitle;
+
+  /// No description provided for @syncActiveInterval.
+  ///
+  /// In en, this message translates to:
+  /// **'Auto-sync active (every 15 min)'**
+  String get syncActiveInterval;
+
+  /// No description provided for @syncLastSync.
+  ///
+  /// In en, this message translates to:
+  /// **'Last sync: {time}'**
+  String syncLastSync(String time);
+
+  /// No description provided for @timeJustNow.
+  ///
+  /// In en, this message translates to:
+  /// **'just now'**
+  String get timeJustNow;
+
+  /// No description provided for @timeMinutesAgo.
+  ///
+  /// In en, this message translates to:
+  /// **'{minutes} min ago'**
+  String timeMinutesAgo(String minutes);
+
+  /// No description provided for @vulcanTokenHint.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g. 3H6K9...'**
+  String get vulcanTokenHint;
+
+  /// No description provided for @vulcanSymbolHint.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g. powiat-warszawski'**
+  String get vulcanSymbolHint;
+
+  /// No description provided for @autoSyncSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Automatically download new grades in the background'**
+  String get autoSyncSubtitle;
+
+  /// No description provided for @syncLibrusEvents.
+  ///
+  /// In en, this message translates to:
+  /// **'Dates and events (Librus Calendar)'**
+  String get syncLibrusEvents;
+
+  /// No description provided for @syncEventDefault.
+  ///
+  /// In en, this message translates to:
+  /// **'Event'**
+  String get syncEventDefault;
+
+  /// No description provided for @syncTerminLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Due date: {date}'**
+  String syncTerminLabel(String date);
+
+  /// No description provided for @syncSaveAndAuto.
+  ///
+  /// In en, this message translates to:
+  /// **'Save & auto-sync'**
+  String get syncSaveAndAuto;
+
+  /// No description provided for @syncSaveAndAutoSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Refresh grades automatically every 15 min'**
+  String get syncSaveAndAutoSubtitle;
+
+  /// No description provided for @syncSyncNowTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Sync now'**
+  String get syncSyncNowTooltip;
+
+  /// No description provided for @syncDefaultSubject.
+  ///
+  /// In en, this message translates to:
+  /// **'Subject'**
+  String get syncDefaultSubject;
+
+  /// No description provided for @predictionPointsStatus.
+  ///
+  /// In en, this message translates to:
+  /// **'You have {current} / {max} pts ({pct}%).'**
+  String predictionPointsStatus(String current, String max, String pct);
+
+  /// No description provided for @predictionPointsNeededVal.
+  ///
+  /// In en, this message translates to:
+  /// **'{points} / {max} pts'**
+  String predictionPointsNeededVal(String points, String max);
+
+  /// No description provided for @vulcanNotSupportedError.
+  ///
+  /// In en, this message translates to:
+  /// **'Vulcan integration requires PIN pairing. Under development.'**
+  String get vulcanNotSupportedError;
 }
 
 class _AppLocalizationsDelegate

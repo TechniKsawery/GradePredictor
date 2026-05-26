@@ -18,11 +18,13 @@ class CalendarScreen extends ConsumerWidget {
   ) async {
     final service = GoogleCalendarService();
     final messenger = ScaffoldMessenger.of(context);
-    final success = await service.addExamToCalendar(exam, subjectName);
+    final l10n = AppLocalizations.of(context)!;
+    final summary = '${l10n.examSummaryPrefix}: $subjectName';
+    final success = await service.addExamToCalendar(exam, summary);
 
     messenger.showSnackBar(
       SnackBar(
-        content: Text(success ? 'Dodano do Google Calendar' : 'Nie udało się dodać do Google Calendar'),
+        content: Text(success ? l10n.googleCalendarAdded : l10n.googleCalendarFailedToAdd),
       ),
     );
   }
@@ -31,7 +33,8 @@ class CalendarScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
     final subjects = ref.watch(subjectsProvider);
-    final exams = ref.watch(examsProvider);
+    final rawExams = ref.watch(examsProvider);
+    final exams = List<Exam>.from(rawExams)..sort((a, b) => b.date.compareTo(a.date));
     final colorScheme = Theme.of(context).colorScheme;
 
     return Scaffold(
@@ -302,6 +305,7 @@ class CalendarScreen extends ConsumerWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 DropdownButtonFormField<String>(
+                  isExpanded: true,
                   value: selectedSubjectId,
                   items: subjects
                       .map(

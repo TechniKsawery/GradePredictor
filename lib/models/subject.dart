@@ -27,7 +27,7 @@ class Subject {
     Map<String, double>? scale;
     if (json['custom_grading_scale'] != null) {
       scale = (json['custom_grading_scale'] as Map<String, dynamic>).map(
-        (key, value) => MapEntry(key, (value as num).toDouble()),
+        (key, value) => MapEntry(key, value is String ? (double.tryParse(value) ?? 0.0) : (value as num?)?.toDouble() ?? 0.0),
       );
     }
 
@@ -36,8 +36,8 @@ class Subject {
       userId: json['user_id'],
       name: json['name'],
       createdAt: DateTime.parse(json['created_at']),
-      maxNormalPoints: json['max_normal_points'] != null ? (json['max_normal_points'] as num).toDouble() : null,
-      maxBonusPoints: json['max_bonus_points'] != null ? (json['max_bonus_points'] as num).toDouble() : null,
+      maxNormalPoints: json['max_normal_points'] != null ? (json['max_normal_points'] is String ? double.tryParse(json['max_normal_points']) : (json['max_normal_points'] as num?)?.toDouble()) : null,
+      maxBonusPoints: json['max_bonus_points'] != null ? (json['max_bonus_points'] is String ? double.tryParse(json['max_bonus_points']) : (json['max_bonus_points'] as num?)?.toDouble()) : null,
       gradingMode: json['grading_mode'] ?? gradingModeMixed,
       customGradingScale: scale,
     );

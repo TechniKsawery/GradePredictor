@@ -236,5 +236,76 @@
   "disable": "Deaktivieren",
   "librus": "Librus",
   "vulcan": "Vulcan",
-  "autoSync": "Automatische Synchronisierung (alle 15 Minuten)"
+  "autoSync": "Automatische Synchronisierung (alle 15 Minuten)",
+  "googleCalendarIntegrationSubtitle": "Google Kalender-Integration",
+  "googleCalendarSignedOut": "Vom Google Kalender abgemeldet",
+  "googleCalendarSignOut": "Abmelden",
+  "googleCalendarSignOutDescription": "Vom Google-Konto abmelden, um den Kalender zu ändern",
+  "googleCalendarAdded": "Zu Google Kalender hinzugefügt",
+  "googleCalendarFailedToAdd": "Fehler beim Hinzufügen zu Google Kalender",
+  "examSummaryPrefix": "Klassenarbeit",
+  "showRawPoints": "Rohe Punkte anzeigen",
+  "convertPointsToGrades": "Punkte in Noten umrechnen",
+  "sortLatest": "Neueste",
+  "sortOldest": "Älteste",
+  "sortHighestGrade": "Beste Noten",
+  "sortLowestGrade": "Schlechteste Noten",
+  "semester1": "Halbjahr 1",
+  "semester2": "Halbjahr 2",
+  "allYear": "Ganzes Jahr",
+  "filterAll": "Alle",
+  "syncSyncing": "Synchronisierung läuft...",
+  "syncErrorTitle": "Fehler bei der Synchronisation",
+  "syncActiveInterval": "Auto-Sync aktiv (alle 15 Min.)",
+  "syncLastSync": "Letzte: {time}",
+  "@syncLastSync": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "timeJustNow": "gerade eben",
+  "timeMinutesAgo": "vor {minutes} Min.",
+  "@timeMinutesAgo": {
+    "placeholders": {
+      "minutes": {
+        "type": "String"
+      }
+    }
+  },
+  "vulcanTokenHint": "z.B. 3H6K9...",
+  "vulcanSymbolHint": "z.B. powiat-warszawski",
+  "autoSyncSubtitle": "Neue Noten automatisch im Hintergrund herunterladen",
+  "syncLibrusEvents": "Termine und Ereignisse (Librus-Kalender)",
+  "syncEventDefault": "Ereignis",
+  "syncTerminLabel": "Termin: {date}",
+  "@syncTerminLabel": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "syncSaveAndAuto": "Speichern & Auto-Sync",
+  "syncSaveAndAutoSubtitle": "Noten automatisch alle 15 Min. aktualisieren",
+  "syncSyncNowTooltip": "Jetzt synchronisieren",
+  "syncDefaultSubject": "Fach",
+  "predictionPointsStatus": "Sie haben {current} / {max} Pkt ({pct}%).",
+  "@predictionPointsStatus": {
+    "placeholders": {
+      "current": { "type": "String" },
+      "max": { "type": "String" },
+      "pct": { "type": "String" }
+    }
+  },
+  "predictionPointsNeededVal": "{points} / {max} Pkt",
+  "@predictionPointsNeededVal": {
+    "placeholders": {
+      "points": { "type": "String" },
+      "max": { "type": "String" }
+    }
+  },
+  "vulcanNotSupportedError": "Die Vulcan-Integration erfordert eine PIN-Kopplung. In Entwicklung."
 }
+

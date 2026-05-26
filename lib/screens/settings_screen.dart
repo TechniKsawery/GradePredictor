@@ -9,6 +9,7 @@ import '../providers/accounts_provider.dart';
 import '../providers/settings_provider.dart';
 import '../providers/theme_provider.dart';
 import '../services/supabase_service.dart';
+import '../services/google_calendar_service.dart';
 import 'login_screen.dart';
 
 class SettingsScreen extends ConsumerStatefulWidget {
@@ -284,6 +285,29 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                     label: Text(l10n.addRegisterAccount),
                   ),
                 ],
+              ),
+            ),
+            const SizedBox(height: 20),
+            _buildSectionCard(
+              context: context,
+              title: l10n.calendarTitle,
+              subtitle: l10n.googleCalendarIntegrationSubtitle,
+              child: ListTile(
+                leading: const Icon(Icons.calendar_month),
+                title: const Text('Google Calendar'),
+                subtitle: Text(l10n.googleCalendarSignOutDescription),
+                trailing: TextButton(
+                  onPressed: () async {
+                    final service = GoogleCalendarService();
+                    await service.signOut();
+                    if (context.mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text(l10n.googleCalendarSignedOut)),
+                      );
+                    }
+                  },
+                  child: Text(l10n.googleCalendarSignOut),
+                ),
               ),
             ),
             const SizedBox(height: 20),

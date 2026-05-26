@@ -21,8 +21,8 @@ class Exam {
       subjectId: json['subject_id'],
       title: json['title'],
       date: DateTime.parse(json['date']),
-      weight: (json['weight'] as num).toDouble(),
-      maxPoints: json['max_points'] != null ? (json['max_points'] as num).toDouble() : null,
+      weight: json['weight'] is String ? double.tryParse(json['weight']) ?? 1.0 : (json['weight'] as num?)?.toDouble() ?? 1.0,
+      maxPoints: json['max_points'] != null ? (json['max_points'] is String ? double.tryParse(json['max_points']) : (json['max_points'] as num?)?.toDouble()) : null,
     );
   }
 

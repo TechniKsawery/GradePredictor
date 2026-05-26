@@ -4,6 +4,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/intl.dart' as intl;
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'l10n/app_localizations.dart';
 import 'providers/locale_provider.dart';
 import 'providers/theme_provider.dart';
@@ -12,11 +13,13 @@ import 'screens/home_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  
+  await dotenv.load(fileName: ".env");
 
   // Replace with your Supabase credentials
   await Supabase.initialize(
-    url: 'https://uaeimifolckkhnsofluy.supabase.co',
-    anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVhZWltaWZvbGNra2huc29mbHV5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgyODc1NzQsImV4cCI6MjA5Mzg2MzU3NH0.ChbVEAKQZkrHP25ougl8mWE1QJLwrxA_weDXx1kX_rg',
+    url: dotenv.env['SUPABASE_URL'] ?? '',
+    anonKey: dotenv.env['SUPABASE_ANON_KEY'] ?? '',
   );
 
   runApp(const ProviderScope(child: GradePredictorApp()));

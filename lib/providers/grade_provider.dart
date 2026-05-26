@@ -9,9 +9,27 @@ final subjectsProvider = StateNotifierProvider<SubjectsNotifier, List<Subject>>(
   return SubjectsNotifier(ref.watch(supabaseServiceProvider));
 });
 
-final subjectAveragesProvider = FutureProvider<Map<String, double>>((ref) async {
-  final service = ref.watch(supabaseServiceProvider);
-  return service.getSubjectAverages();
+final subjectAveragesProvider = Provider<Map<String, double>>((ref) {
+  final subjects = ref.watch(subjectsProvider);
+  final Map<String, double> averages = {};
+  
+  for (final subject in subjects) {
+    // Watch grades for each subject. 
+    // It's a bit heavy to watch all, but this correctly uses cached data
+    // instead of repeatedly hitting the DB via getSubjectAverages.
+    final grades = ref.watch(gradesProvider(subject.id));
+    
+    double sum = 0.0;
+    double weights = 0.0;
+    for (final g in grades) {
+      if (g.grade > 0) {
+        sum += g.grade * g.weight;
+        weights += g.weight;
+      }
+    }
+    averages[subject.id] = weights > 0 ? sum / weights : 0.0;
+  }
+  return averages;
 });
 
 class SubjectsNotifier extends StateNotifier<List<Subject>> {
@@ -112,15 +130,22 @@ class GradesNotifier extends StateNotifier<List<Grade>> {
     double? maxPoints,
     bool refreshAverages = true,
   }) async {
+    final parts = type.split('|');
+    final actualType = parts[0];
+    final semester = parts.length > 1 ? (int.tryParse(parts[1]) ?? 1) : 1;
+    final rawText = parts.length > 2 ? parts[2] : null;
+
     final newGrade = await _service.addGrade(Grade(
       id: '',
       subjectId: subjectId,
       grade: grade,
       weight: weight,
-      type: type,
+      type: actualType,
+      semester: semester,
       date: DateTime.now(),
       points: points,
       maxPoints: maxPoints,
+      rawText: rawText,
     ));
     state = [newGrade, ...state];
     if (refreshAverages) {
@@ -194,18 +219,18 @@ final averageProvider = Provider.family<double, String>((ref, subjectId) {
 
 final semesterFilterProvider = StateProvider<int>((ref) => 0);
 
+final gradeCategoryFilterProvider = StateProvider<String?>((ref) => null);
+
 final gradeSortProvider = StateProvider<String>((ref) => 'date_desc');
 
 final filteredGradesProvider = Provider.family<List<Grade>, String>((ref, subjectId) {
   final grades = ref.watch(gradesProvider(subjectId));
   final semester = ref.watch(semesterFilterProvider);
   final sort = ref.watch(gradeSortProvider);
-  final currentYear = DateTime.now().year;
-  final semester2Start = DateTime(currentYear, 2, 1);
-
+  final category = ref.watch(gradeCategoryFilterProvider);
   final filtered = grades.where((grade) {
-    if (semester == 1) return grade.date.isBefore(semester2Start);
-    if (semester == 2) return grade.date.isAtSameMomentAs(semester2Start) || grade.date.isAfter(semester2Start);
+    if (semester != 0 && grade.semester != semester) return false;
+    if (category != null && grade.type != category) return false;
     return true;
   }).toList();
 
@@ -240,3 +265,6 @@ final filteredAverageProvider = Provider.family<double, String>((ref, subjectId)
 
   return totalWeights == 0 ? 0.0 : totalWeightedSum / totalWeights;
 });
+
+final showPointGradesProvider = StateProvider.family<bool, String>((ref, subjectId) => false);
+
