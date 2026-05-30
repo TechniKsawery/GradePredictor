@@ -50,15 +50,36 @@ Struktura katalogów wewnątrz `lib/`:
     *   [`grade.dart`](file:///c:/Users/KsaweryBloch/PAM/Projekt%20na%20koniec%20roku/lib/models/grade.dart) – Model pojedynczej oceny (wartość, waga, punkty).
     *   [`subject.dart`](file:///c:/Users/KsaweryBloch/PAM/Projekt%20na%20koniec%20roku/lib/models/subject.dart) – Model przedmiotu i konfiguracji skali oceniania.
     *   [`profile.dart`](file:///c:/Users/KsaweryBloch/PAM/Projekt%20na%20koniec%20roku/lib/models/profile.dart) – Informacje o koncie użytkownika.
-*   [`lib/providers/`](file:///c:/Users/KsaweryBloch/PAM/Projekt%20na%20koniec%20roku/lib/providers/) – Zarządzanie stanem Riverpod (oceny, przedmioty, ustawienia, motyw, lokalizacja).
+*   [`lib/providers/`](file:///c:/Users/KsaweryBloch/PAM/Projekt%20na%20koniec%20roku/lib/providers/) – Zarządzanie stanem Riverpod:
+    *   [`accounts_provider.dart`](file:///c:/Users/KsaweryBloch/PAM/Projekt%20na%20koniec%20roku/lib/providers/accounts_provider.dart) – Zarządzanie kontami zewnętrznych dzienników.
+    *   [`grade_provider.dart`](file:///c:/Users/KsaweryBloch/PAM/Projekt%20na%20koniec%20roku/lib/providers/grade_provider.dart) – Stan ocen, sprawdzianów i przedmiotów.
+    *   [`locale_provider.dart`](file:///c:/Users/KsaweryBloch/PAM/Projekt%20na%20koniec%20roku/lib/providers/locale_provider.dart) – Obsługa lokalizacji i języka aplikacji.
+    *   [`profile_provider.dart`](file:///c:/Users/KsaweryBloch/PAM/Projekt%20na%20koniec%20roku/lib/providers/profile_provider.dart) – Informacje o profilu zalogowanego użytkownika.
+    *   [`settings_provider.dart`](file:///c:/Users/KsaweryBloch/PAM/Projekt%20na%20koniec%20roku/lib/providers/settings_provider.dart) – Zarządzanie ustawieniami aplikacji.
+    *   [`theme_provider.dart`](file:///c:/Users/KsaweryBloch/PAM/Projekt%20na%20koniec%20roku/lib/providers/theme_provider.dart) – Zarządzanie motywem graficznym (jasny/ciemny).
 *   [`lib/services/`](file:///c:/Users/KsaweryBloch/PAM/Projekt%20na%20koniec%20roku/lib/services/) – Warstwa integracji i usług:
     *   [`supabase_service.dart`](file:///c:/Users/KsaweryBloch/PAM/Projekt%20na%20koniec%20roku/lib/services/supabase_service.dart) – Operacje CRUD na bazie Supabase.
     *   [`school_integration_service.dart`](file:///c:/Users/KsaweryBloch/PAM/Projekt%20na%20koniec%20roku/lib/services/school_integration_service.dart) – Klient integracji z dziennikiem Librus/Vulcan.
-    *   [`gemini_parser_service.dart`](file:///c:/Users/KsaweryBloch/PAM/Projekt%20na%20koniec%20roku/lib/services/gemini_parser_service.dart) – Integracja z Gemini API do analizy i normalizacji ocen.
-    *   [`google_calendar_service.dart`](file:///c:/Users/KsaweryBloch/PAM/Projekt%20na%20koniec%20roku/lib/services/google_calendar_service.dart) – Synchronizacja z Kalendarzem Google.
-*   [`lib/screens/`](file:///c:/Users/KsaweryBloch/PAM/Projekt%20na%20koniec%20roku/lib/screens/) – Ekrany widoków aplikacji (Home, Stats, Calendar, School Sync, Subject Details, Settings, Login).
-*   [`lib/widgets/`](file:///c:/Users/KsaweryBloch/PAM/Projekt%20na%20koniec%20roku/lib/widgets/) – Reużywalne komponenty UI (karty ocen, dialogi, formularze).
-*   [`lib/l10n/`](file:///c:/Users/KsaweryBloch/PAM/Projekt%20na%20koniec%20roku/lib/l10n/) – Pliki tłumaczeń lokalizacyjnych (`app_pl.arb`, `app_en.arb`, `app_de.arb`).
+    *   [`auto_sync_service.dart`](file:///c:/Users/KsaweryBloch/PAM/Projekt%20na%20koniec%20roku/lib/services/auto_sync_service.dart) – Automatyczna synchronizacja ocen i sprawdzianów w tle.
+    *   [`school_extraction_service.dart`](file:///c:/Users/KsaweryBloch/PAM/Projekt%20na%20koniec%20roku/lib/services/school_extraction_service.dart) – Lokalna ekstrakcja szczegółów ocen (punkty, wagi, typy).
+    *   [`gemini_parser_service.dart`](file:///c:/Users/KsaweryBloch/PAM/Projekt%20na%20koniec%20roku/lib/services/gemini_parser_service.dart) – Integracja z Gemini API do inteligentnej analizy ocen.
+    *   [`google_calendar_service.dart`](file:///c:/Users/KsaweryBloch/PAM/Projekt%20na%20koniec%20roku/lib/services/google_calendar_service.dart) – Dwukierunkowa synchronizacja z Kalendarzem Google.
+*   [`lib/screens/`](file:///c:/Users/KsaweryBloch/PAM/Projekt%20na%20koniec%20roku/lib/screens/) – Ekrany aplikacji:
+    *   [`home_screen.dart`](file:///c:/Users/KsaweryBloch/PAM/Projekt%20na%20koniec%20roku/lib/screens/home_screen.dart) – Panel główny z ocenami, średnimi i opcją symulacji.
+    *   [`stats_screen.dart`](file:///c:/Users/KsaweryBloch/PAM/Projekt%20na%20koniec%20roku/lib/screens/stats_screen.dart) – Wizualizacja rozkładu ocen i trendów za pomocą wykresów.
+    *   [`calendar_screen.dart`](file:///c:/Users/KsaweryBloch/PAM/Projekt%20na%20koniec%20roku/lib/screens/calendar_screen.dart) – Widok kalendarza ze sprawdzianami i zadaniami.
+    *   [`school_sync_screen.dart`](file:///c:/Users/KsaweryBloch/PAM/Projekt%20na%20koniec%20roku/lib/screens/school_sync_screen.dart) – Konfiguracja i logowanie do e-dziennika Librus/Vulcan.
+    *   [`subject_detail_screen.dart`](file:///c:/Users/KsaweryBloch/PAM/Projekt%20na%20koniec%20roku/lib/screens/subject_detail_screen.dart) – Detale przedmiotu, edycja i dodawanie ocen.
+    *   [`settings_screen.dart`](file:///c:/Users/KsaweryBloch/PAM/Projekt%20na%20koniec%20roku/lib/screens/settings_screen.dart) – Konfiguracja motywu, języka oraz konta.
+    *   [`login_screen.dart`](file:///c:/Users/KsaweryBloch/PAM/Projekt%20na%20koniec%20roku/lib/screens/login_screen.dart) – Logowanie i rejestracja do konta GradePredictor (Supabase).
+*   [`lib/widgets/`](file:///c:/Users/KsaweryBloch/PAM/Projekt%20na%20koniec%20roku/lib/widgets/) – Reużywalne komponenty interfejsu:
+    *   [`prediction_dialog.dart`](file:///c:/Users/KsaweryBloch/PAM/Projekt%20na%20koniec%20roku/lib/widgets/prediction_dialog.dart) – Dialog symulacji ocen i prognozowania średniej.
+    *   [`translated_text.dart`](file:///c:/Users/KsaweryBloch/PAM/Projekt%20na%20koniec%20roku/lib/widgets/translated_text.dart) – Komponent obsługujący automatyczne lub predefiniowane tłumaczenia.
+*   [`lib/utils/`](file:///c:/Users/KsaweryBloch/PAM/Projekt%20na%20koniec%20roku/lib/utils/) – Klasy pomocnicze:
+    *   [`date_formatter.dart`](file:///c:/Users/KsaweryBloch/PAM/Projekt%20na%20koniec%20roku/lib/utils/date_formatter.dart) – Pomocnicze funkcje formatowania dat.
+    *   [`grade_converter.dart`](file:///c:/Users/KsaweryBloch/PAM/Projekt%20na%20koniec%20roku/lib/utils/grade_converter.dart) – Konwersja i normalizacja ocen szkolnych.
+    *   [`subject_translator.dart`](file:///c:/Users/KsaweryBloch/PAM/Projekt%20na%20koniec%20roku/lib/utils/subject_translator.dart) – Słowniki tłumaczenia i ujednolicania nazw przedmiotów.
+*   [`lib/l10n/`](file:///c:/Users/KsaweryBloch/PAM/Projekt%20na%20koniec%20roku/lib/l10n/) – Pliki lokalizacyjne dla systemu wielojęzyczności (`app_pl.arb`, `app_en.arb`, `app_de.arb`).
 
 ---
 
